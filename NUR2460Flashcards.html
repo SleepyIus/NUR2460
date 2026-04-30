@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NUR 2460 · Flashcards</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0f1117;--surface:#181c27;--surface2:#1e2336;--border:#2a3050;--accent:#e8527a;--accent2:#c97aac;--green:#3db87a;--red:#e05c6a;--amber:#e8a838;--text:#e8eaf2;--text2:#8b92b8;--text3:#555e85;--modal-bg:rgba(9,11,20,0.85)}
+[data-theme="light"]{--bg:#faf7f2;--surface:#f4f0e8;--surface2:#ece6d8;--border:#d6ccb8;--accent:#b83060;--accent2:#8b3e6e;--green:#1a9157;--red:#c0384a;--amber:#b87418;--text:#1e1c18;--text2:#5a5448;--text3:#9e9080;--modal-bg:rgba(250,247,242,0.92)}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',system-ui,sans-serif;min-height:100vh;transition:background .2s,color .2s}
+
+/* Layout */
+.app{max-width:900px;margin-left:260px;padding:40px 20px 40px;min-height:100vh;display:flex;flex-direction:column;align-items:center}
+.app>*{width:100%;max-width:640px}
+
+/* Top bar */
+.top-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:10px}
+.back-link{font-size:11px;font-weight:600;color:var(--text3);text-decoration:none;display:flex;align-items:center;gap:5px;transition:color .15s}
+.back-link:hover{color:var(--accent)}
+.back-link::before{content:'←';font-size:13px}
+.top-title{font-family:'DM Serif Display',serif;font-size:24px}
+.top-title em{color:var(--accent);font-style:italic}
+.top-actions{display:flex;gap:8px;align-items:center}
+.top-btn{background:0 0;border:1px solid var(--border);color:var(--text2);font-family:inherit;font-size:11px;font-weight:600;padding:6px 12px;border-radius:6px;cursor:pointer;transition:all .15s}
+.top-btn:hover{border-color:var(--accent);color:var(--accent)}
+.top-btn.active{background:var(--accent);border-color:var(--accent);color:#fff}
+
+/* Sidebar */
+.layout{display:flex;min-height:100vh}
+.sidebar{width:260px;min-width:260px;background:var(--surface);border-right:1px solid var(--border);position:fixed;top:0;left:0;bottom:0;display:flex;flex-direction:column;z-index:10;overflow:hidden}
+.sidebar-header{padding:18px 16px 14px;border-bottom:1px solid var(--border);flex-shrink:0}
+.sb-back{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:var(--text3);text-decoration:none;padding:5px 0 12px;letter-spacing:.03em;transition:color .15s}
+.sb-back:hover{color:var(--accent)}
+.sb-back::before{content:'←';font-size:13px}
+.sb-title{font-family:'DM Serif Display',serif;font-size:20px;font-weight:400;line-height:1.1;color:var(--text);margin-bottom:4px}
+.sb-sub{font-size:11px;color:var(--text3);margin-bottom:10px}
+.sb-theme{background:0 0;border:1px solid var(--border);color:var(--text2);padding:6px 10px;border-radius:6px;font-family:inherit;font-size:11px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;width:100%;justify-content:center;transition:all .15s}
+.sb-theme:hover{border-color:var(--accent);color:var(--text)}
+.sidebar-body{flex:1;overflow-y:auto;padding:12px 0}
+.sb-section{margin-bottom:4px}
+.sb-section-label{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);padding:8px 16px 4px;cursor:pointer;display:flex;align-items:center;gap:8px;user-select:none;transition:color .15s}
+.sb-section-label:hover{color:var(--text2)}
+.sb-section-label .caret{font-size:14px;color:var(--text2);transition:transform .2s;flex-shrink:0;order:-1}
+.sb-section.collapsed .sb-topic{display:none}
+.sb-section.collapsed .caret{transform:rotate(-90deg)}
+.sb-topic{display:flex;align-items:center;gap:10px;padding:6px 16px 6px 28px;cursor:pointer;transition:background .1s;user-select:none}
+.sb-topic:hover{background:var(--surface2)}
+.sb-topic input[type=checkbox]{accent-color:var(--accent);width:15px;height:15px;cursor:pointer;flex-shrink:0}
+.sb-topic label{font-size:12px;color:var(--text2);cursor:pointer;flex:1}
+.sb-topic .count{font-size:10px;color:var(--text3);flex-shrink:0}
+.sb-actions{padding:12px 16px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:6px}
+.sb-start{background:var(--accent);border:none;color:#fff;font-family:inherit;font-size:13px;font-weight:600;padding:10px;border-radius:8px;cursor:pointer;transition:all .15s;width:100%}
+.sb-start:hover{opacity:.9;transform:translateY(-1px)}
+.sb-select-row{display:flex;gap:8px}
+.sb-select-btn{background:0 0;border:none;color:var(--text3);font-family:inherit;font-size:10px;font-weight:600;cursor:pointer;padding:2px 0;transition:color .15s}
+.sb-select-btn:hover{color:var(--accent)}
+
+/* Overlay */
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:9;transition:opacity .25s}
+.sidebar-overlay.show{display:block}
+
+/* Mobile sidebar */
+.mob-back{display:none;position:fixed;top:14px;left:14px;z-index:51;font-size:11px;font-weight:600;color:var(--text2);text-decoration:none;letter-spacing:.03em;align-items:center;gap:5px;background:var(--surface);border:1px solid var(--border);padding:8px 14px;border-radius:8px;transition:color .15s,border-color .15s}
+.mob-back:hover{color:var(--accent);border-color:var(--accent)}
+.mob-back::before{content:'←';font-size:12px}
+.mob-toggle{display:none;position:fixed;top:52px;left:14px;z-index:50;background:var(--surface);border:1px solid var(--border);color:var(--text);width:40px;height:40px;border-radius:8px;font-size:18px;cursor:pointer;align-items:center;justify-content:center}
+@media(max-width:800px){.sidebar{transform:translateX(-100%);transition:transform .25s}.sidebar.open{transform:translateX(0)}.app{margin-left:0;padding:110px 20px 40px}.mob-back{display:flex}.mob-toggle{display:flex}.sidebar-header{padding-top:100px}.sidebar-header .sb-back{display:none}}
+
+/* Progress */
+.progress-bar{margin-bottom:20px}
+.progress-info{display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-bottom:6px}
+.progress-track{height:6px;background:var(--surface2);border-radius:99px;overflow:hidden;display:flex}
+.progress-right{background:var(--green);height:100%;transition:width .3s}
+.progress-wrong{background:var(--red);height:100%;transition:width .3s}
+
+/* Stats row */
+.stats{display:flex;justify-content:center;gap:24px;margin-bottom:20px;font-size:12px;font-weight:600}
+.stat-right{color:var(--green)}
+.stat-wrong{color:var(--red)}
+.stat-remain{color:var(--text3)}
+
+/* Card container */
+.card-area{flex:1;display:flex;align-items:center;justify-content:center;position:relative;min-height:320px;perspective:1000px}
+.card-wrapper{width:100%;max-width:520px;position:relative}
+
+/* Flashcard */
+.flashcard{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:32px 28px;min-height:280px;cursor:pointer;transition:transform .5s,opacity .3s;position:relative;display:flex;flex-direction:column;user-select:none;-webkit-user-select:none}
+.flashcard.swiping-right{transform:translateX(120%) rotate(12deg);opacity:0}
+.flashcard.swiping-left{transform:translateX(-120%) rotate(-12deg);opacity:0}
+.card-tag{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:12px}
+.card-question{font-size:16px;font-weight:500;color:var(--text);line-height:1.55;flex:1}
+.card-divider{border:none;border-top:1px dashed var(--border);margin:20px 0}
+.card-answer{font-size:14px;color:var(--text2);line-height:1.6;display:none}
+.card-answer.visible{display:block}
+.card-answer strong{color:var(--text);font-weight:600}
+.card-answer ul{margin:6px 0 0 16px;list-style:disc}
+.card-answer li{margin:3px 0;font-size:13px}
+.tap-hint{text-align:center;font-size:11px;color:var(--text3);margin-top:16px}
+.tap-hint.hidden{display:none}
+
+/* Star button */
+.star-btn{position:absolute;top:16px;right:16px;background:0 0;border:none;font-size:20px;cursor:pointer;opacity:.3;transition:opacity .15s}
+.star-btn:hover,.star-btn.starred{opacity:1}
+
+/* Action buttons */
+.card-actions{display:flex;gap:12px;justify-content:center;margin-top:20px;display:none}
+.card-actions.visible{display:flex}
+.action-btn{font-family:inherit;font-size:13px;font-weight:700;padding:12px 32px;border-radius:10px;border:none;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:6px}
+.action-btn:hover{transform:translateY(-2px)}
+.btn-wrong{background:rgba(224,92,106,.15);color:var(--red);border:1px solid var(--red)}
+.btn-wrong:hover{background:rgba(224,92,106,.25)}
+.btn-right{background:rgba(61,184,122,.15);color:var(--green);border:1px solid var(--green)}
+.btn-right:hover{background:rgba(61,184,122,.25)}
+
+/* End screen */
+.end-screen{text-align:center;padding:40px 20px}
+.end-title{font-family:'DM Serif Display',serif;font-size:28px;margin-bottom:8px}
+.end-sub{font-size:14px;color:var(--text2);margin-bottom:24px}
+.end-stats{display:flex;justify-content:center;gap:32px;margin-bottom:28px}
+.end-stat{text-align:center}
+.end-stat-num{font-size:32px;font-weight:700}
+.end-stat-label{font-size:11px;color:var(--text3);margin-top:2px}
+.end-btn{font-family:inherit;font-size:13px;font-weight:600;padding:10px 24px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer;margin:0 6px;transition:all .15s}
+.end-btn:hover{border-color:var(--accent);color:var(--accent)}
+.end-btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.end-btn.primary:hover{opacity:.9;transform:translateY(-1px)}
+
+/* Keyboard hints */
+.kbd-hints{text-align:center;margin-top:16px;font-size:10px;color:var(--text3);letter-spacing:.03em}
+.kbd{background:var(--surface2);border:1px solid var(--border);padding:2px 6px;border-radius:3px;font-family:monospace;font-size:10px}
+
+@media(max-width:500px){.flashcard{padding:24px 20px;min-height:240px}.card-question{font-size:15px}.top-title{font-size:20px}.action-btn{padding:10px 24px;font-size:12px}}
+</style>
+</head>
+<body>
+<button class="mob-toggle" onclick="openSidebar()">☰</button>
+<a class="mob-back" href="index.html">Back to Hub</a>
+
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <a class="sb-back" href="index.html">Back to Hub</a>
+    <div class="sb-title">Flashcards</div>
+    <div class="sb-sub">Select topics to study</div>
+    <button class="sb-theme" onclick="toggleTheme()"><span id="themeIcon">☀️</span> <span id="themeLabel">Light Mode</span></button>
+  </div>
+  <div class="sidebar-body" id="sidebarBody"></div>
+  <div class="sb-actions">
+    <div class="sb-select-row">
+      <button class="sb-select-btn" onclick="selectAll()">Select All</button>
+      <span style="color:var(--text3)">·</span>
+      <button class="sb-select-btn" onclick="deselectAll()">Deselect All</button>
+    </div>
+    <div style="display:flex;gap:6px">
+      <button class="top-btn" id="shuffleBtn" onclick="toggleShuffle()" style="flex:1;text-align:center">🔀 Shuffle</button>
+      <button class="top-btn" id="starFilter" onclick="toggleStarFilter()" style="flex:1;text-align:center">⭐ Starred</button>
+    </div>
+    <button class="sb-start" onclick="startRound()">Start Studying</button>
+  </div>
+</aside>
+
+<div class="app">
+
+<div class="top-bar">
+  <div></div>
+  <div class="top-title">Flash<em>cards</em></div>
+  <div></div>
+</div>
+
+<div class="progress-bar">
+  <div class="progress-info"><span id="cardPos">Card 1 of 0</span><span id="pctDone">0%</span></div>
+  <div class="progress-track"><div class="progress-right" id="progRight" style="width:0"></div><div class="progress-wrong" id="progWrong" style="width:0"></div></div>
+</div>
+
+<div class="stats">
+  <span class="stat-right">✓ <span id="rightCount">0</span></span>
+  <span class="stat-wrong">✗ <span id="wrongCount">0</span></span>
+  <span class="stat-remain">○ <span id="remainCount">0</span></span>
+</div>
+
+<div class="card-area">
+  <div class="card-wrapper" id="cardWrapper">
+    <div class="flashcard" id="flashcard" onclick="revealAnswer()">
+      <button class="star-btn" id="starBtn" onclick="event.stopPropagation();toggleStar()">☆</button>
+      <div class="card-tag" id="cardTag"></div>
+      <div class="card-question" id="cardQ"></div>
+      <hr class="card-divider">
+      <div class="card-answer" id="cardA"></div>
+      <div class="tap-hint" id="tapHint">Tap to reveal answer</div>
+    </div>
+    <div class="card-actions" id="cardActions">
+      <button class="action-btn btn-wrong" onclick="answer(false)">✗ Wrong</button>
+      <button class="action-btn btn-right" onclick="answer(true)">✓ Got It</button>
+    </div>
+  </div>
+  <div class="end-screen" id="endScreen" style="display:none">
+    <div class="end-title">Round Complete!</div>
+    <div class="end-sub" id="endSub"></div>
+    <div class="end-stats">
+      <div class="end-stat"><div class="end-stat-num stat-right" id="endRight">0</div><div class="end-stat-label">Correct</div></div>
+      <div class="end-stat"><div class="end-stat-num stat-wrong" id="endWrong">0</div><div class="end-stat-label">Wrong</div></div>
+    </div>
+    <button class="end-btn primary" onclick="restartAll()">Start Over</button>
+    <button class="end-btn" onclick="reviewWrong()" id="reviewBtn">Review Wrong</button>
+  </div>
+</div>
+
+<div class="kbd-hints">
+  <kbd class="kbd">Space</kbd> reveal · <kbd class="kbd">←</kbd> wrong · <kbd class="kbd">→</kbd> got it · <kbd class="kbd">S</kbd> star
+</div>
+
+</div>
+
+<script>
+function toggleTheme(){
+  const isLight=document.documentElement.getAttribute('data-theme')==='light';
+  if(isLight){document.documentElement.removeAttribute('data-theme');document.getElementById('themeIcon').textContent='☀️';try{document.getElementById('themeLabel').textContent='Light Mode'}catch(e){};localStorage.setItem('studyTheme','dark')}
+  else{document.documentElement.setAttribute('data-theme','light');document.getElementById('themeIcon').textContent='🌙';try{document.getElementById('themeLabel').textContent='Dark Mode'}catch(e){};localStorage.setItem('studyTheme','light')}
+}
+(function(){const t=localStorage.getItem('studyTheme');if(t==='light'){document.documentElement.dataset.theme='light';document.getElementById('themeIcon').textContent='🌙';try{document.getElementById('themeLabel').textContent='Dark Mode'}catch(e){}}})();
+
+// ═══ CARD DATA ═══
+const CARDS=[
+// ── PART 1: ANTEPARTUM ──
+{q:"What is Nägele's rule for calculating estimated date of delivery?",a:"<strong>First day of LMP − 3 months + 7 days + 1 year.</strong> Example: LMP Jan 15 → EDD Oct 22.",t:"Antepartum",p:1},
+{q:"What are the three presumptive signs of pregnancy?",a:"<ul><li>Amenorrhea</li><li>Nausea/vomiting (morning sickness)</li><li>Breast tenderness and changes</li></ul>Also: fatigue, urinary frequency, quickening (fetal movement felt by mother).",t:"Antepartum",p:1},
+{q:"What is the probable sign of pregnancy that is confirmed by lab test?",a:"<strong>Positive hCG</strong> (human chorionic gonadotropin) in blood or urine. Doubles every 48-72 hr in early pregnancy. hCG is the basis for pregnancy tests.",t:"Antepartum",p:1},
+{q:"What are the positive (diagnostic) signs of pregnancy?",a:"<ul><li>Fetal heartbeat detected by Doppler or ultrasound</li><li>Fetal movement felt by examiner</li><li>Visualization of fetus by ultrasound</li></ul>These <strong>cannot</strong> be attributed to any other condition.",t:"Antepartum",p:1},
+{q:"What does GTPAL stand for?",a:"<strong>G</strong>=Gravida (total pregnancies), <strong>T</strong>=Term births (≥37 wk), <strong>P</strong>=Preterm births (20-36 wk), <strong>A</strong>=Abortions/miscarriages (<20 wk), <strong>L</strong>=Living children.",t:"Antepartum",p:1},
+{q:"What is the recommended weight gain during pregnancy for a client with normal BMI?",a:"<strong>25-35 lb (11.3-15.9 kg).</strong> Underweight: 28-40 lb. Overweight: 15-25 lb. 1st trimester: 2-4 lb total. 2nd/3rd: ~1 lb/week.",t:"Antepartum",p:1},
+{q:"How many additional calories per day are recommended in the 2nd and 3rd trimesters?",a:"<strong>2nd trimester: +340 kcal/day</strong><br><strong>3rd trimester: +452 kcal/day</strong><br>No additional calories needed in 1st trimester.",t:"Antepartum",p:1},
+{q:"What is the recommended folic acid dose during pregnancy, and what does it prevent?",a:"<strong>600 mcg/day</strong> during pregnancy (400 mcg preconception). Prevents <strong>neural tube defects</strong> (spina bifida, anencephaly). Most effective when started before conception.",t:"Antepartum",p:1},
+{q:"Iron supplements should be taken with what? And avoided with what?",a:"<strong>Take WITH:</strong> vitamin C (orange juice) to enhance absorption.<br><strong>AVOID WITH:</strong> milk, caffeine, calcium, and antacids — these all interfere with absorption.<br>AE: constipation, dark stools.",t:"Antepartum",p:1},
+{q:"What is a reactive NST?",a:"FHR accelerates <strong>≥15/min above baseline for ≥15 seconds, occurring ≥2 times in 20 minutes.</strong><br>Before 32 weeks: ≥10/min for ≥10 seconds.<br>Reactive = reassuring = normal.",t:"Antepartum",p:1},
+{q:"What are the 5 variables of a Biophysical Profile (BPP)?",a:"<ul><li>FHR (NST) — reactive or nonreactive</li><li>Fetal breathing movements (≥1 episode >30 sec)</li><li>Gross body movements (≥3 in 30 min)</li><li>Fetal tone (extension with return to flexion)</li><li>Amniotic fluid volume (≥1 pocket ≥2 cm)</li></ul>Each scored 0 or 2. <strong>8-10 normal, 4-6 suspect, <4 abnormal.</strong>",t:"Antepartum",p:1},
+{q:"What is the significance of a positive CST?",a:"Persistent <strong>late decelerations with ≥50% of contractions</strong> = positive (abnormal). Suggests <strong>uteroplacental insufficiency.</strong> Provider may determine to induce labor or perform cesarean.",t:"Antepartum",p:1},
+{q:"What is supine hypotensive syndrome and how is it prevented?",a:"Compression of the <strong>inferior vena cava</strong> by the gravid uterus when supine, reducing venous return and cardiac output. Causes hypotension, dizziness, pallor.<br><strong>Prevention:</strong> left lateral position or wedge under right hip.",t:"Antepartum",p:1},
+{q:"Nitrazine paper turns deep blue when testing for what? What pH range?",a:"<strong>Amniotic fluid</strong> (alkaline, pH 6.5-7.5). Deep blue = positive for ROM.<br>Urine is slightly acidic — nitrazine paper remains yellow.",t:"Antepartum",p:1},
+{q:"What does elevated AFP in maternal serum or amniotic fluid suggest?",a:"<strong>High AFP:</strong> neural tube defects (spina bifida, anencephaly, omphalocele) or normal multifetal pregnancy.<br><strong>Low AFP:</strong> chromosomal disorders (Down syndrome) or hydatidiform mole.",t:"Antepartum",p:1},
+
+// ── PART 2: LABOR & DELIVERY ──
+{q:"What are the key differences between true and false labor contractions?",a:"<strong>True:</strong> regular, increase in frequency/duration/intensity, felt in lower back radiating to abdomen, increase with walking, progressive cervical change.<br><strong>False:</strong> irregular, decrease with walking/rest/hydration, felt above umbilicus, no cervical change.",t:"Labor & Delivery",p:2},
+{q:"What are the Five Ps of labor?",a:"<ul><li><strong>Passenger</strong> — fetus and placenta</li><li><strong>Passageway</strong> — birth canal</li><li><strong>Powers</strong> — contractions</li><li><strong>Position</strong> — maternal position</li><li><strong>Psychological response</strong> — stress/anxiety can impair progress</li></ul>",t:"Labor & Delivery",p:2},
+{q:"What are the 7 cardinal movements of labor (mechanism of labor)?",a:"<ol><li>Engagement</li><li>Descent</li><li>Flexion</li><li>Internal rotation</li><li>Extension</li><li>External rotation (restitution)</li><li>Expulsion</li></ol>",t:"Labor & Delivery",p:2},
+{q:"What are the contraction characteristics during transition phase?",a:"<strong>Transition (8-10 cm):</strong> contractions every 2-3 min, duration 45-90 sec, strong to very strong intensity.<br>Client is tired, restless, irritable, states 'cannot continue,' may have N/V, increased rectal pressure, urge to push. <strong>Most difficult part of labor.</strong>",t:"Labor & Delivery",p:2},
+{q:"What does FHR variability tell you? What is the normal range?",a:"Variability reflects intact fetal CNS and adequate oxygenation.<br><strong>Absent:</strong> undetectable (nonreassuring)<br><strong>Minimal:</strong> ≤5/min<br><strong>Moderate:</strong> 6-25/min (<strong>normal/reassuring</strong>)<br><strong>Marked:</strong> >25/min",t:"Labor & Delivery",p:2},
+{q:"What causes early decelerations? Are they reassuring?",a:"Caused by <strong>fetal head compression</strong> during contractions. They mirror contractions (onset to onset, nadir at peak). Uniform shape.<br><strong>Benign — no intervention required.</strong>",t:"Labor & Delivery",p:2},
+{q:"What causes late decelerations? What do they indicate?",a:"Caused by <strong>uteroplacental insufficiency.</strong> Onset AFTER contraction begins, nadir AFTER peak, recovery AFTER contraction ends.<br><strong>Nonreassuring — requires immediate intervention:</strong> stop oxytocin, left lateral, O2 10L NRB, IV fluids, notify provider.",t:"Labor & Delivery",p:2},
+{q:"What causes variable decelerations?",a:"Caused by <strong>umbilical cord compression.</strong> Abrupt onset, variable shape and timing relative to contractions. Can look like a V, W, or U shape.<br><strong>Nonreassuring if recurrent or severe.</strong> Reposition client, amnioinfusion may be needed.",t:"Labor & Delivery",p:2},
+{q:"What is Category III fetal heart rate tracing?",a:"<strong>Abnormal — requires immediate intervention.</strong><br>Either: <strong>sinusoidal pattern</strong> OR absent baseline variability with any of: recurrent late decels, recurrent variable decels, or bradycardia.",t:"Labor & Delivery",p:2},
+{q:"What are the four Leopold maneuvers and what does each assess?",a:"<ul><li><strong>1st:</strong> palpate fundus — identify head vs breech (lie, presenting part)</li><li><strong>2nd:</strong> palpate sides — locate fetal back vs small parts</li><li><strong>3rd:</strong> grasp lower segment — identify presenting part over inlet and descent</li><li><strong>4th:</strong> facing feet, palpate cephalic prominence — determine attitude (flexion vs extension)</li></ul>",t:"Labor & Delivery",p:2},
+{q:"When can an epidural be administered during labor?",a:"When client is in <strong>active labor, dilated to at least 4 cm.</strong><br>Give <strong>IV fluid bolus</strong> before placement. Position sitting or side-lying with curved back. Left-lateral after insertion to prevent supine hypotension.",t:"Labor & Delivery",p:2},
+{q:"What are the degrees of perineal laceration?",a:"<ul><li><strong>1st:</strong> skin only, no muscle</li><li><strong>2nd:</strong> skin + muscles, NOT anal sphincter</li><li><strong>3rd:</strong> skin + muscles + external anal sphincter</li><li><strong>4th:</strong> skin + muscles + anal sphincter + anterior rectal wall</li></ul>",t:"Labor & Delivery",p:2},
+{q:"What is the FIRST action after rupture of membranes?",a:"<strong>Check FHR</strong> for decelerations to rule out umbilical cord prolapse.<br>Then: assess color, clarity, odor, and amount of amniotic fluid. Green/meconium = fetal distress. Foul odor = infection. Temp q2hr after ROM.",t:"Labor & Delivery",p:2},
+
+// ── PART 3: NEWBORN ──
+{q:"What is the Apgar scoring system?",a:"Assessed at <strong>1 and 5 minutes.</strong> Five components (0-2 each):<br><strong>H</strong>eart rate, <strong>R</strong>espiratory effort, <strong>M</strong>uscle tone, <strong>R</strong>eflex irritability, <strong>C</strong>olor.<br>7-10: normal. 4-6: moderate difficulty. 0-3: severe distress.",t:"Newborn",p:3},
+{q:"What is the normal newborn heart rate and how is it assessed?",a:"<strong>110-160/min.</strong> Assess <strong>apical pulse for 1 full minute</strong> with pediatric stethoscope at 4th-5th intercostal space, left midclavicular line. Preferably when sleeping. Report murmurs.",t:"Newborn",p:3},
+{q:"In what order should newborn vital signs be assessed?",a:"<strong>Respirations FIRST</strong> (before newborn becomes agitated), then heart rate, blood pressure, then temperature.<br>Resp: 30-60/min. HR: 110-160. BP: 60-80/40-50. Temp: 36.5-37.5°C.",t:"Newborn",p:3},
+{q:"What is the difference between caput succedaneum and cephalohematoma?",a:"<strong>Caput:</strong> soft tissue swelling, <strong>CROSSES suture lines,</strong> resolves 3-4 days, no treatment.<br><strong>Cephalohematoma:</strong> blood between periosteum and skull, <strong>does NOT cross suture lines,</strong> appears day 1-2, resolves 2-8 weeks.",t:"Newborn",p:3},
+{q:"What are the four mechanisms of heat loss in the newborn?",a:"<ul><li><strong>Conduction:</strong> direct contact with cool surface</li><li><strong>Convection:</strong> heat loss to cool air currents</li><li><strong>Evaporation:</strong> wet skin converts liquid to vapor</li><li><strong>Radiation:</strong> heat loss to nearby cool surface (not touching)</li></ul>Best prevention: <strong>skin-to-skin contact</strong> and dry immediately.",t:"Newborn",p:3},
+{q:"When suctioning a newborn, what comes first — mouth or nose?",a:"<strong>Mouth FIRST, then nose.</strong> Suctioning the nose first can stimulate a gasp that aspirates secretions from the mouth into the lungs.",t:"Newborn",p:3},
+{q:"What are the three mandatory prophylactic medications given to newborns?",a:"<ul><li><strong>Erythromycin eye ointment 0.5%</strong> — prevents ophthalmia neonatorum</li><li><strong>Vitamin K (phytonadione) 0.5-1 mg IM</strong> — prevents hemorrhagic disease</li><li><strong>Hepatitis B vaccine</strong> — first dose at birth</li></ul><strong>Do NOT give Vit K and Hep B in the same thigh.</strong>",t:"Newborn",p:3},
+{q:"Why is vitamin K given to newborns?",a:"Newborn gut is <strong>sterile</strong> — vitamin K is not produced until bacteria colonize the intestines (~day 7) after feeding begins. Without it, newborn is at risk for <strong>hemorrhagic disease</strong> (vitamin K deficiency bleeding).",t:"Newborn",p:3},
+{q:"What are normal newborn elimination expectations?",a:"<strong>Urine:</strong> within 24 hr of birth; 6-8 wet diapers/day after day 4. Uric acid crystals (rust color) normal for first days.<br><strong>Meconium:</strong> within 24-48 hr. Then 3-4 stools/day. Breastfed: yellow, seedy. Formula-fed: darker, firmer.",t:"Newborn",p:3},
+{q:"What does the Moro reflex look like, and when does it disappear?",a:"Let head/trunk fall backward 30°. Newborn symmetrically extends and abducts arms, fingers form a <strong>'C'</strong>.<br>Complete response until <strong>8 weeks,</strong> body jerk until 8-18 weeks, absent by <strong>6 months.</strong> Asymmetric response suggests birth injury.",t:"Newborn",p:3},
+
+// ── PART 4: POSTPARTUM ──
+{q:"What is BUBBLE-E assessment?",a:"<strong>B</strong>=Breasts, <strong>U</strong>=Uterus (fundal height, placement, consistency), <strong>B</strong>=Bowel, <strong>B</strong>=Bladder, <strong>L</strong>=Lochia (COCA: Color, Odor, Consistency, Amount), <strong>E</strong>=Episiotomy (edema, ecchymosis, approximation). Plus VS and pain.",t:"Postpartum",p:4},
+{q:"Describe the uterine involution timeline.",a:"<strong>End of 3rd stage:</strong> 2 cm below umbilicus.<br><strong>1 hr postpartum:</strong> rises to umbilicus.<br><strong>Every 24 hr:</strong> descends ~1 cm (1 fingerbreadth/day).<br><strong>Day 6:</strong> halfway between symphysis and umbilicus.<br><strong>2 weeks:</strong> within true pelvis, not palpable.",t:"Postpartum",p:4},
+{q:"What are the three stages of lochia and their timing?",a:"<ul><li><strong>Rubra:</strong> dark red, days 1-3</li><li><strong>Serosa:</strong> pinkish brown, days 4-10</li><li><strong>Alba:</strong> yellowish white, day 10 to 8 weeks</li></ul>Foul odor = infection. Return to red after serosa = retained fragments. Pad saturated in 15 min = excessive.",t:"Postpartum",p:4},
+{q:"What does a boggy uterus indicate and what should the nurse do?",a:"Indicates <strong>uterine atony</strong> — the most common cause of postpartum hemorrhage.<br><strong>Actions:</strong> massage fundus in circular motion → if does not firm, continue massage + notify provider → administer oxytocin → methergine (if not hypertensive) → carboprost → misoprostol.",t:"Postpartum",p:4},
+{q:"What causes lateral displacement of the fundus?",a:"A <strong>full bladder.</strong> The distended bladder pushes the uterus to one side, which can prevent it from contracting properly and lead to atony/hemorrhage.<br><strong>Intervention:</strong> encourage voiding or catheterize.",t:"Postpartum",p:4},
+{q:"What are Rubin's phases of maternal role attainment?",a:"<ul><li><strong>Taking-in</strong> (first 24-48 hr): focus on self, dependent, talkative, reviews birth</li><li><strong>Taking-hold</strong> (day 2-3, lasts weeks): focus on baby care, wants to learn, may have 'baby blues'</li><li><strong>Letting-go:</strong> focus on family unit, resumes other roles</li></ul>",t:"Postpartum",p:4},
+{q:"Name 4 danger signs to report after discharge.",a:"<ul><li>Fever >38°C (100.4°F) after 24 hr</li><li>Increased/foul-smelling lochia or return to bright red</li><li>Calf pain, redness, warmth, swelling (thromboembolism)</li><li>Signs of depression: apathy, inability to care for self/infant, thoughts of harm</li></ul>Also: breast infection signs, wound/incision problems, urinary symptoms.",t:"Postpartum",p:4},
+{q:"When should perineal ice packs be switched to heat therapy?",a:"<strong>Ice/cold packs for the first 24 hours</strong> (reduce edema, anesthetic effect).<br><strong>After 24 hours:</strong> switch to heat therapy — hot packs, moist heat, sitz baths (at least 20 min, twice daily) to increase circulation and promote healing.",t:"Postpartum",p:4},
+
+// ── PHARMACOLOGY ──
+{q:"What is the antidote for magnesium sulfate toxicity?",a:"<strong>Calcium gluconate</strong> (1 g = 10 mL of 10% solution). Administer IV push over 3-5 min.<br><strong>Must be at bedside at ALL times</strong> during MgSO4 infusion.",t:"Pharmacology",p:5},
+{q:"What are the signs of magnesium sulfate toxicity?",a:"<ul><li>Respirations <strong><12/min</strong></li><li><strong>Absent DTRs</strong> (precedes respiratory depression)</li><li>Urine output <strong><25 mL/hr</strong></li><li>Mg level <strong>≥10 mEq/L</strong></li><li>Pulmonary edema, altered LOC, severe hypotension</li></ul><strong>STOP infusion immediately</strong> and give calcium gluconate.",t:"Pharmacology",p:5},
+{q:"Why is methylergonovine (Methergine) contraindicated in hypertension?",a:"Methergine is an <strong>ergot alkaloid that causes vasoconstriction,</strong> which raises blood pressure. In hypertensive or preeclamptic clients, it can cause <strong>hypertensive crisis</strong> (severe headache, N/V, dangerously elevated BP, stroke).<br><strong>CHECK BP BEFORE EVERY DOSE.</strong>",t:"Pharmacology",p:5},
+{q:"What is the PPH medication escalation protocol?",a:"<strong>1st:</strong> Oxytocin (Pitocin) + fundal massage<br><strong>2nd:</strong> Methylergonovine (Methergine) — NOT if hypertensive<br><strong>3rd:</strong> Carboprost (Hemabate) — NOT if asthma<br><strong>4th:</strong> Misoprostol (Cytotec)",t:"Pharmacology",p:5},
+{q:"What must be given before epidural placement and why?",a:"<strong>IV fluid bolus (500-1000 mL)</strong> to prevent the most common complication: <strong>maternal hypotension</strong> from sympathetic blockade.<br>Also: client must be at least 4 cm dilated and in active labor.",t:"Pharmacology",p:5},
+{q:"Carboprost (Hemabate) is contraindicated in what condition?",a:"<strong>Asthma.</strong> Carboprost is a prostaglandin that can cause severe <strong>bronchospasm.</strong> This is the most tested contraindication for carboprost.<br>Also contraindicated: active cardiac, pulmonary, renal, or hepatic disease.",t:"Pharmacology",p:5},
+{q:"What is the most important nursing action before giving naloxone to a neonate?",a:"Ensure the respiratory depression is <strong>opioid-related</strong> (not from other causes). Naloxone only reverses opioid effects.<br>Also: monitor for <strong>re-narcotization</strong> — naloxone may wear off before the opioid (duration 30-90 min).",t:"Pharmacology",p:5},
+{q:"Why should terbutaline be withheld if maternal HR >120?",a:"Terbutaline is a <strong>beta2 agonist</strong> that causes tachycardia as an adverse effect. HR >120, chest pain, or cardiac arrhythmias indicate intolerable effects.<br><strong>Withhold and contact provider immediately.</strong>",t:"Pharmacology",p:5},
+{q:"When is betamethasone administered and what does it do?",a:"<strong>12 mg IM × 2 doses, 24 hr apart</strong> to clients at <strong>24-34 weeks gestation.</strong><br>Stimulates fetal lungs to produce <strong>surfactant,</strong> reducing risk of respiratory distress syndrome. Must be given at least 24 hr before delivery.",t:"Pharmacology",p:5},
+{q:"Why can't vitamin K and hepatitis B vaccine be given in the same thigh?",a:"To <strong>allow accurate assessment of injection site reactions</strong> — if both are in the same thigh and a reaction occurs, you cannot determine which medication caused it. Use <strong>opposite vastus lateralis muscles.</strong>",t:"Pharmacology",p:5},
+];
+
+// ═══ ENGINE ═══
+const PARTS={1:'Antepartum',2:'Labor & Delivery',3:'Newborn',4:'Postpartum',5:'Pharmacology'};
+let deck=[],current=0,rightN=0,wrongN=0,wrongCards=[];
+let shuffleOn=false,starFilterOn=false;
+let starred=JSON.parse(localStorage.getItem('nur2460_fc_stars')||'{}');
+
+const EXAMS={
+  'Exam 1':{
+    1:'Antepartum',
+    2:'Labor & Delivery',
+    3:'Newborn',
+    4:'Postpartum',
+    5:'Pharmacology'
+  }
+};
+let selectedTopics=new Set(Object.keys(PARTS).map(Number));
+
+function buildSidebar(){
+  const sb=document.getElementById('sidebarBody');
+  let h='';
+  Object.keys(EXAMS).forEach(examName=>{
+    const topics=EXAMS[examName];
+    h+='<div class="sb-section"><div class="sb-section-label" onclick="toggleExamSection(this)"><span class="caret">▾</span>'+examName+'</div>';
+    Object.keys(topics).forEach(p=>{
+      const pNum=parseInt(p);
+      const count=CARDS.filter(c=>c.p===pNum).length;
+      const checked=selectedTopics.has(pNum)?'checked':'';
+      h+='<div class="sb-topic"><input type="checkbox" id="tp'+pNum+'" '+checked+' onchange="toggleTopic('+pNum+',this.checked)"><label for="tp'+pNum+'">'+topics[p]+'</label><span class="count">'+count+'</span></div>';
+    });
+    h+='</div>';
+  });
+  sb.innerHTML=h;
+}
+
+function openSidebar(){
+  document.querySelector('.sidebar').classList.add('open');
+  document.getElementById('sidebarOverlay').classList.add('show');
+}
+function closeSidebar(){
+  document.querySelector('.sidebar').classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('show');
+}
+
+function toggleExamSection(el){el.parentElement.classList.toggle('collapsed')}
+
+function toggleTopic(p,on){
+  if(on)selectedTopics.add(p);else selectedTopics.delete(p);
+}
+
+function selectAll(){
+  Object.keys(PARTS).forEach(p=>selectedTopics.add(parseInt(p)));
+  document.querySelectorAll('.sb-topic input').forEach(cb=>cb.checked=true);
+}
+
+function deselectAll(){
+  selectedTopics.clear();
+  document.querySelectorAll('.sb-topic input').forEach(cb=>cb.checked=false);
+}
+
+function toggleShuffle(){shuffleOn=!shuffleOn;document.getElementById('shuffleBtn').classList.toggle('active',shuffleOn);startRound()}
+function toggleStarFilter(){starFilterOn=!starFilterOn;document.getElementById('starFilter').classList.toggle('active',starFilterOn);startRound()}
+
+function startRound(){
+  let pool=CARDS.filter(c=>selectedTopics.has(c.p));
+  if(starFilterOn)pool=pool.filter((_,i)=>starred[CARDS.indexOf(_)]);
+  // Close mobile sidebar
+  closeSidebar();
+  if(shuffleOn)pool.sort(()=>Math.random()-.5);
+  deck=pool;current=0;rightN=0;wrongN=0;wrongCards=[];
+  document.getElementById('endScreen').style.display='none';
+  document.getElementById('cardWrapper').style.display='';
+  if(deck.length)showCard();
+  else{document.getElementById('cardWrapper').style.display='none';document.getElementById('endScreen').style.display='';document.getElementById('endSub').textContent='No cards match your filters.';document.getElementById('reviewBtn').style.display='none'}
+  updateUI();
+}
+
+function showCard(){
+  const c=deck[current];
+  const card=document.getElementById('flashcard');
+  card.classList.remove('swiping-left','swiping-right');
+  card.style.display='';
+  document.getElementById('cardTag').textContent=c.t;
+  document.getElementById('cardQ').innerHTML=c.q;
+  document.getElementById('cardA').innerHTML=c.a;
+  document.getElementById('cardA').classList.remove('visible');
+  document.getElementById('tapHint').classList.remove('hidden');
+  document.getElementById('cardActions').classList.remove('visible');
+  const idx=CARDS.indexOf(c);
+  document.getElementById('starBtn').textContent=starred[idx]?'★':'☆';
+  document.getElementById('starBtn').classList.toggle('starred',!!starred[idx]);
+  updateUI();
+}
+
+function revealAnswer(){
+  document.getElementById('cardA').classList.add('visible');
+  document.getElementById('tapHint').classList.add('hidden');
+  document.getElementById('cardActions').classList.add('visible');
+}
+
+function answer(correct){
+  if(correct)rightN++;
+  else{wrongN++;wrongCards.push(deck[current])}
+  const card=document.getElementById('flashcard');
+  card.classList.add(correct?'swiping-right':'swiping-left');
+  setTimeout(()=>{
+    current++;
+    if(current>=deck.length)showEnd();
+    else showCard();
+  },350);
+  updateUI();
+}
+
+function toggleStar(){
+  const idx=CARDS.indexOf(deck[current]);
+  if(starred[idx])delete starred[idx];else starred[idx]=true;
+  localStorage.setItem('nur2460_fc_stars',JSON.stringify(starred));
+  document.getElementById('starBtn').textContent=starred[idx]?'★':'☆';
+  document.getElementById('starBtn').classList.toggle('starred',!!starred[idx]);
+}
+
+function updateUI(){
+  const total=deck.length;
+  const done=rightN+wrongN;
+  document.getElementById('cardPos').textContent='Card '+(Math.min(current+1,total))+' of '+total;
+  document.getElementById('pctDone').textContent=total?Math.round(done/total*100)+'%':'0%';
+  document.getElementById('rightCount').textContent=rightN;
+  document.getElementById('wrongCount').textContent=wrongN;
+  document.getElementById('remainCount').textContent=Math.max(total-done,0);
+  const rPct=total?((rightN/total)*100)+'%':'0%';
+  const wPct=total?((wrongN/total)*100)+'%':'0%';
+  document.getElementById('progRight').style.width=rPct;
+  document.getElementById('progWrong').style.width=wPct;
+}
+
+function showEnd(){
+  document.getElementById('cardWrapper').style.display='none';
+  document.getElementById('endScreen').style.display='';
+  document.getElementById('endRight').textContent=rightN;
+  document.getElementById('endWrong').textContent=wrongN;
+  const pct=deck.length?Math.round(rightN/deck.length*100):0;
+  document.getElementById('endSub').textContent=pct+'% correct — '+(pct>=80?'Great job!':pct>=60?'Getting there!':'Keep studying!');
+  document.getElementById('reviewBtn').style.display=wrongCards.length?'':'none';
+}
+
+function restartAll(){startRound()}
+function reviewWrong(){
+  deck=wrongCards.slice();current=0;rightN=0;wrongN=0;wrongCards=[];
+  document.getElementById('endScreen').style.display='none';
+  document.getElementById('cardWrapper').style.display='';
+  showCard();updateUI();
+}
+
+// Keyboard shortcuts
+document.addEventListener('keydown',e=>{
+  if(e.key===' '||e.key==='Enter'){e.preventDefault();if(!document.getElementById('cardA').classList.contains('visible'))revealAnswer()}
+  else if(e.key==='ArrowRight'&&document.getElementById('cardA').classList.contains('visible'))answer(true);
+  else if(e.key==='ArrowLeft'&&document.getElementById('cardA').classList.contains('visible'))answer(false);
+  else if(e.key==='s'||e.key==='S')toggleStar();
+});
+
+// Touch swipe support
+let touchStartX=0;
+document.getElementById('flashcard').addEventListener('touchstart',e=>{touchStartX=e.touches[0].clientX},{passive:true});
+document.getElementById('flashcard').addEventListener('touchend',e=>{
+  if(!document.getElementById('cardA').classList.contains('visible'))return;
+  const diff=e.changedTouches[0].clientX-touchStartX;
+  if(Math.abs(diff)>60){answer(diff>0)}
+},{passive:true});
+
+buildSidebar();
+startRound();
+</script>
+</body>
+</html>
