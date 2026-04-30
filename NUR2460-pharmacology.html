@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NUR 2460 · Pharmacology Reference</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0f1117;--surface:#181c27;--surface2:#1e2336;--border:#2a3050;--accent:#e8527a;--accent2:#c97aac;--green:#3db87a;--red:#e05c6a;--amber:#e8a838;--teal:#2fbfbf;--text:#e8eaf2;--text2:#8b92b8;--text3:#555e85;--modal-bg:rgba(9,11,20,0.85)}
+[data-theme="light"]{--bg:#faf7f2;--surface:#f4f0e8;--surface2:#ece6d8;--border:#d6ccb8;--accent:#b83060;--accent2:#8b3e6e;--green:#1a9157;--red:#c0384a;--amber:#b87418;--teal:#177f7f;--text:#1e1c18;--text2:#5a5448;--text3:#9e9080;--modal-bg:rgba(250,247,242,0.92)}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',system-ui,sans-serif;min-height:100vh;transition:background .2s,color .2s}
+.layout{display:flex;min-height:100vh}
+
+/* Sidebar */
+.sidebar{width:280px;min-width:280px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;overflow:hidden;z-index:10}
+.sidebar-header{padding:18px 16px 14px;border-bottom:1px solid var(--border);flex-shrink:0}
+.back-home{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:var(--text3);text-decoration:none;padding:5px 0 12px;letter-spacing:.03em;transition:color .15s}
+.back-home:hover{color:var(--accent)}
+.back-home::before{content:'←';font-size:13px}
+.sb-course{font-size:10px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:4px}
+.sb-title{font-family:'DM Serif Display',serif;font-size:20px;font-weight:400;line-height:1.1;color:var(--text);margin-bottom:2px}
+.sb-sub{font-size:11px;color:var(--text3)}
+#themeToggle{margin-top:12px;background:0 0;border:1px solid var(--border);color:var(--text2);padding:6px 10px;border-radius:6px;font-family:inherit;font-size:11px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;width:100%;justify-content:center;transition:all .15s}
+#themeToggle:hover{border-color:var(--accent);color:var(--text)}
+
+/* Sidebar nav */
+.sidebar-nav{flex:1;overflow-y:auto;padding:10px 0}
+.nav-cat{padding:6px 16px;margin-bottom:2px}
+.nav-cat-label{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);padding:8px 0 4px;cursor:pointer;display:flex;align-items:center;gap:8px;user-select:none;transition:color .15s}
+.nav-cat-label:hover{color:var(--text2)}
+.nav-cat-label .caret{font-size:14px;color:var(--text2);transition:transform .2s;flex-shrink:0;order:-1}
+.nav-cat.collapsed .nav-cat-label .caret{transform:rotate(-90deg)}
+.nav-cat.collapsed .nav-drug{display:none}
+.nav-drug{font-size:12px;color:var(--text2);padding:5px 0 5px 22px;cursor:pointer;transition:color .15s;border-left:2px solid transparent}
+.nav-drug:hover{color:var(--accent)}
+.nav-drug.active{color:var(--accent);border-left-color:var(--accent);font-weight:600}
+
+/* Search */
+.search-wrap{padding:12px 16px;border-bottom:1px solid var(--border);flex-shrink:0}
+#searchInput{width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:8px 10px;border-radius:6px;font-family:inherit;font-size:12px;outline:0;transition:border-color .15s}
+#searchInput:focus{border-color:var(--accent)}
+
+/* Main content */
+.main-content{margin-left:280px;padding:48px 48px 60px;flex:1;max-width:960px}
+.main-course{font-size:10px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:6px}
+.main-title{font-family:'DM Serif Display',serif;font-size:38px;font-weight:400;line-height:1.1;margin-bottom:6px}
+.main-title em{font-style:italic;color:var(--accent)}
+.main-desc{font-size:13.5px;color:var(--text2);margin-bottom:32px;line-height:1.5;max-width:600px}
+
+/* Drug categories */
+.section-divider{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--text3);padding-bottom:12px;border-bottom:1px solid var(--border);margin:36px 0 18px}
+.pharm-cat{background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:10px;overflow:hidden}
+.pharm-cat-header{padding:14px 18px;display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none;transition:background .15s}
+.pharm-cat-header:hover{background:var(--surface2)}
+.pharm-cat-caret{font-size:14px;color:var(--accent);transition:transform .2s;flex-shrink:0}
+.pharm-cat.collapsed .pharm-cat-caret{transform:rotate(-90deg)}
+.pharm-cat-title{font-size:13px;font-weight:700;letter-spacing:.04em;color:var(--text)}
+.pharm-cat-count{font-size:11px;color:var(--text3);margin-left:auto}
+.pharm-cat-body{padding:10px 18px 14px;border-top:1px solid var(--border);display:flex;flex-wrap:wrap;gap:8px}
+.pharm-cat.collapsed .pharm-cat-body{display:none}
+.pharm-pill{background:var(--bg);border:1px solid var(--border);color:var(--text2);font-family:inherit;font-size:12px;font-weight:500;padding:7px 16px;border-radius:8px;cursor:pointer;transition:all .15s}
+.pharm-pill:hover{border-color:var(--accent);color:var(--accent);background:var(--surface2)}
+.pharm-pill.populated{border-left:3px solid var(--accent)}
+.pharm-pill.unpop{opacity:.45;cursor:not-allowed}
+
+/* Modal */
+.modal-overlay{position:fixed;inset:0;background:var(--modal-bg);z-index:100;display:flex;align-items:flex-start;justify-content:center;padding:40px 20px;overflow-y:auto;opacity:0;pointer-events:none;transition:opacity .2s}
+.modal-overlay.show{opacity:1;pointer-events:auto}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:16px;width:100%;max-width:820px;box-shadow:0 20px 60px rgba(0,0,0,.4);overflow:hidden}
+.modal-header{padding:20px 24px 16px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--surface);z-index:2}
+.modal-title-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.modal-title{font-family:'DM Serif Display',serif;font-size:22px;line-height:1.2}
+.modal-sub{font-size:12px;color:var(--text3);margin-top:2px}
+.modal-close{background:0 0;border:1px solid var(--border);color:var(--text3);width:32px;height:32px;border-radius:8px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
+.modal-close:hover{border-color:var(--accent);color:var(--accent)}
+.modal-refs{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.modal-ref{font-size:10px;color:var(--text3);background:var(--bg);padding:3px 8px;border-radius:4px;display:inline-flex;align-items:center;gap:4px}
+#modalBody{padding:20px 24px 28px}
+
+
+/* Exam accordion */
+.exam-accordion{background:var(--surface);border:1px solid var(--border);border-radius:14px;margin-bottom:20px;overflow:hidden}
+.exam-header{padding:18px 22px;display:flex;align-items:center;gap:14px;cursor:pointer;user-select:none;transition:background .15s;flex-wrap:wrap}
+.exam-header:hover{background:var(--surface2)}
+.exam-caret{font-size:16px;color:var(--accent);transition:transform .2s;flex-shrink:0}
+.exam-accordion.collapsed .exam-caret{transform:rotate(-90deg)}
+.exam-title{font-size:14px;font-weight:700;color:var(--text);letter-spacing:.02em}
+.exam-count{font-size:12px;font-weight:600;color:var(--accent);margin-left:auto}
+.exam-bar-wrap{width:100%;padding:0 22px 14px}
+.exam-bar-outer{width:100%;height:8px;background:var(--bg);border-radius:99px;overflow:hidden}
+.exam-bar-inner{height:100%;background:var(--accent);border-radius:99px;transition:width .4s ease}
+.exam-body{border-top:1px solid var(--border);padding:14px 16px 8px}
+.exam-accordion.collapsed .exam-body{display:none}
+.exam-accordion.collapsed .exam-bar-wrap{display:none}
+.exam-reset{display:inline-block;margin-top:8px;margin-bottom:4px}
+.exam-reset button{background:0 0;border:none;color:var(--text3);font-family:inherit;font-size:11px;cursor:pointer;padding:4px 8px;border-radius:4px;transition:all .15s}
+.exam-reset button:hover{color:var(--red);background:rgba(224,92,106,.1)}
+
+/* Progress tracking */
+
+
+/* Drug row with checkbox */
+.pharm-drug-row{display:flex;align-items:center;gap:8px}
+.pharm-check{width:18px;height:18px;border-radius:5px;border:2px solid var(--border);background:var(--bg);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s;font-size:11px;color:transparent}
+.pharm-check.checked{background:var(--accent);border-color:var(--accent);color:#fff}
+.pharm-check:hover{border-color:var(--accent)}
+.pharm-pill.reviewed{opacity:.55;text-decoration:line-through;text-decoration-color:var(--text3)}
+
+/* Pharm Card Grid */
+.pharm-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:4px 0}
+@media(max-width:600px){.pharm-grid{grid-template-columns:1fr}}
+.pharm-grid-cell{background:var(--bg);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.pharm-grid-cell.full-width{grid-column:1/-1}
+.pharm-grid-cell h4{font-size:12px;font-weight:700;color:var(--text);margin:0;padding:9px 14px;background:var(--surface2);border-bottom:1px solid var(--border);letter-spacing:.02em}
+.pharm-grid-cell ul{list-style:none;padding:8px 14px 10px;margin:0}
+.pharm-grid-cell ul li{padding:3px 0 3px 14px;position:relative;font-size:12.5px;color:var(--text2);line-height:1.5}
+.pharm-grid-cell ul li::before{content:'•';position:absolute;left:0;color:var(--accent);font-weight:700}
+.pharm-grid-cell ul li strong{color:var(--text);font-weight:600}
+
+/* Source badges */
+.bsrc{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.06em;padding:1px 5px;border-radius:3px;margin-left:4px;vertical-align:middle}
+.bsrc-ati{background:rgba(47,130,200,.15);color:#5ba0d8}
+.bsrc-perry{background:rgba(60,180,100,.15);color:#3db87a}
+.bsrc-both{background:rgba(160,100,200,.15);color:#b88cd8}
+
+/* Mobile */
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:9;transition:opacity .25s}
+.sidebar-overlay.show{display:block}
+
+.back-home-mobile{display:none;position:fixed;top:14px;left:14px;z-index:51;font-size:11px;font-weight:600;color:var(--text2);text-decoration:none;letter-spacing:.03em;align-items:center;gap:5px;background:var(--surface);border:1px solid var(--border);padding:8px 14px;border-radius:8px;transition:color .15s,border-color .15s}
+.back-home-mobile:hover{color:var(--accent);border-color:var(--accent)}
+.back-home-mobile::before{content:'←';font-size:12px}
+.sidebar-toggle{display:none;position:fixed;top:52px;left:14px;z-index:50;background:var(--surface);border:1px solid var(--border);color:var(--text);width:40px;height:40px;border-radius:8px;font-size:18px;cursor:pointer;align-items:center;justify-content:center}
+@media(max-width:900px){.sidebar{transform:translateX(-100%);transition:transform .25s}.sidebar.open{transform:translateX(0)}.sidebar-header{padding-top:100px}.sidebar-header .back-home{display:none}.main-content{margin-left:0;padding:110px 28px 48px}.sidebar-toggle{display:flex}.main-title{font-size:32px}.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:9;transition:opacity .25s}
+.sidebar-overlay.show{display:block}
+
+.back-home-mobile{display:flex}}
+</style>
+</head>
+<body>
+<button class="sidebar-toggle" onclick="toggleMobileSidebar()">☰</button>
+<a class="back-home-mobile" href="NUR2460-hub.html">Back to Hub</a>
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+<div class="layout">
+
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <a class="back-home" href="NUR2460-hub.html">Back to Hub</a>
+    <div class="sb-course">NUR 2460 · Fall 2026</div>
+    <div class="sb-title">Pharmacology</div>
+    <div class="sb-sub">Medication Reference</div>
+    <button id="themeToggle" onclick="toggleTheme()"><span id="themeIcon">☀️</span> <span id="themeLabel">Light Mode</span></button>
+  </div>
+  <div class="search-wrap">
+    <input type="text" id="searchInput" placeholder="Search medications…" oninput="filterDrugs(this.value)">
+  </div>
+  <nav class="sidebar-nav" id="sidebarNav">
+    <div class="nav-cat" id="nc1"><div class="nav-cat-label" onclick="this.parentElement.classList.toggle('collapsed')"><span class="caret">▾</span>Prenatal Supplements</div>
+      <div class="nav-drug" onclick="openDrug('folic_acid')">Folic Acid</div>
+      <div class="nav-drug" onclick="openDrug('iron_supp')">Iron</div>
+      <div class="nav-drug" onclick="openDrug('calcium_supp')">Calcium</div>
+      <div class="nav-drug" onclick="openDrug('rhogam')">RhoGAM</div>
+    </div>
+    <div class="nav-cat" id="nc2"><div class="nav-cat-label" onclick="this.parentElement.classList.toggle('collapsed')"><span class="caret">▾</span>Labor Analgesics & Anesthesia</div>
+      <div class="nav-drug" onclick="openDrug('opioid_analgesics')">Opioid Analgesics</div>
+      <div class="nav-drug" onclick="openDrug('epidural')">Epidural Block</div>
+      <div class="nav-drug" onclick="openDrug('spinal')">Spinal Block</div>
+      <div class="nav-drug" onclick="openDrug('pudendal')">Pudendal Block</div>
+      <div class="nav-drug" onclick="openDrug('naloxone')">Naloxone</div>
+    </div>
+    <div class="nav-cat" id="nc3"><div class="nav-cat-label" onclick="this.parentElement.classList.toggle('collapsed')"><span class="caret">▾</span>Cervical Ripening & Induction</div>
+      <div class="nav-drug" onclick="openDrug('oxytocin_ind')">Oxytocin (Pitocin)</div>
+      <div class="nav-drug" onclick="openDrug('dinoprostone')">Dinoprostone</div>
+      <div class="nav-drug" onclick="openDrug('misoprostol_rip')">Misoprostol</div>
+    </div>
+    <div class="nav-cat" id="nc4"><div class="nav-cat-label" onclick="this.parentElement.classList.toggle('collapsed')"><span class="caret">▾</span>Tocolytics</div>
+      <div class="nav-drug" onclick="openDrug('terbutaline')">Terbutaline</div>
+      <div class="nav-drug" onclick="openDrug('mag_sulfate')">Magnesium Sulfate</div>
+      <div class="nav-drug" onclick="openDrug('nifedipine')">Nifedipine</div>
+      <div class="nav-drug" onclick="openDrug('indomethacin')">Indomethacin</div>
+    </div>
+    <div class="nav-cat" id="nc5"><div class="nav-cat-label" onclick="this.parentElement.classList.toggle('collapsed')"><span class="caret">▾</span>Uterotonics (PPH)</div>
+      <div class="nav-drug" onclick="openDrug('oxytocin_pp')">Oxytocin (Postpartum)</div>
+      <div class="nav-drug" onclick="openDrug('methergine')">Methylergonovine</div>
+      <div class="nav-drug" onclick="openDrug('carboprost')">Carboprost</div>
+      <div class="nav-drug" onclick="openDrug('misoprostol_pp')">Misoprostol (PPH)</div>
+    </div>
+    <div class="nav-cat" id="nc6"><div class="nav-cat-label" onclick="this.parentElement.classList.toggle('collapsed')"><span class="caret">▾</span>Glucocorticoids</div>
+      <div class="nav-drug" onclick="openDrug('betamethasone')">Betamethasone</div>
+    </div>
+    <div class="nav-cat" id="nc7"><div class="nav-cat-label" onclick="this.parentElement.classList.toggle('collapsed')"><span class="caret">▾</span>Newborn Prophylaxis</div>
+      <div class="nav-drug" onclick="openDrug('erythromycin_eye')">Erythromycin Eye</div>
+      <div class="nav-drug" onclick="openDrug('vitamin_k')">Vitamin K</div>
+      <div class="nav-drug" onclick="openDrug('hep_b_vax')">Hepatitis B Vaccine</div>
+    </div>
+  </nav>
+</aside>
+
+<main class="main-content">
+  <div class="main-course">NUR 2460 · Fall 2026</div>
+  <h1 class="main-title">Pharmacology <em>Reference</em></h1>
+  <p class="main-desc">Comprehensive medication reference organized by ATI template. Check off drugs as you review them — progress is saved automatically.</p>
+
+  <div class="exam-accordion" id="exam1pharm">
+    <div class="exam-header" onclick="this.parentElement.classList.toggle('collapsed')">
+      <span class="exam-caret">▾</span>
+      <span class="exam-title">Exam 1 — Medications</span>
+      <span class="exam-count" id="pharmCount">0 / 24</span>
+    </div>
+    <div class="exam-bar-wrap">
+      <div class="exam-bar-outer"><div class="exam-bar-inner" id="pharmBar" style="width:0%"></div></div>
+    </div>
+    <div class="exam-body">
+
+  <div class="pharm-cat" id="pc1">
+    <div class="pharm-cat-header" onclick="this.parentElement.classList.toggle('collapsed')"><span class="pharm-cat-caret">▾</span><span class="pharm-cat-title">Prenatal Supplements</span><span class="pharm-cat-count" id="pc1count">0/4</span></div>
+    <div class="pharm-cat-body">
+      <div class="pharm-drug-row"><div class="pharm-check" data-drug="folic_acid" onclick="togglePharmCheck(this)">✓</div><button class="pharm-pill populated" data-drug="folic_acid" onclick="openDrug('folic_acid')">Folic Acid</button></div>
+      <div class="pharm-drug-row"><div class="pharm-check" data-drug="iron_supp" onclick="togglePharmCheck(this)">✓</div><button class="pharm-pill populated" data-drug="iron_supp" onclick="openDrug('iron_supp')">Iron</button></div>
+      <div class="pharm-drug-row"><div class="pharm-check" data-drug="calcium_supp" onclick="togglePharmCheck(this)">✓</div><button class="pharm-pill populated" data-drug="calcium_supp" onclick="openDrug('calcium_supp')">Calcium</button></div>
+      <div class="pharm-drug-row"><div class="pharm-check" data-drug="rhogam" onclick="togglePharmCheck(this)">✓</div><button class="pharm-pill populated" data-drug="rhogam" onclick="openDrug('rhogam')">RhoGAM</button></div>
+    </div>
+  </div>
+
+  <div class="pharm-cat" id="pc2">
+    <div class="pharm-cat-header" onclick="this.parentElement.classList.toggle('collapsed')"><span class="pharm-cat-caret">▾</span><span class="pharm-cat-title">Labor Analgesics & Anesthesia</span><span class="pharm-cat-count" id="pc2count">0/5</span></div>
+    <div class="pharm-cat-body">
+      <div class="pharm-drug-row"><div class="pharm-check" data-drug="opioid_analgesics" onclick="togglePharmCheck(this)">✓</div><button class="pharm-pill populated" data-drug="opioid_analgesics" onclick="openDrug('opioid_analgesics')">Opioid Analgesics</button></div>
+      <div class="pharm-drug-row"><div class="pharm-check" data-drug="epidural" onclick="togglePharmCheck(this)">✓</div><button class="pharm-pill populated" data-drug="epidural" onclick="openDrug('epidural')">Epidural Block</button></div>
+      <div class="pharm-drug-row"><div class="pharm-check" data-drug="spinal" onclick="togglePharmCheck(this)">✓</div><button class="pharm-pill populated" data-drug="spinal" onclick="openDrug('spinal')">Spinal Block</button></div>
+      <div class="pharm-drug-row"><div class="pharm-check" data-drug="pudendal" onclick="togglePharmCheck(this)">✓</div><button class="pharm-pill populated" data-drug="pudendal" onclick="openDrug('pudendal')">Pudendal Block</button></div>
+      <div class="pharm-drug-row"><div class="pharm-check" data-drug="naloxone" onclick="togglePharmCheck(this)">✓</div><button class="pharm-pill populated" data-drug="naloxone" onclick="openDrug('naloxone')">Naloxone</button></div>
+    </div>
+  </div>
+
+  <div class="pharm-cat" id="pc3">
+    <div class="pharm-cat-header" onclick="this.parentElement.classList.toggle('collapsed')"><span class="pharm-cat-caret">▾</span><span class="pharm-cat-title">Cervical Ripening & Induction</span><span class="pharm-cat-count" id="pc3count">0/3</span></div>
+    <div class="pharm-cat-body">
+      <div class="pharm-drug-row"><div class="pharm-check" data-drug="oxytocin_ind" onclick="togglePharmCheck(this)">✓</div><button class="pharm-pill populated" data-drug="oxytocin_ind" onclick="openDrug('oxytocin_ind')">Oxytocin (Pitocin)</button></div>
+      <div class="pharm-drug-row"><div class="pharm-check" data-drug="dinoprostone" onclick="togglePharmCheck(this)">✓</div><button class="pharm-pill populated" data-drug="dinoprostone" onclick="openDrug('dinoprostone')">Dinoprostone</button></div>
+      <div class="pharm-drug-row"><div class="pharm-check" data-drug="misoprostol_rip" onclick="togglePharmCheck(this)">✓</div><button class="pharm-pill populated" data-drug="misoprostol_rip" onclick="openDrug('misoprostol_rip')">Misoprostol</button></div>
+    </div>
+  </div>
+
+  <div class="pharm-cat" id="pc4">
+    <div class="pharm-cat-header" onclick="this.parentElement.classList.toggle('collapsed')"><span class="pharm-cat-caret">▾</span><span class="pharm-cat-title">Tocolytics</span><span class="pharm-cat-count" id="pc4count">0/4</span></div>
+    <div class="pharm-cat-body">
+      <div class="pharm-drug-row"><div class="pharm-check" data-drug="terbutaline" onclick="togglePharmCheck(this)">✓</div><button class="pharm-pill populated" data-drug="terbutaline" onclick="openDrug('terbutaline')">Terbutaline</button></div>
+      <div class="pharm-drug-row"><div class="pharm-check" data-drug="mag_sulfate" onclick="togglePharmCheck(this)">✓</div><button class="pharm-pill populated" data-drug="mag_sulfate" onclick="openDrug('mag_sulfate')">Magnesium Sulfate</button></div>
+      <div class="pharm-drug-row"><div class="pharm-check" data-drug="nifedipine" onclick="togglePharmCheck(this)">✓</div><button class="pharm-pill populated" data-drug="nifedipine" onclick="openDrug('nifedipine')">Nifedipine</button></div>
+      <div class="pharm-drug-row"><div class="pharm-check" data-drug="indomethacin" onclick="togglePharmCheck(this)">✓</div><button class="pharm-pill populated" data-drug="indomethacin" onclick="openDrug('indomethacin')">Indomethacin</button></div>
+    </div>
+  </div>
+
+  <div class="pharm-cat" id="pc5">
+    <div class="pharm-cat-header" onclick="this.parentElement.classList.toggle('collapsed')"><span class="pharm-cat-caret">▾</span><span class="pharm-cat-title">Uterotonics (PPH Prevention)</span><span class="pharm-cat-count" id="pc5count">0/4</span></div>
+    <div class="pharm-cat-body">
+      <div class="pharm-drug-row"><div class="pharm-check" data-drug="oxytocin_pp" onclick="togglePharmCheck(this)">✓</div><button class="pharm-pill populated" data-drug="oxytocin_pp" onclick="openDrug('oxytocin_pp')">Oxytocin (Postpartum)</button></div>
+      <div class="pharm-drug-row"><div class="pharm-check" data-drug="methergine" onclick="togglePharmCheck(this)">✓</div><button class="pharm-pill populated" data-drug="methergine" onclick="openDrug('methergine')">Methylergonovine</button></div>
+      <div class="pharm-drug-row"><div class="pharm-check" data-drug="carboprost" onclick="togglePharmCheck(this)">✓</div><button class="pharm-pill populated" data-drug="carboprost" onclick="openDrug('carboprost')">Carboprost</button></div>
+      <div class="pharm-drug-row"><div class="pharm-check" data-drug="misoprostol_pp" onclick="togglePharmCheck(this)">✓</div><button class="pharm-pill populated" data-drug="misoprostol_pp" onclick="openDrug('misoprostol_pp')">Misoprostol (PPH)</button></div>
+    </div>
+  </div>
+
+  <div class="pharm-cat" id="pc6">
+    <div class="pharm-cat-header" onclick="this.parentElement.classList.toggle('collapsed')"><span class="pharm-cat-caret">▾</span><span class="pharm-cat-title">Glucocorticoids</span><span class="pharm-cat-count" id="pc6count">0/1</span></div>
+    <div class="pharm-cat-body">
+      <div class="pharm-drug-row"><div class="pharm-check" data-drug="betamethasone" onclick="togglePharmCheck(this)">✓</div><button class="pharm-pill populated" data-drug="betamethasone" onclick="openDrug('betamethasone')">Betamethasone</button></div>
+    </div>
+  </div>
+
+  <div class="pharm-cat" id="pc7">
+    <div class="pharm-cat-header" onclick="this.parentElement.classList.toggle('collapsed')"><span class="pharm-cat-caret">▾</span><span class="pharm-cat-title">Newborn Prophylaxis</span><span class="pharm-cat-count" id="pc7count">0/3</span></div>
+    <div class="pharm-cat-body">
+      <div class="pharm-drug-row"><div class="pharm-check" data-drug="erythromycin_eye" onclick="togglePharmCheck(this)">✓</div><button class="pharm-pill populated" data-drug="erythromycin_eye" onclick="openDrug('erythromycin_eye')">Erythromycin Eye</button></div>
+      <div class="pharm-drug-row"><div class="pharm-check" data-drug="vitamin_k" onclick="togglePharmCheck(this)">✓</div><button class="pharm-pill populated" data-drug="vitamin_k" onclick="openDrug('vitamin_k')">Vitamin K</button></div>
+      <div class="pharm-drug-row"><div class="pharm-check" data-drug="hep_b_vax" onclick="togglePharmCheck(this)">✓</div><button class="pharm-pill populated" data-drug="hep_b_vax" onclick="openDrug('hep_b_vax')">Hepatitis B Vaccine</button></div>
+    </div>
+  </div>
+
+    <div class="exam-reset"><button onclick="resetPharmProgress()">Reset Progress</button></div>
+
+    </div>
+  </div>
+
+</main>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)closeDrug()">
+<div class="modal" id="modal">
+  <div class="modal-header">
+    <div class="modal-title-row">
+      <div><div class="modal-title" id="modalTitle"></div><div class="modal-sub" id="modalSub"></div></div>
+      <button class="modal-close" onclick="closeDrug()">×</button>
+    </div>
+    <div class="modal-refs" id="modalRefs"></div>
+  </div>
+  <div id="modalBody"></div>
+</div>
+</div>
+
+<script>
+function toggleMobileSidebar(){
+  var sb=document.querySelector('.sidebar');
+  var ov=document.getElementById('sidebarOverlay');
+  var open=sb.classList.toggle('open');
+  if(ov)ov.classList.toggle('show',open);
+}
+function closeSidebar(){
+  document.querySelector('.sidebar').classList.remove('open');
+  var ov=document.getElementById('sidebarOverlay');
+  if(ov)ov.classList.remove('show');
+}
+
+function toggleTheme(){
+  const isLight=document.documentElement.getAttribute('data-theme')==='light';
+  if(isLight){document.documentElement.removeAttribute('data-theme');document.getElementById('themeIcon').textContent='☀️';document.getElementById('themeLabel').textContent='Light Mode';localStorage.setItem('studyTheme','dark')}
+  else{document.documentElement.setAttribute('data-theme','light');document.getElementById('themeIcon').textContent='🌙';document.getElementById('themeLabel').textContent='Dark Mode';localStorage.setItem('studyTheme','light')}
+}
+(function(){const t=localStorage.getItem('studyTheme');if(t==='light'){document.documentElement.dataset.theme='light';document.getElementById('themeIcon').textContent='🌙';document.getElementById('themeLabel').textContent='Dark Mode'}})();
+
+function filterDrugs(q){
+  q=q.toLowerCase().trim();
+  document.querySelectorAll('.nav-drug').forEach(d=>{
+    d.style.display=(!q||d.textContent.toLowerCase().includes(q))?'':'none';
+  });
+  document.querySelectorAll('.pharm-pill').forEach(p=>{
+    p.style.display=(!q||p.textContent.toLowerCase().includes(q))?'':'none';
+  });
+}
+
+
+// ── Pharmacology Progress with localStorage ──
+const PHARM_KEY='nur2460_pharm_progress';
+const PHARM_CATS={
+  pc1:['folic_acid','iron_supp','calcium_supp','rhogam'],
+  pc2:['opioid_analgesics','epidural','spinal','pudendal','naloxone'],
+  pc3:['oxytocin_ind','dinoprostone','misoprostol_rip'],
+  pc4:['terbutaline','mag_sulfate','nifedipine','indomethacin'],
+  pc5:['oxytocin_pp','methergine','carboprost','misoprostol_pp'],
+  pc6:['betamethasone'],
+  pc7:['erythromycin_eye','vitamin_k','hep_b_vax']
+};
+
+function getPharmProgress(){try{return JSON.parse(localStorage.getItem(PHARM_KEY))||{}}catch(e){return{}}}
+function savePharmProgress(p){localStorage.setItem(PHARM_KEY,JSON.stringify(p))}
+
+function togglePharmCheck(el){
+  const id=el.dataset.drug;
+  const p=getPharmProgress();
+  if(p[id]){delete p[id];el.classList.remove('checked')}
+  else{p[id]=true;el.classList.add('checked')}
+  // Update pill styling
+  const pill=el.parentElement.querySelector('.pharm-pill');
+  if(pill)pill.classList.toggle('reviewed',!!p[id]);
+  savePharmProgress(p);
+  updatePharmBars();
+}
+
+function updatePharmBars(){
+  const p=getPharmProgress();
+  let total=0,done=0;
+  Object.keys(PHARM_CATS).forEach(catId=>{
+    const ids=PHARM_CATS[catId];
+    const catDone=ids.filter(id=>p[id]).length;
+    total+=ids.length;done+=catDone;
+    const el=document.getElementById(catId+'count');
+    if(el)el.textContent=catDone+'/'+ids.length;
+  });
+  const pct=total?Math.round((done/total)*100):0;
+  document.getElementById('pharmCount').textContent=done+' / '+total;
+  document.getElementById('pharmBar').style.width=pct+'%';
+}
+
+function resetPharmProgress(){
+  if(!confirm('Reset all pharmacology progress? This cannot be undone.'))return;
+  localStorage.removeItem(PHARM_KEY);
+  document.querySelectorAll('.pharm-check').forEach(c=>c.classList.remove('checked'));
+  document.querySelectorAll('.pharm-pill').forEach(p=>p.classList.remove('reviewed'));
+  updatePharmBars();
+}
+
+function loadPharmProgress(){
+  const p=getPharmProgress();
+  document.querySelectorAll('.pharm-check').forEach(el=>{
+    if(p[el.dataset.drug]){
+      el.classList.add('checked');
+      const pill=el.parentElement.querySelector('.pharm-pill');
+      if(pill)pill.classList.add('reviewed');
+    }
+  });
+  updatePharmBars();
+}
+
+const DRUGS={};
+
+// ═══ OXYTOCIN (INDUCTION) ═══
+DRUGS['oxytocin_ind']={
+title:'Oxytocin (Pitocin)',
+subtitle:'Uterine Stimulant · ATI Pharm Ch.32',
+refs:[{icon:'💊',short:'ATI Pharmacology Ed.8 — Ch.32'},{icon:'📘',short:'ATI Maternal Newborn Ed.11'}],
+action:'<ul><li>Synthetic form of the naturally occurring posterior pituitary hormone</li><li>Increases the strength, frequency, and length of uterine contractions by stimulating the smooth muscle of the uterus</li><li>Stimulates milk ejection (letdown) reflex during breastfeeding</li><li>At low doses, produces rhythmic uterine contractions that mimic spontaneous labor</li><li>At higher doses, can produce sustained tetanic contraction</li></ul>',
+use:'<ul><li><strong>Induction of labor:</strong> postterm pregnancy, premature rupture of membranes, preeclampsia, maternal medical conditions (diabetes, kidney disease), fetal demise</li><li><strong>Augmentation:</strong> enhancement of dysfunctional labor when contractions are inadequate for progress</li><li><strong>Third stage:</strong> delivery of placenta after birth, management of incomplete or inevitable miscarriage</li><li><strong>Postpartum:</strong> control of postpartum bleeding and hemorrhage by promoting uterine contraction</li><li><strong>Antepartum testing:</strong> contraction stress test (oxytocin challenge test) to evaluate fetal tolerance of labor</li></ul>',
+complications:'<ul><li><strong>Uterine tachysystole</strong> (most significant): 5+ contractions in 10 min, contractions within 1 min of each other, or single contraction lasting &gt;1 min — can lead to uterine rupture, placental abruption, fetal distress</li><li><strong>Tachysystole intervention protocol:</strong> 1) Stop oxytocin infusion immediately, 2) Position client left lateral, 3) Administer O2 at 10 L/min via nonrebreather mask, 4) Increase maintenance IV fluid rate, 5) Administer tocolytic if prescribed, 6) Notify provider immediately</li><li><strong>Water intoxication (rare at labor doses):</strong> occurs with prolonged high-dose infusion; findings include hyponatremia, hypochloremia, listlessness, confusion, headache, seizures</li><li><strong>Fetal effects:</strong> fetal bradycardia, late decelerations, decreased variability from reduced placental perfusion during tachysystole</li><li><strong>Maternal:</strong> nausea, vomiting, hypotension (especially with rapid IV bolus), cardiac arrhythmias (rare)</li></ul>',
+admin:'<ul><li>Administer via <strong>infusion pump only</strong> — NEVER as a free-flow or IV push (can cause uterine rupture and maternal death)</li><li><strong>Dilution:</strong> typically 10-40 units in 1,000 mL of isotonic solution per facility protocol</li><li><strong>Starting dose:</strong> 0.5-6 milliunits/min; increase gradually every 15-40 min per prescribed low-dose or high-dose protocol</li><li><strong>Monitoring frequency:</strong> BP, RR, pulse every 30-60 min and with every dosage change; contractions every 15 min (1st stage) and every 5 min (2nd stage) and with every dosage change</li><li><strong>Contraction goal:</strong> lasting 45-60 seconds or less, occurring every 2-3 min with adequate resting tone between</li><li>Continuous electronic fetal monitoring throughout entire infusion; report any nonreassuring FHR patterns</li><li>For cervical ripening agents (dinoprostone/misoprostol): wait prescribed time before starting oxytocin to prevent tachysystole</li><li><strong>Postpartum administration:</strong> IV drip or IM injection after placenta delivery; may be added to existing IV line</li></ul>',
+contraindications:'<ul><li><strong>Maternal factors:</strong> sepsis, unripe cervix (Bishop score less than 6), active genital herpes, history of multiple births (twins/triplets), history of uterine surgery or classic cesarean incision, grand multiparity</li><li><strong>Fetal factors:</strong> immature lungs, cephalopelvic disproportion (CPD), fetal malpresentation (breech, transverse), prolapsed umbilical cord, fetal distress, placental abnormalities (previa, abruption), threatened spontaneous abortion</li><li><strong>Relative contraindications:</strong> over-distended uterus, previous cesarean with low transverse incision (use with extreme caution and provider at bedside)</li></ul>',
+nursing:'<ul><li><strong>Before starting:</strong> obtain baseline FHR strip for 20-30 min; verify Bishop score; confirm fetal presentation by Leopold maneuvers or ultrasound; ensure IV access with large-bore catheter</li><li><strong>During infusion:</strong> continuous EFM is mandatory; palpate uterine resting tone between contractions; assess maternal VS per protocol; monitor I&O</li><li>Have <strong>tocolytic medication readily available</strong> (terbutaline) for emergency tachysystole</li><li>Maintain O2 and suction at bedside</li><li>Document infusion rate, contraction pattern (frequency, duration, intensity, resting tone), FHR pattern, and maternal response at each assessment</li><li><strong>Postpartum use:</strong> monitor fundal firmness and position; assess lochia amount, color, and clots; encourage voiding to prevent bladder distention displacing uterus</li><li>Breastfeeding also stimulates endogenous oxytocin — encourage early initiation</li></ul>',
+interactions:'<ul><li><strong>Vasopressors:</strong> severe hypertension can occur if oxytocin follows administration of vasopressors — monitor VS closely</li><li><strong>Other oxytocics (dinoprostone, misoprostol):</strong> increased risk of tachysystole; avoid concurrent use; wait prescribed interval between cervical ripening agents and oxytocin</li><li><strong>Cyclopropane anesthesia:</strong> can cause maternal hypotension and sinus bradycardia with concurrent oxytocin</li><li>Monitor vital signs, uterine activity, and fetal status when used with any concurrent medication</li></ul>',
+education:'<ul><li>Explain the purpose of the medication and what to expect (increasing contractions that feel like menstrual cramps growing stronger)</li><li>Instruct to report any sudden increase in pain, feeling of constant pressure, dizziness, or headache</li><li>Explain that contractions and baby heart rate will be monitored continuously throughout</li><li>Inform that the nurse will be adjusting the dose based on contraction pattern — this is normal</li><li>May need to change positions frequently for comfort; avoid supine position (use left lateral tilt)</li></ul>',
+evaluation:'<ul><li><strong>Effective induction/augmentation:</strong> regular contractions lasting 45-60 sec every 2-3 min with progressive cervical dilation and effacement</li><li><strong>Reassuring fetal status:</strong> FHR baseline 110-160/min with moderate variability, accelerations present, no late or variable decelerations</li><li><strong>Adequate resting tone:</strong> uterine relaxation between contractions (≥30 sec rest, uterus soft to palpation)</li><li><strong>Postpartum effectiveness:</strong> firm, contracted fundus; lochia within normal limits; no evidence of hemorrhage</li></ul>'
+};
+
+// ═══ MAGNESIUM SULFATE ═══
+DRUGS['mag_sulfate']={
+title:'Magnesium Sulfate',
+subtitle:'CNS Depressant / Tocolytic / Anticonvulsant · ATI Pharm Ch.32',
+refs:[{icon:'💊',short:'ATI Pharmacology Ed.8 — Ch.32'},{icon:'📘',short:'ATI Maternal Newborn Ed.11'}],
+action:'<ul><li>Central nervous system depressant that relaxes smooth muscle including uterine muscle</li><li>Blocks neuromuscular transmission by decreasing the amount of acetylcholine released at the motor end plate</li><li>Reduces the frequency and force of uterine contractions</li><li>Raises the seizure threshold by decreasing CNS irritability</li><li>Produces vasodilation, which can cause flushing, warmth, and transient hypotension</li></ul>',
+use:'<ul><li><strong>Primary use:</strong> prevent and control seizures in clients with preeclampsia and eclampsia — this is the most important and most tested use</li><li><strong>Tocolytic:</strong> suppress preterm labor by relaxing uterine smooth muscle; administered for up to 48 hr to delay delivery long enough for glucocorticoids (betamethasone) to take effect for fetal lung maturity</li><li><strong>Neuroprotection:</strong> may be administered before anticipated preterm birth (&lt;32 weeks) to reduce risk of cerebral palsy</li><li>Has significant adverse maternal effects and increases fetal mortality — benefits must be carefully weighed against risks</li></ul>',
+complications:'<ul><li><strong>Common maternal effects:</strong> hypocalcemia, hot flashes (flushing), diaphoresis, dyspnea, transient hypotension, feeling of warmth, lethargy, drowsiness, headache, blurred vision, nausea</li><li><strong>TOXICITY SIGNS — STOP INFUSION IMMEDIATELY:</strong></li><li>Respirations <strong>less than 12/min</strong> (early sign of toxicity)</li><li><strong>Absent deep tendon reflexes</strong> (loss of DTRs precedes respiratory depression)</li><li>Urine output <strong>less than 25 mL/hr</strong> or less than 100 mL in 4 hr (kidneys excrete Mg; decreased output = accumulation)</li><li>Blood magnesium level <strong>10 mEq/L or greater</strong> (therapeutic range for preeclampsia: 4-7 mEq/L)</li><li>Pulmonary edema, altered level of consciousness, severe hypotension, chest pain</li><li><strong>Cardiac arrest:</strong> can occur at very high serum levels (&gt;15 mEq/L)</li><li><strong>ANTIDOTE: Calcium gluconate</strong> — must be at bedside at ALL times; administer IV slowly for confirmed toxicity</li><li><strong>Fetal effects:</strong> nonreactive NST, reduced FHR variability, decreased fetal breathing movements, neonatal hypotonia and respiratory depression at birth</li></ul>',
+admin:'<ul><li><strong>IV administration (preferred):</strong> loading dose of 4-6 g IV over 15-30 min, followed by maintenance infusion of 1-2 g/hr via infusion pump</li><li>Infusion can continue for up to 48 hr (tocolysis) or until 24-48 hr postpartum (preeclampsia)</li><li><strong>Total IV fluid intake</strong> not to exceed 125 mL/hr to prevent fluid overload and pulmonary edema</li><li>Limit total client fluid intake to 2,500-3,000 mL/day</li><li><strong>Monitoring schedule:</strong> DTRs and respirations before each dose increase and at regular intervals; VS per protocol; blood magnesium levels per provider order (therapeutic: 4-7 mEq/L for preeclampsia; 5-8 mEq/L for tocolysis)</li><li>Strict I&O with hourly urine measurement — use indwelling catheter if needed</li><li>Weigh daily to assess for fluid retention</li></ul>',
+contraindications:'<ul><li><strong>Absolute:</strong> hypersensitivity, heart block, myocardial damage, hepatitis</li><li><strong>Relative:</strong> abdominal pain (rule out appendicitis), renal impairment (magnesium excreted by kidneys — impaired clearance increases toxicity risk)</li><li><strong>Avoid concurrent use with nifedipine</strong> — risk of severe hypotension and skeletal muscle blockade (neuromuscular paralysis)</li><li>Use cautiously in clients on digitalis preparations (Mg can potentiate cardiac effects)</li></ul>',
+nursing:'<ul><li><strong>Before starting:</strong> obtain baseline DTRs (document reflex grade), respirations, BP, HR, urine output, and blood Mg level; assess fetal status</li><li><strong>Ongoing monitoring:</strong> DTRs and respirations before each dose increase and at minimum every 1-2 hr; assess LOC, clonus, visual changes</li><li>Monitor respirations — <strong>HOLD infusion and notify provider if respirations &lt;12/min</strong></li><li>Strict I&O — <strong>HOLD infusion if urine output &lt;25-30 mL/hr</strong></li><li><strong>Calcium gluconate (1 g = 10 mL of 10% solution) must be at bedside at ALL times</strong> — administer IV push over 3-5 min for confirmed toxicity</li><li>Continuous electronic fetal monitoring; report nonreassuring patterns</li><li>Assess for signs of pulmonary edema (crackles, dyspnea, O2 sat decrease)</li><li>Keep room quiet and dimly lit (seizure precautions for preeclampsia)</li><li>Maintain seizure precautions: padded side rails, suction equipment, O2 at bedside</li><li>After discontinuation: continue monitoring for 24-48 hr as effects diminish gradually</li></ul>',
+interactions:'<ul><li><strong>Increase effects:</strong> calcium channel blockers (especially nifedipine — avoid concurrent use), neuromuscular blockers (potentiates paralysis), CNS depressants (additive sedation)</li><li><strong>Decrease effect of:</strong> digoxin (Mg can alter cardiac conduction)</li><li><strong>Nifedipine + MgSO4:</strong> risk of severe hypotension and neuromuscular blockade — this combination is contraindicated at most facilities</li><li>Monitor closely if client is also receiving opioids or sedatives (enhanced CNS depression)</li><li>Calcium supplements may decrease effectiveness of magnesium</li></ul>',
+education:'<ul><li>Explain that the medication may cause a sensation of warmth, flushing, and drowsiness — these are expected effects, not emergencies</li><li>Instruct to report immediately: difficulty breathing, chest pain, decreased sensation in extremities, inability to move, visual changes, severe headache</li><li>Maintain bed rest during infusion — call for assistance before attempting to stand (fall risk from hypotension and muscle weakness)</li><li>Explain the importance of the monitoring (DTR checks, frequent VS, urine output) — it ensures safety</li><li>If receiving for preeclampsia: explain that the goal is seizure prevention and that monitoring will continue after delivery</li></ul>',
+evaluation:'<ul><li><strong>Preeclampsia:</strong> no seizure activity, decrease in DTR hyperreflexia (from 3+/4+ to 2+), blood pressure trending toward normal, improved urine output, decreased edema</li><li><strong>Tocolysis:</strong> cessation or significant reduction of preterm contractions (success = delay of delivery by at least 48 hr for steroid administration)</li><li><strong>Safety parameters maintained:</strong> therapeutic Mg level (4-7 mEq/L), DTRs present (2+), respirations ≥12/min, urine output ≥25-30 mL/hr, no signs of toxicity</li><li><strong>Fetal status:</strong> reassuring FHR pattern maintained throughout therapy</li></ul>'
+};
+
+// ═══ METHYLERGONOVINE (METHERGINE) ═══
+DRUGS['methergine']={
+title:'Methylergonovine (Methergine)',
+subtitle:'Ergot Alkaloid — Uterotonic · ATI Pharm Ch.32',
+refs:[{icon:'💊',short:'ATI Pharmacology Ed.8 — Ch.32'},{icon:'📘',short:'ATI Maternal Newborn Ed.11 — Ch.17'}],
+action:'<ul><li>Ergot alkaloid that directly stimulates uterine smooth muscle, producing strong and sustained tetanic contractions</li><li>Acts differently from oxytocin — produces a sustained contraction rather than rhythmic contractions</li><li>Also causes vasoconstriction (which is why it raises blood pressure)</li><li>Effect on the uterus is more pronounced in the early postpartum period when the uterus is highly sensitive to ergot alkaloids</li></ul>',
+use:'<ul><li><strong>Emergency intervention</strong> for serious postpartum hemorrhage when uterus remains boggy/atonic despite oxytocin and fundal massage</li><li><strong>Promote uterine involution</strong> — can be given orally for up to 1 week postpartum to maintain uterine tone</li><li>Used as second-line agent after oxytocin fails, or in combination with oxytocin for severe hemorrhage</li><li>Part of the PPH medication escalation protocol: oxytocin → methylergonovine → carboprost → misoprostol</li></ul>',
+complications:'<ul><li><strong>HYPERTENSIVE CRISIS</strong> — the most dangerous and most tested adverse effect; occurs due to the vasoconstrictive properties of ergot alkaloids</li><li><strong>Signs of hypertensive crisis:</strong> severe headache, nausea, vomiting, dramatically elevated blood pressure, visual disturbances, seizures, stroke</li><li><strong>If crisis occurs:</strong> stop medication immediately, notify provider, prepare emergency antihypertensive medications, monitor VS continuously, assess neurological status</li><li>Other adverse effects: nausea, vomiting, abdominal cramping (more intense than oxytocin cramping), dizziness, tinnitus, diaphoresis</li><li>Rare but serious: chest pain, palpitations, peripheral ischemia (numbness/tingling in extremities from vasoconstriction)</li></ul>',
+admin:'<ul><li><strong>IM route (standard):</strong> 0.2 mg IM after passage of placenta; may repeat every 2-4 hr as needed</li><li><strong>IV route:</strong> reserved for life-threatening emergencies ONLY; administer slowly over at least 60 seconds; IV push can cause sudden severe hypertension or cardiac arrest</li><li><strong>Oral route:</strong> 0.2 mg every 6-8 hr for up to 7 days to promote uterine involution</li><li><strong>CRITICAL TIMING:</strong> administer ONLY after delivery of placenta — NEVER during labor (sustained contraction could trap fetus and cause fetal death or uterine rupture)</li><li><strong>MANDATORY pre-dose assessment:</strong> check blood pressure before EVERY dose; withhold medication and notify provider if BP is elevated above baseline or if client has any history of hypertension</li></ul>',
+contraindications:'<ul><li><strong>ABSOLUTE CONTRAINDICATIONS:</strong></li><li>Hypertension (any degree) — this is the #1 tested contraindication</li><li>Preeclampsia or eclampsia</li><li>Pregnancy (NEVER during labor)</li><li><strong>RELATIVE CONTRAINDICATIONS:</strong></li><li>Asthma (can cause bronchospasm)</li><li>Cardiac disease (vasoconstrictive effects worsen cardiac conditions)</li><li>Peripheral vascular disease (Raynaud phenomenon)</li><li>Severe renal or hepatic disease (impaired metabolism and excretion)</li><li>Sepsis (altered vascular response)</li></ul>',
+nursing:'<ul><li><strong>CHECK BP BEFORE EVERY SINGLE DOSE</strong> — this is the most critical nursing action and the most frequently tested point; document BP before and after administration</li><li><strong>DO NOT ADMINISTER if BP is elevated</strong> — withhold, document, notify provider, and request alternative uterotonic (oxytocin or carboprost)</li><li>Monitor vital signs every 15 min after IM administration and continuously during IV administration</li><li>Assess for signs of hypertensive crisis: headache, nausea, vomiting, visual changes, chest pain — report immediately</li><li>Monitor uterine tone (should become firm); palpate fundus and document consistency</li><li>Monitor vaginal bleeding — amount, color, clots; should decrease after administration</li><li>Assess peripheral circulation (pulses, color, warmth, sensation in extremities) — ergot alkaloids cause vasoconstriction</li><li>For oral administration: may give with food to reduce GI side effects</li><li>Protect medication from light; store according to facility policy</li></ul>',
+interactions:'<ul><li><strong>Vasopressors:</strong> increase hypertensive effects — avoid concurrent use; can cause severe hypertensive emergency</li><li><strong>Other ergot alkaloids:</strong> additive vasoconstrictive effects — do not use concurrently</li><li><strong>CYP3A4 inhibitors</strong> (erythromycin, ketoconazole, protease inhibitors): can increase methylergonovine levels and toxicity risk</li><li><strong>Sumatriptan and other triptans:</strong> additive vasospasm risk — avoid concurrent use</li><li>Monitor vital signs closely when any vasoactive medication is given concurrently</li></ul>',
+education:'<ul><li>Report severe headache, chest pain, vision changes, numbness or tingling in extremities, or difficulty breathing immediately — these may indicate hypertensive crisis or vascular complications</li><li>Cramping is expected as the uterus contracts and is a sign the medication is working; however, report pain that is severe or unrelenting</li><li>Explain that the nurse will check blood pressure before each dose — this is a safety requirement, not optional</li><li>For oral doses at home: take with food; report any persistent heavy bleeding</li><li>Notify provider if experiencing cold, numb, or pale fingers or toes (peripheral vasoconstriction)</li></ul>',
+evaluation:'<ul><li><strong>Effective uterine contraction:</strong> fundus is firm, well-contracted, and at or below the umbilicus</li><li><strong>Decreased bleeding:</strong> lochia amount decreases from heavy/excessive to moderate or less; no large clots passed</li><li><strong>Hemodynamic stability:</strong> blood pressure remains within client baseline range (no hypertensive response)</li><li><strong>No adverse effects:</strong> no headache, visual changes, nausea/vomiting, or signs of peripheral ischemia</li><li><strong>Uterine involution</strong> (for oral course): fundus descends appropriately ~1 cm/day, lochia progresses normally through rubra → serosa → alba stages</li></ul>'
+};
+
+
+
+// ═══ FOLIC ACID ═══
+DRUGS['folic_acid']={
+title:'Folic Acid (Folate)',
+subtitle:'Prenatal Supplement · Water-Soluble B Vitamin (B9)',
+refs:[{icon:'📘',short:'ATI Maternal Newborn Ed.11 — Ch.5'}],
+action:'<ul><li>Essential coenzyme for DNA synthesis and cell division</li><li>Critical for rapidly dividing cells — especially important during embryonic neural tube development (first 28 days of gestation)</li><li>Supports maternal RBC production and prevents megaloblastic anemia</li></ul>',
+use:'<ul><li><strong>Prevention of neural tube defects:</strong> spina bifida, anencephaly, omphalocele</li><li>Prevention of megaloblastic anemia in pregnancy</li><li>Support rapid cell growth of fetus and placenta</li></ul>',
+complications:'<ul><li>Generally well tolerated at recommended doses</li><li>May mask vitamin B12 deficiency (pernicious anemia) — important to screen</li><li>GI effects at high doses: nausea, bloating, flatulence</li></ul>',
+admin:'<ul><li><strong>Preconception:</strong> 400 mcg/day for all clients of childbearing age (March of Dimes)</li><li><strong>During pregnancy:</strong> 600 mcg/day</li><li><strong>History of NTD-affected pregnancy:</strong> 4 mg/day starting 1-3 months before conception</li><li>Available in prenatal vitamins and as standalone supplement</li><li>Best taken on empty stomach but can take with food if GI upset</li></ul>',
+contraindications:'<ul><li>No significant contraindications at recommended doses</li><li>Caution with undiagnosed anemia (may mask B12 deficiency)</li></ul>',
+nursing:'<ul><li>Assess dietary intake of folate-rich foods</li><li>Educate ALL women of childbearing age about folic acid — NTDs occur before many women know they are pregnant</li><li>Monitor CBC for anemia</li></ul>',
+interactions:'<ul><li>Methotrexate, trimethoprim, phenytoin: can decrease folate levels</li><li>Alcohol: impairs folate absorption</li></ul>',
+education:'<ul><li><strong>Food sources:</strong> leafy green vegetables, dried peas and beans, seeds, orange juice, fortified breads and cereals</li><li>Begin supplementation BEFORE conception for maximum NTD prevention</li><li>Take consistently as part of prenatal vitamin routine</li></ul>',
+evaluation:'<ul><li>No neural tube defects identified on ultrasound</li><li>Maternal Hgb/Hct within normal limits</li><li>Client verbalizes importance and takes supplement daily</li></ul>'
+};
+
+// ═══ IRON ═══
+DRUGS['iron_supp']={
+title:'Iron Supplement (Ferrous Sulfate)',
+subtitle:'Prenatal Supplement · Mineral',
+refs:[{icon:'📘',short:'ATI Maternal Newborn Ed.11 — Ch.5'}],
+action:'<ul><li>Essential mineral for hemoglobin synthesis and oxygen transport</li><li>Facilitates the increase of maternal RBC mass needed during pregnancy (blood volume increases 40-50%)</li><li>Supports fetal iron stores for the first 4-6 months of life</li></ul>',
+use:'<ul><li>Prevention and treatment of iron-deficiency anemia during pregnancy</li><li>Supplement maternal iron stores depleted by increased blood volume and fetal demands</li></ul>',
+complications:'<ul><li><strong>GI effects (most common):</strong> constipation, nausea, vomiting, dark/black stools, gastric irritation</li><li>Diarrhea or abdominal cramping</li><li><strong>Iron toxicity (overdose):</strong> vomiting, diarrhea, metabolic acidosis, liver failure — keep out of reach of children</li></ul>',
+admin:'<ul><li>Typically 30-60 mg elemental iron/day during pregnancy (varies by preparation)</li><li><strong>Best absorbed between meals</strong> (empty stomach) with a source of <strong>vitamin C</strong> (orange juice) to enhance absorption</li><li>If GI upset occurs, may take with small amount of food (not dairy)</li><li>Take at least 1 hr before or 2 hr after antacids, calcium, or dairy</li><li>Liquid iron: use straw to prevent tooth staining; rinse mouth after</li></ul>',
+contraindications:'<ul><li>Hemochromatosis or hemolytic anemias (iron overload conditions)</li><li>Peptic ulcer disease or inflammatory bowel disease (can worsen GI symptoms)</li></ul>',
+nursing:'<ul><li>Monitor Hgb and Hct levels throughout pregnancy</li><li>Assess for signs of anemia: fatigue, pallor, tachycardia, dyspnea</li><li>Educate about expected dark/black stools — this is normal, not blood</li><li>May need stool softener (docusate) to manage constipation</li><li>Iron is the leading cause of pediatric poisoning death — educate about safe storage</li></ul>',
+interactions:'<ul><li><strong>Milk and caffeine</strong> interfere with iron absorption — avoid taking together</li><li><strong>Antacids and calcium supplements</strong> decrease absorption — separate by 1-2 hr</li><li><strong>Tetracycline and fluoroquinolones:</strong> mutual decrease in absorption</li><li><strong>Vitamin C:</strong> enhances absorption (take together)</li></ul>',
+education:'<ul><li><strong>Food sources:</strong> beef liver, red meats, fish, poultry, dried peas and beans, fortified cereals and breads</li><li>Dark/black stools are expected — do not confuse with GI bleeding</li><li>Increase fluids and fiber to manage constipation</li><li>Keep supplements out of reach of children — iron poisoning is a medical emergency</li><li>Do not take with milk, coffee, tea, or calcium supplements</li></ul>',
+evaluation:'<ul><li>Hgb and Hct levels improving or within normal range</li><li>Client reports decreased fatigue and improved energy</li><li>Tolerating supplement without severe GI effects</li><li>Client verbalizes proper administration technique</li></ul>'
+};
+
+// ═══ CALCIUM ═══
+DRUGS['calcium_supp']={
+title:'Calcium Supplement',
+subtitle:'Prenatal Supplement · Mineral',
+refs:[{icon:'📘',short:'ATI Maternal Newborn Ed.11 — Ch.5'}],
+action:'<ul><li>Essential mineral for bone and teeth formation in the developing fetus</li><li>Required for muscle contraction, nerve transmission, and blood clotting</li><li>If maternal intake is inadequate, calcium is drawn from maternal bones to meet fetal demands</li></ul>',
+use:'<ul><li>Support fetal skeletal development</li><li>Maintain maternal bone density during pregnancy</li><li>Supplement dietary calcium when intake is insufficient</li></ul>',
+complications:'<ul><li>Constipation (most common)</li><li>GI upset, bloating, gas</li><li>Hypercalcemia at excessive doses: nausea, vomiting, confusion, cardiac arrhythmias</li><li>Kidney stones with chronic excessive intake</li></ul>',
+admin:'<ul><li><strong>Ages 19-50:</strong> 1,000 mg/day (pregnant and nonpregnant)</li><li><strong>Under 19:</strong> 1,300 mg/day</li><li>Take in divided doses (body absorbs only ~500 mg at a time)</li><li>Calcium carbonate: take with food (needs stomach acid for absorption)</li><li>Calcium citrate: can take with or without food</li></ul>',
+contraindications:'<ul><li>Hypercalcemia, hypercalciuria</li><li>Renal calculi (kidney stone history)</li><li>Severe renal impairment</li></ul>',
+nursing:'<ul><li>Assess dietary calcium intake before recommending supplements</li><li>Monitor for constipation; recommend fluids and fiber</li><li>Separate calcium from iron supplements by at least 1-2 hr (calcium inhibits iron absorption)</li></ul>',
+interactions:'<ul><li><strong>Iron:</strong> calcium decreases iron absorption — separate by 1-2 hr</li><li><strong>Tetracyclines and fluoroquinolones:</strong> calcium decreases antibiotic absorption</li><li><strong>Thiazide diuretics:</strong> can cause hypercalcemia when combined</li><li><strong>Vitamin D:</strong> enhances calcium absorption (often combined in supplements)</li></ul>',
+education:'<ul><li><strong>Food sources:</strong> milk, calcium-fortified soy milk, fortified orange juice, nuts, legumes, dark green leafy vegetables (kale, turnip greens), yogurt, cheese</li><li>Lactose-intolerant clients: calcium-fortified soy milk, yogurt (often tolerated better), calcium supplements</li><li>Take in divided doses for better absorption</li><li>Do not take at same time as iron supplement</li></ul>',
+evaluation:'<ul><li>Adequate fetal skeletal development on ultrasound</li><li>No signs of maternal bone density loss</li><li>Client consuming recommended daily amount through diet and supplements</li></ul>'
+};
+
+// ═══ RhoGAM ═══
+DRUGS['rhogam']={
+title:'Rho(D) Immune Globulin (RhoGAM)',
+subtitle:'Immune Globulin · Rh Isoimmunization Prevention',
+refs:[{icon:'📘',short:'ATI Maternal Newborn Ed.11 — Ch.5, 17'},{icon:'💊',short:'ATI Pharmacology Ed.8'}],
+action:'<ul><li>Provides passive immunity by suppressing the immune response of Rh-negative clients to Rh-positive fetal blood cells</li><li>Prevents the formation of anti-Rh antibodies (Rh isoimmunization/sensitization) that could attack future Rh-positive fetuses</li><li>Coats any fetal Rh-positive RBCs that have entered maternal circulation, preventing maternal immune system from recognizing them</li></ul>',
+use:'<ul><li>Prevention of Rh isoimmunization in Rh-negative clients carrying or who have carried an Rh-positive fetus</li><li>Given to unsensitized Rh-negative clients (negative indirect Coombs test)</li></ul>',
+complications:'<ul><li>Injection site tenderness, pain, redness</li><li>Low-grade fever, malaise</li><li>Rare: allergic reaction, anaphylaxis</li></ul>',
+admin:'<ul><li><strong>Routine antepartum:</strong> 300 mcg IM at approximately 28 weeks gestation</li><li><strong>Postpartum:</strong> within 72 hr of delivery if newborn is Rh-positive</li><li><strong>After any potential sensitizing event:</strong> miscarriage, ectopic pregnancy, amniocentesis, CVS, abdominal trauma, placenta previa with bleeding, manual removal of placenta</li><li>Administer IM into deltoid or gluteal muscle</li><li>Verify client is Rh-negative AND unsensitized (negative indirect Coombs) before administration</li></ul>',
+contraindications:'<ul><li>Client who is Rh-positive (not indicated)</li><li>Client already sensitized (positive indirect Coombs — RhoGAM will not help)</li><li>Known hypersensitivity to immune globulin products</li><li>Previous severe reaction to RhoGAM</li></ul>',
+nursing:'<ul><li>Verify Rh-negative status and negative indirect Coombs test before administration</li><li>Check lot number and expiration; cross-reference with blood bank records</li><li>Administer within the prescribed timeframe (especially within 72 hr postpartum)</li><li>Monitor for allergic reaction for 20 min after administration</li><li>Document lot number, dose, site, and time</li></ul>',
+interactions:'<ul><li><strong>Live vaccines (MMR, varicella):</strong> RhoGAM may interfere with immune response to live vaccines; wait 3 months after RhoGAM before administering live vaccines</li></ul>',
+education:'<ul><li>Explain that the injection prevents the body from making antibodies that could harm future babies</li><li>Will need RhoGAM with every pregnancy if Rh-negative</li><li>Report any signs of allergic reaction: hives, difficulty breathing, swelling</li><li>Carry a card indicating Rh-negative status</li></ul>',
+evaluation:'<ul><li>No development of Rh antibodies (indirect Coombs remains negative)</li><li>Successful prevention of hemolytic disease of the newborn in subsequent pregnancies</li><li>No adverse reactions to administration</li></ul>'
+};
+
+// ═══ OPIOID ANALGESICS ═══
+DRUGS['opioid_analgesics']={
+title:'Opioid Analgesics (Labor)',
+subtitle:'Meperidine · Fentanyl · Butorphanol · Nalbuphine',
+refs:[{icon:'📘',short:'ATI Maternal Newborn Ed.11 — Ch.12'},{icon:'💊',short:'ATI Pharmacology Ed.8'}],
+action:'<ul><li>Act on opioid receptors in the CNS to decrease the perception of pain without loss of consciousness</li><li>Butorphanol and nalbuphine are mixed agonist-antagonists — provide pain relief with less respiratory depression than pure agonists</li><li>Meperidine and fentanyl are pure opioid agonists</li></ul>',
+use:'<ul><li>Management of labor pain during early active phase</li><li>Provide analgesia while client maintains consciousness and ability to participate in labor</li></ul>',
+complications:'<ul><li><strong>Neonatal respiratory depression</strong> if mother is medicated too close to delivery — most significant risk</li><li>Decreased gastric emptying; increased nausea and vomiting</li><li>Increased risk for aspiration of stomach contents</li><li>Bladder and bowel elimination inhibited</li><li>Sedation, altered mental status, drowsiness</li><li>Tachycardia, hypotension</li><li>Decreased FHR variability</li><li>Allergic reaction</li></ul>',
+admin:'<ul><li><strong>IV route recommended</strong> during labor (quicker onset than IM)</li><li>Administered during early part of active labor</li><li><strong>Must verify labor is well established</strong> by performing vaginal exam and evaluating contraction pattern before administration</li><li>Assess maternal VS and FHR before and after administration; document</li><li>Butorphanol and nalbuphine: can be given IM or IV</li></ul>',
+contraindications:'<ul><li>Anticipated delivery within 1-4 hr (risk of neonatal respiratory depression)</li><li>Respiratory depression in the mother</li><li>History of opioid addiction (for mixed agonist-antagonists: can precipitate withdrawal)</li></ul>',
+nursing:'<ul><li>Verify labor is well established before administering</li><li>Assess and document VS and FHR before and after administration</li><li>Monitor for respiratory depression in mother and neonate</li><li><strong>Naloxone (Narcan) must be readily available</strong> for reversal of opioid-induced respiratory depression</li><li>Administer antiemetics as prescribed for N/V</li><li>Monitor continuous FHR for decreased variability</li><li>Implement safety measures: bed in low position, side rails up, call light within reach</li><li>Assist with ambulation — client may be dizzy and sedated</li></ul>',
+interactions:'<ul><li>CNS depressants (barbiturates, benzodiazepines): additive sedation and respiratory depression</li><li>MAOIs: can cause severe and unpredictable reactions</li><li>Mixed agonist-antagonists should not be given to client on pure opioid agonists (can precipitate withdrawal)</li></ul>',
+education:'<ul><li>Medication will cause drowsiness — this is expected</li><li>Request assistance before getting out of bed or ambulating</li><li>Report difficulty breathing, severe dizziness, or itching</li><li>The baby will be monitored for any effects of the medication after birth</li></ul>',
+evaluation:'<ul><li>Client reports pain relief or reduced pain score</li><li>Client appears relaxed between contractions</li><li>FHR remains reassuring</li><li>No respiratory depression in mother or neonate</li></ul>'
+};
+
+// ═══ EPIDURAL BLOCK ═══
+DRUGS['epidural']={
+title:'Epidural Block',
+subtitle:'Regional Analgesia/Anesthesia · Bupivacaine + Fentanyl/Morphine',
+refs:[{icon:'📘',short:'ATI Maternal Newborn Ed.11 — Ch.12'},{icon:'💊',short:'ATI Pharmacology Ed.8'}],
+action:'<ul><li>Local anesthetic (bupivacaine) combined with opioid analgesic (fentanyl or morphine) injected into epidural space at L4-L5 vertebrae</li><li>Blocks nerve impulse transmission to eliminate pain sensation from umbilicus to thighs</li><li>May not completely eliminate pressure sensations</li><li>Patient-controlled epidural analgesia (PCEA) is the favored method — client self-administers bolus doses within programmed limits</li></ul>',
+use:'<ul><li>Pain management during all stages of labor and all types of birth</li><li>Suitable for vaginal delivery, cesarean birth, and episiotomy/laceration repair</li><li>Continuous infusion or intermittent injections through indwelling catheter</li></ul>',
+complications:'<ul><li><strong>Maternal hypotension</strong> (most common significant complication — from sympathetic blockade)</li><li>Fetal bradycardia (secondary to maternal hypotension reducing placental perfusion)</li><li>Fever (epidural-related maternal temperature elevation)</li><li>Itching/pruritus (from opioid component)</li><li>Inability to feel urge to void; urinary retention</li><li>Loss of bearing down reflex (may need coaching for pushing)</li><li>Respiratory depression (rare, from opioid migration)</li></ul>',
+admin:'<ul><li>Administered when client is in <strong>active labor, dilated to at least 4 cm</strong></li><li><strong>Pre-procedure:</strong> administer IV fluid bolus (500-1000 mL) to offset hypotension</li><li><strong>Positioning:</strong> sitting or side-lying modified Sims position with back curved to widen intervertebral space</li><li>Catheter is threaded into epidural space by anesthesia provider</li><li>After insertion: encourage <strong>left-lateral position</strong> to avoid supine hypotensive syndrome</li><li>Continuous infusion or PCEA with programmed parameters</li></ul>',
+contraindications:'<ul><li>Client refusal or inability to cooperate with positioning</li><li>Coagulopathy or anticoagulant therapy (risk of epidural hematoma)</li><li>Infection at insertion site</li><li>Severe hypovolemia or hemorrhage</li><li>Increased intracranial pressure</li><li>Allergy to local anesthetic agents</li></ul>',
+nursing:'<ul><li><strong>IV fluid bolus</strong> before placement to prevent hypotension</li><li>Position and steady client for insertion; coach to remain still during placement</li><li>Monitor BP and pulse every 5 min for first 15-20 min, then per protocol</li><li>Monitor O2 saturation continuously</li><li>Assess FHR patterns continuously</li><li>Coach pushing efforts if bearing down reflex is diminished</li><li>Assess bladder for distention frequently; catheterize if unable to void</li><li>Monitor for orthostatic hypotension — be prepared with IV vasopressor (ephedrine), lateral positioning, increased IV rate, and O2</li><li><strong>After delivery:</strong> monitor return of sensation and motor control in legs before allowing ambulation; assist with first standing</li><li>Maintain IV line; O2 and suction at bedside</li></ul>',
+interactions:'<ul><li>Opioid component adds to systemic opioid effects if additional opioids are given</li><li>Oxytocin: may need dose adjustment as epidural can slow labor progress</li><li>Antihypertensives: additive hypotensive effect</li></ul>',
+education:'<ul><li>Explain that you will feel pressure but not sharp pain</li><li>Must remain still during insertion — breathe through contractions</li><li>Legs may feel heavy, warm, or numb — this is expected</li><li>Call nurse before attempting to stand or get out of bed</li><li>Nurse will check blood pressure frequently — this is routine safety</li><li>Use patient-controlled button as instructed for pain management</li></ul>',
+evaluation:'<ul><li>Client reports adequate pain relief (pain score reduced)</li><li>BP remains stable (no significant hypotension)</li><li>FHR remains reassuring</li><li>Client able to participate in pushing with coaching</li><li>Sensation and motor function return after delivery</li></ul>'
+};
+
+// ═══ SPINAL BLOCK ═══
+DRUGS['spinal']={
+title:'Spinal Block (Spinal Anesthesia)',
+subtitle:'Regional Anesthesia · Subarachnoid Space',
+refs:[{icon:'📘',short:'ATI Maternal Newborn Ed.11 — Ch.12'}],
+action:'<ul><li>Local anesthetic (with or without opioid like fentanyl) injected into subarachnoid space (spinal fluid) at L3-L5</li><li>Eliminates ALL sensation from nipple line to feet (complete motor and sensory block)</li><li>Onset is rapid (within minutes) compared to epidural</li><li>Single injection — no catheter left in place (shorter duration than epidural)</li></ul>',
+use:'<ul><li><strong>Commonly used for cesarean births</strong></li><li>Low spinal block can be used for vaginal birth during late 2nd stage</li><li><strong>NOT used for labor</strong> (too short-acting and eliminates all motor function)</li></ul>',
+complications:'<ul><li>Maternal hypotension (more sudden and severe than epidural due to rapid onset)</li><li>Fetal bradycardia (from decreased placental perfusion)</li><li>Loss of bearing down reflex — higher incidence of operative births (forceps/vacuum)</li><li><strong>Postdural puncture headache</strong> from CSF leak at puncture site (positional: worse when upright, better when supine)</li><li>Higher incidence of bladder and uterine atony after birth</li></ul>',
+admin:'<ul><li>Administered in late 2nd stage (for vaginal birth) or before cesarean birth</li><li>Single injection technique — no indwelling catheter</li><li>IV fluid bolus before administration</li><li>Position: sitting or lateral decubitus with curved back</li></ul>',
+contraindications:'<ul><li>Same as epidural: coagulopathy, infection at site, severe hypovolemia, increased ICP, client refusal</li><li>Previous spinal surgery at insertion level (relative)</li></ul>',
+nursing:'<ul><li>Assess VS every 10 min after administration</li><li>Manage hypotension: IV fluid bolus, lateral positioning, increase IV rate, O2, vasopressor (ephedrine) if needed</li><li>Assess uterine contractions and level of anesthesia</li><li>Assess FHR patterns</li><li>Recognize signs of impending birth: sitting on one buttock, grunting, perineal bulging</li><li>Provide safety: raise side rails, assist with repositioning</li><li><strong>Headache management:</strong> supine position, bed rest in dark room, oral analgesics, caffeine, IV fluids; <strong>autologous blood patch</strong> is the most beneficial and reliable relief for CSF leak headache</li></ul>',
+interactions:'<ul><li>Antihypertensives: increased risk of hypotension</li><li>Vasopressors may be needed to counteract hypotensive effects</li></ul>',
+education:'<ul><li>You will not feel contractions — bear down when instructed during vaginal birth</li><li>Legs will be completely numb and unable to move — this wears off within hours</li><li>Report severe headache, especially one that worsens when sitting up (may indicate CSF leak)</li><li>Call nurse before attempting to stand — motor function must fully return first</li></ul>',
+evaluation:'<ul><li>Adequate anesthesia for procedure</li><li>Hemodynamic stability maintained</li><li>No postdural puncture headache (or headache managed effectively)</li><li>Return of full sensation and motor function after procedure</li></ul>'
+};
+
+// ═══ PUDENDAL BLOCK ═══
+DRUGS['pudendal']={
+title:'Pudendal Block',
+subtitle:'Local/Regional Anesthesia · Perineal',
+refs:[{icon:'📘',short:'ATI Maternal Newborn Ed.11 — Ch.12'}],
+action:'<ul><li>Local anesthetic (lidocaine or bupivacaine) administered transvaginally into the space in front of the pudendal nerve</li><li>Provides local anesthesia to the perineum, vulva, and rectal areas</li><li>No maternal or fetal systemic effects — one of the safest regional blocks</li></ul>',
+use:'<ul><li>Anesthesia for delivery, episiotomy, and episiotomy/laceration repair</li><li>Suitable during 2nd and 3rd stages of labor</li></ul>',
+complications:'<ul><li>May compromise maternal bearing down reflex (need to coach when to push)</li><li>Hematoma at injection site (rare)</li><li>Infection at injection site (rare)</li><li>Systemic toxicity if inadvertently injected IV (rare — tinnitus, metallic taste, seizures)</li></ul>',
+admin:'<ul><li>Administered during late 2nd stage, 10-20 min before delivery</li><li>Transvaginal approach by provider</li><li>Provides analgesia prior to spontaneous expulsion, forceps-assisted, or vacuum-assisted birth</li></ul>',
+contraindications:'<ul><li>Allergy to local anesthetic agents</li><li>Infection at injection site</li></ul>',
+nursing:'<ul><li>Instruct client about the procedure</li><li>Coach client about when to bear down since reflex may be diminished</li><li>Assess for adequate anesthesia before delivery proceeds</li><li>Monitor for signs of systemic toxicity: tinnitus, metallic taste, numbness around mouth</li></ul>',
+interactions:'<ul><li>Minimal systemic interactions due to local administration</li></ul>',
+education:'<ul><li>Will feel numbing in the perineal area — this is expected</li><li>May not feel the urge to push as strongly — nurse will guide when to bear down</li><li>Effect wears off within 1-2 hr after delivery</li></ul>',
+evaluation:'<ul><li>Adequate perineal anesthesia for delivery and repair</li><li>Client able to push effectively with coaching</li><li>No adverse effects</li></ul>'
+};
+
+// ═══ NALOXONE ═══
+DRUGS['naloxone']={
+title:'Naloxone (Narcan)',
+subtitle:'Opioid Antagonist · Emergency Reversal Agent',
+refs:[{icon:'📘',short:'ATI Maternal Newborn Ed.11 — Ch.12'},{icon:'💊',short:'ATI Pharmacology Ed.8'}],
+action:'<ul><li>Competitive opioid antagonist that binds to opioid receptors without activating them</li><li>Rapidly reverses the effects of opioid agonists: respiratory depression, sedation, hypotension</li><li>Does NOT reverse effects of non-opioid CNS depressants</li></ul>',
+use:'<ul><li><strong>Reversal of opioid-induced respiratory depression</strong> in mother or neonate</li><li>Neonatal resuscitation when respiratory depression is suspected to be opioid-related</li></ul>',
+complications:'<ul><li>Acute opioid withdrawal symptoms if given to opioid-dependent individual: tachycardia, hypertension, diaphoresis, N/V, tremors, seizures</li><li>Return of pain (reverses analgesia along with respiratory depression)</li><li>Pulmonary edema (rare)</li><li>Duration of naloxone may be shorter than the opioid — respiratory depression can return (re-narcotization)</li></ul>',
+admin:'<ul><li><strong>Adult:</strong> 0.4-2 mg IV/IM/SubQ; may repeat every 2-3 min as needed</li><li><strong>Neonate:</strong> 0.1 mg/kg IV or IM</li><li>IV route preferred for fastest onset (1-2 min)</li><li>Must be readily available wherever opioids are administered</li></ul>',
+contraindications:'<ul><li>Known hypersensitivity</li><li>Use with extreme caution in opioid-dependent clients (can precipitate severe withdrawal)</li></ul>',
+nursing:'<ul><li><strong>Must be readily available</strong> at bedside whenever opioid analgesics are administered during labor</li><li>Monitor respirations continuously after administration</li><li>Repeat doses may be needed — naloxone duration (30-90 min) may be shorter than the opioid</li><li>Monitor for return of respiratory depression (re-narcotization)</li><li>For neonate: monitor respiratory effort, heart rate, color, tone</li></ul>',
+interactions:'<ul><li>Reverses ALL opioid effects including analgesia — pain will return</li><li>In mixed agonist-antagonist use: can still precipitate withdrawal in dependent individuals</li></ul>',
+education:'<ul><li>Explain that medication reverses the effects of pain medication including pain relief</li><li>Pain management alternatives will be discussed after reversal</li></ul>',
+evaluation:'<ul><li>Respiratory rate returns to ≥12/min (adult) or adequate effort (neonate)</li><li>Improved level of consciousness</li><li>Stable vital signs</li><li>No return of respiratory depression (monitor for re-narcotization)</li></ul>'
+};
+
+// ═══ DINOPROSTONE ═══
+DRUGS['dinoprostone']={
+title:'Dinoprostone (Cervidil/Prepidil)',
+subtitle:'Prostaglandin E2 · Cervical Ripening Agent',
+refs:[{icon:'💊',short:'ATI Pharmacology Ed.8 — Ch.32'},{icon:'📘',short:'ATI Maternal Newborn Ed.11'}],
+action:'<ul><li>Prostaglandin E2 (PGE2) that promotes cervical ripening by softening, thinning, and dilating the cervix</li><li>Also stimulates uterine smooth muscle contractions</li></ul>',
+use:'<ul><li>Cervical ripening prior to induction of labor</li><li>Stimulate uterine contractions</li></ul>',
+complications:'<ul><li>Uterine tachysystole</li><li>GI reactions: nausea, vomiting, diarrhea</li><li>Cervical or uterine lacerations</li><li>Fever</li></ul>',
+admin:'<ul><li><strong>Cervidil (vaginal insert):</strong> placed in posterior fornix; client remains supine with lateral tilt for 2 hr; remove after 12 hr or when active labor begins</li><li><strong>Prepidil (gel):</strong> intracervical application; allow gel to warm to room temperature (do NOT use external warming); client remains supine 30 min after</li><li>Wait prescribed interval before starting oxytocin (usually 30 min after Cervidil removal or 6-12 hr after gel)</li></ul>',
+contraindications:'<ul><li>Prior cesarean birth or uterine surgery</li><li>Fetal distress, vaginal bleeding</li><li>Avoid with history of hypotension, hypertension, or asthma</li><li>Active heart, lung, or liver disease (use with caution)</li></ul>',
+nursing:'<ul><li>Monitor FHR and contraction pattern continuously</li><li>Monitor VS and for GI reactions</li><li>Assess for tachysystole; if occurs, remove vaginal insert (Cervidil has retrieval string)</li><li>Keep client supine with lateral tilt during and after administration</li></ul>',
+interactions:'<ul><li>Other oxytocics increase effects — avoid concurrent use</li><li>Wait prescribed time before starting oxytocin</li></ul>',
+education:'<ul><li>Need to remain lying down for specified time after placement</li><li>Report any sudden increase in contractions, pain, or bleeding</li></ul>',
+evaluation:'<ul><li>Cervical ripening achieved (softened, effaced, partially dilated)</li><li>Ready for oxytocin induction</li><li>No tachysystole or adverse effects</li></ul>'
+};
+
+// ═══ MISOPROSTOL (RIPENING) ═══
+DRUGS['misoprostol_rip']={
+title:'Misoprostol (Cytotec) — Cervical Ripening',
+subtitle:'Prostaglandin E1 Analog · Off-Label Cervical Ripening',
+refs:[{icon:'💊',short:'ATI Pharmacology Ed.8 — Ch.32'}],
+action:'<ul><li>Synthetic prostaglandin E1 analog that promotes cervical ripening and can stimulate uterine contractions</li><li>Off-label use for cervical ripening (originally developed for gastric ulcer prevention)</li></ul>',
+use:'<ul><li>Alternative to dinoprostone for cervical ripening</li><li>Can result in uterine stimulation</li></ul>',
+complications:'<ul><li>Uterine tachysystole</li><li>Nonreassuring FHR patterns</li><li>GI effects: diarrhea, nausea, vomiting</li></ul>',
+admin:'<ul><li>Placed intravaginally in posterior fornix</li><li>Client remains supine with lateral tilt for 30-40 min after administration</li><li>Wait prescribed interval before starting oxytocin</li></ul>',
+contraindications:'<ul><li>Previous cesarean birth or uterine surgery (risk of uterine rupture)</li><li>Use with caution in renal failure</li></ul>',
+nursing:'<ul><li>Monitor FHR and contractions continuously</li><li>Monitor VS</li><li>Assess for tachysystole and nonreassuring FHR</li></ul>',
+interactions:'<ul><li>Aluminum/magnesium-containing antacids: increased diarrhea risk</li><li>Avoid concurrent use with other oxytocics</li></ul>',
+education:'<ul><li>Remain supine for 30-40 min after placement</li><li>Report severe cramping, heavy bleeding, or feeling of constant pressure</li></ul>',
+evaluation:'<ul><li>Cervical ripening achieved</li><li>No tachysystole or nonreassuring FHR</li></ul>'
+};
+
+// ═══ TERBUTALINE ═══
+DRUGS['terbutaline']={
+title:'Terbutaline',
+subtitle:'Beta2-Adrenergic Agonist · Tocolytic',
+refs:[{icon:'💊',short:'ATI Pharmacology Ed.8 — Ch.32'}],
+action:'<ul><li>Selectively activates beta2-adrenergic receptors causing uterine smooth muscle relaxation</li><li>Reduces frequency and intensity of uterine contractions</li></ul>',
+use:'<ul><li>Delay (not prevent) preterm labor for up to 48 hr — buys time for glucocorticoid administration for fetal lung maturity</li><li>Acute tocolysis for uterine tachysystole during oxytocin infusion</li></ul>',
+complications:'<ul><li><strong>Maternal:</strong> tachycardia, palpitations, chest pain, hypotension, hypokalemia, hyperglycemia, tremor, anxiety</li><li><strong>Intolerable (STOP):</strong> BP &lt;90/60, HR &gt;120, chest pain, pulmonary edema, cardiac arrhythmias</li><li><strong>Fetal:</strong> tachycardia</li></ul>',
+admin:'<ul><li>Administered subcutaneously for up to 48 hr</li><li>Assess maternal HR before and after each dose</li><li><strong>Withhold and contact provider</strong> for chest pain, HR &gt;120, or cardiac arrhythmias</li><li>Limit fluid intake to 2,500-3,000 mL/day</li></ul>',
+contraindications:'<ul><li>Hypersensitivity</li><li>Use caution with chronic/active hepatic or renal disease</li></ul>',
+nursing:'<ul><li>Monitor VS, blood glucose, and potassium levels</li><li>Monitor injection site for infection</li><li>Notify provider for intolerable adverse effects</li><li>Monitor FHR and contraction pattern</li><li>Notify provider if contractions persist or increase</li></ul>',
+interactions:'<ul><li><strong>MAOIs, green tea:</strong> increase effect</li><li><strong>Beta blockers:</strong> decrease effect</li><li>Monitor for hypertensive crisis with MAOIs</li></ul>',
+education:'<ul><li>Report chest pain, rapid heartbeat, or difficulty breathing immediately</li><li>Tremor and restlessness are common side effects</li><li>Goal is to delay delivery for 48 hr for steroid treatment</li></ul>',
+evaluation:'<ul><li>Cessation or significant reduction of preterm contractions</li><li>Delay of delivery by at least 48 hr for steroid effect</li><li>No intolerable adverse effects</li></ul>'
+};
+
+// ═══ NIFEDIPINE ═══
+DRUGS['nifedipine']={
+title:'Nifedipine',
+subtitle:'Calcium Channel Blocker · Tocolytic',
+refs:[{icon:'💊',short:'ATI Pharmacology Ed.8 — Ch.32'}],
+action:'<ul><li>Calcium channel blocker that inhibits calcium influx into smooth muscle cells</li><li>Results in uterine smooth muscle relaxation and decreased contractions</li></ul>',
+use:'<ul><li>Maintenance medication to suppress preterm labor</li><li>May be used as first-line tocolytic at some facilities</li></ul>',
+complications:'<ul><li>Hypotension, headache, dizziness, nausea</li><li>Facial flushing, peripheral edema</li></ul>',
+admin:'<ul><li>Administered orally every 3-6 hr until contractions decrease, then long-acting formulation every 6-8 hr</li><li>Monitor BP before and after administration</li></ul>',
+contraindications:'<ul><li>Hypersensitivity</li><li>Use caution with hypotension, hepatic or renal disease, acute MI</li><li><strong>Avoid concurrent use with magnesium sulfate</strong> (risk of skeletal muscle blockade and severe hypotension)</li><li>Avoid concurrent use with terbutaline</li></ul>',
+nursing:'<ul><li>Monitor BP — withhold if hypotensive</li><li>Monitor FHR and uterine contractions</li><li>Assess for headache, dizziness, flushing</li></ul>',
+interactions:'<ul><li><strong>Increase effect:</strong> digoxin, phenytoin, beta blockers, antihypertensives, ginkgo biloba, ginseng, grapefruit juice</li><li><strong>Increase toxicity:</strong> cimetidine, St. John wort, melatonin</li><li><strong>Magnesium sulfate:</strong> risk of skeletal muscle blockade — AVOID concurrent use</li></ul>',
+education:'<ul><li>Avoid grapefruit juice during therapy</li><li>Report dizziness, severe headache, or swelling</li><li>Rise slowly from sitting/lying to prevent orthostatic hypotension</li></ul>',
+evaluation:'<ul><li>Decreased frequency of contractions</li><li>BP maintained within acceptable range</li><li>No severe adverse effects</li></ul>'
+};
+
+// ═══ INDOMETHACIN ═══
+DRUGS['indomethacin']={
+title:'Indomethacin (Indocin)',
+subtitle:'NSAID / Prostaglandin Synthesis Inhibitor · Tocolytic',
+refs:[{icon:'💊',short:'ATI Pharmacology Ed.8 — Ch.32'}],
+action:'<ul><li>NSAID that inhibits prostaglandin synthesis, thereby suppressing uterine contractions</li></ul>',
+use:'<ul><li>Suppress preterm labor in clients <strong>less than 32 weeks gestation</strong></li><li>Short-term use only — administer for no more than 48 hr</li></ul>',
+complications:'<ul><li><strong>Maternal:</strong> nausea, vomiting, heartburn, GI bleed, thrombocytopenia</li><li><strong>Fetal (most concerning):</strong> premature narrowing or closure of ductus arteriosus, oligohydramnios, neonatal pulmonary hypertension</li></ul>',
+admin:'<ul><li>Administered in long-acting formulations with food to prevent GI effects</li><li>Use only for clients &lt;32 weeks gestation</li><li>Limit to 48 hr maximum</li><li>Monitor fetal ductus arteriosus and amniotic fluid volume before and within 48 hr of discontinuing</li></ul>',
+contraindications:'<ul><li>GI bleeding, hypersensitivity to NSAIDs</li><li>Gestation ≥32 weeks (increased risk of ductus arteriosus closure)</li><li>Use caution with seizures, renal/hepatic disease, GI disorders, cardiac disorders, depression, diabetes</li></ul>',
+nursing:'<ul><li>Monitor for GI effects; give with food</li><li>Monitor amniotic fluid volume (oligohydramnios risk)</li><li>Assess fetal ductus arteriosus patency</li><li>Limit use to 48 hr</li></ul>',
+interactions:'<ul><li><strong>Increase:</strong> bleeding risk with anticoagulants; hyperkalemia with potassium-sparing diuretics; toxicity with lithium, cyclosporine</li><li>Avoid NSAIDs, alcohol, and salicylates</li><li>Monitor for toxicity: blurred vision, tinnitus</li></ul>',
+education:'<ul><li>Take with food to reduce GI upset</li><li>Report ringing in ears, vision changes, or unusual bleeding</li><li>Short-term use only — will be discontinued after 48 hr</li></ul>',
+evaluation:'<ul><li>Reduction in preterm contractions</li><li>Ductus arteriosus remains patent</li><li>Amniotic fluid volume remains adequate</li></ul>'
+};
+
+// ═══ OXYTOCIN (POSTPARTUM) ═══
+DRUGS['oxytocin_pp']={
+title:'Oxytocin (Pitocin) — Postpartum',
+subtitle:'Uterotonic · PPH Prevention',
+refs:[{icon:'📘',short:'ATI Maternal Newborn Ed.11 — Ch.17'},{icon:'💊',short:'ATI Pharmacology Ed.8 — Ch.32'}],
+action:'<ul><li>Same pharmacologic action as induction oxytocin — stimulates uterine smooth muscle contraction</li><li>Promotes sustained uterine contraction to compress blood vessels at placental site and prevent hemorrhage</li></ul>',
+use:'<ul><li><strong>First-line agent</strong> for prevention and management of postpartum hemorrhage</li><li>Administered routinely after delivery of placenta to maintain uterine tone</li><li>Also stimulated naturally by breastfeeding (endogenous oxytocin release)</li></ul>',
+complications:'<ul><li>Hypotension (especially with IV bolus — avoid rapid push)</li><li>Water intoxication with prolonged high-dose infusion (rare postpartum)</li><li>Uterine cramping (afterpains — normal and expected)</li></ul>',
+admin:'<ul><li><strong>IV:</strong> 10-40 units added to IV solution after delivery of placenta; infuse at rate to maintain uterine firmness</li><li><strong>IM:</strong> 10 units IM after delivery of placenta</li><li>Often added to existing IV line — no separate access needed</li><li>Administer after placenta delivery (not before)</li></ul>',
+contraindications:'<ul><li>No significant contraindications for postpartum use when indicated for hemorrhage prevention</li></ul>',
+nursing:'<ul><li>Monitor uterine tone (fundal firmness) — should become and remain firm</li><li>Assess lochia amount, color, and clots</li><li>Monitor VS; watch for hypotension</li><li>Palpate fundus and document position and consistency</li><li>Encourage breastfeeding (stimulates endogenous oxytocin)</li><li>Encourage voiding to prevent bladder distention (full bladder can displace uterus and cause atony)</li></ul>',
+interactions:'<ul><li>Vasopressors: additive hypertensive effect</li></ul>',
+education:'<ul><li>Cramping (afterpains) is normal and means the uterus is contracting to prevent bleeding</li><li>Afterpains may be stronger during breastfeeding — this is beneficial</li><li>Notify nurse if bleeding increases or large clots are passed</li></ul>',
+evaluation:'<ul><li>Fundus firm, midline, at or below umbilicus</li><li>Lochia amount decreasing appropriately</li><li>No signs of postpartum hemorrhage</li><li>VS stable</li></ul>'
+};
+
+// ═══ CARBOPROST ═══
+DRUGS['carboprost']={
+title:'Carboprost (Hemabate)',
+subtitle:'Prostaglandin F2-alpha · Uterotonic',
+refs:[{icon:'📘',short:'ATI Maternal Newborn Ed.11 — Ch.17'},{icon:'💊',short:'ATI Pharmacology Ed.8'}],
+action:'<ul><li>Synthetic prostaglandin F2-alpha analog that stimulates strong uterine contractions</li></ul>',
+use:'<ul><li>Postpartum hemorrhage unresponsive to oxytocin and methylergonovine</li><li>Third-line agent in PPH escalation protocol: oxytocin → methergine → <strong>carboprost</strong> → misoprostol</li></ul>',
+complications:'<ul><li>Hypertension</li><li>GI effects: nausea, vomiting, diarrhea (very common with prostaglandins)</li><li>Fever, chills, flushing</li><li>Bronchospasm</li></ul>',
+admin:'<ul><li>0.25 mg deep IM injection; may repeat every 15-90 min; maximum 8 doses (2 mg total)</li><li>Can also be injected directly into myometrium by provider during surgery</li></ul>',
+contraindications:'<ul><li><strong>Asthma</strong> (can cause severe bronchospasm) — most important contraindication</li><li>Active cardiac, pulmonary, renal, or hepatic disease</li></ul>',
+nursing:'<ul><li>Assess respiratory status — contraindicated in asthma</li><li>Monitor VS, uterine tone, and bleeding</li><li>Monitor for GI effects; have antiemetic available</li><li>Assess for fever (prostaglandin effect, not necessarily infection)</li></ul>',
+interactions:'<ul><li>Other oxytocics: additive uterotonic effects</li></ul>',
+education:'<ul><li>Nausea, vomiting, and diarrhea are common but temporary</li><li>Report difficulty breathing immediately</li></ul>',
+evaluation:'<ul><li>Uterine firmness achieved</li><li>Bleeding controlled</li><li>No respiratory compromise</li></ul>'
+};
+
+// ═══ MISOPROSTOL (PPH) ═══
+DRUGS['misoprostol_pp']={
+title:'Misoprostol (Cytotec) — PPH',
+subtitle:'Prostaglandin E1 Analog · Uterotonic',
+refs:[{icon:'📘',short:'ATI Maternal Newborn Ed.11 — Ch.17'}],
+action:'<ul><li>Synthetic prostaglandin E1 analog that stimulates uterine contractions</li></ul>',
+use:'<ul><li>Treatment of PPH — often used as last-line pharmacological agent</li><li>Part of PPH escalation: oxytocin → methergine → carboprost → <strong>misoprostol</strong></li></ul>',
+complications:'<ul><li>Hypotension (unlike methergine which causes hypertension)</li><li>GI effects: nausea, vomiting, diarrhea</li><li>Fever, chills</li></ul>',
+admin:'<ul><li>800-1000 mcg rectally or sublingually for PPH</li><li>Can be administered when IV access is not available (advantage over oxytocin)</li></ul>',
+contraindications:'<ul><li>Known hypersensitivity</li><li>Previous cesarean or uterine surgery (when used for ripening — less concern for PPH use)</li></ul>',
+nursing:'<ul><li>Monitor VS — watch for hypotension</li><li>Monitor uterine tone and bleeding</li><li>Assess for GI effects and fever</li></ul>',
+interactions:'<ul><li>Aluminum/magnesium antacids: increased diarrhea</li></ul>',
+education:'<ul><li>GI effects are temporary</li><li>Fever may occur — this is a medication effect, not necessarily infection</li></ul>',
+evaluation:'<ul><li>Uterine firmness achieved</li><li>Bleeding controlled</li><li>VS stable</li></ul>'
+};
+
+// ═══ BETAMETHASONE ═══
+DRUGS['betamethasone']={
+title:'Betamethasone',
+subtitle:'Glucocorticoid · Fetal Lung Maturity',
+refs:[{icon:'💊',short:'ATI Pharmacology Ed.8 — Ch.32'},{icon:'📘',short:'ATI Maternal Newborn Ed.11'}],
+action:'<ul><li>Glucocorticoid that crosses the placenta and stimulates fetal lung cells to produce and release surfactant</li><li>Surfactant reduces surface tension in alveoli, allowing lungs to expand and function at birth</li></ul>',
+use:'<ul><li>Accelerate fetal lung maturity to reduce risk of neonatal respiratory distress syndrome (RDS)</li><li>Also reduces risk of intraventricular hemorrhage, necrotizing enterocolitis, and neonatal death</li></ul>',
+complications:'<ul><li>Temporary decreased fetal breathing and body movements (transient — not harmful)</li><li>Maternal hyperglycemia (monitor closely in diabetic clients)</li><li>Maternal immunosuppression</li></ul>',
+admin:'<ul><li><strong>12 mg IM for 2 doses, 24 hr apart</strong></li><li>Administer deep IM to clients between <strong>24-34 weeks gestation</strong></li><li>Must be given at least 24 hr before delivery for maximum effect, but no more than 7 days before</li><li>Alternative: dexamethasone 6 mg IM every 12 hr for 4 doses</li></ul>',
+contraindications:'<ul><li>Active systemic fungal infection</li><li>Use with caution in diabetes (will elevate blood glucose)</li></ul>',
+nursing:'<ul><li>Maintain continuous fetal monitoring after administration</li><li>Monitor maternal blood glucose (especially in gestational or preexisting DM)</li><li>Assess for signs of infection (immunosuppressive effects)</li><li>Coordinate timing with tocolytic therapy — goal is to delay delivery at least 24-48 hr</li><li>Document time of each dose</li></ul>',
+interactions:'<ul><li>May increase blood glucose — adjust insulin or oral hypoglycemic doses as needed</li><li>NSAIDs: increased risk of GI bleeding when combined</li></ul>',
+education:'<ul><li>This medication helps the baby develop lung surfactant so breathing is easier after birth</li><li>Decreased fetal movement for 1-2 days after injection is expected and temporary</li><li>Two injections are needed, 24 hr apart</li></ul>',
+evaluation:'<ul><li>Delivery delayed at least 24-48 hr after administration (steroid effect achieved)</li><li>Neonate born without significant respiratory distress</li><li>Adequate L/S ratio if amniocentesis performed (2:1 or greater)</li></ul>'
+};
+
+// ═══ ERYTHROMYCIN EYE ═══
+DRUGS['erythromycin_eye']={
+title:'Erythromycin Ophthalmic Ointment 0.5%',
+subtitle:'Antibiotic · Newborn Eye Prophylaxis',
+refs:[{icon:'📘',short:'ATI Maternal Newborn Ed.11 — Ch.24'}],
+action:'<ul><li>Macrolide antibiotic that inhibits bacterial protein synthesis</li><li>Provides prophylaxis against bacterial eye infection acquired during passage through birth canal</li></ul>',
+use:'<ul><li><strong>Mandatory prophylaxis</strong> to prevent ophthalmia neonatorum</li><li>Prevents infection caused by Neisseria gonorrhoeae and Chlamydia trachomatis, which can cause blindness</li></ul>',
+complications:'<ul><li><strong>Chemical conjunctivitis:</strong> redness, swelling, drainage, temporarily blurred vision for 24-48 hr — this is expected and resolves spontaneously</li><li>Reassure parents this is a normal reaction to the medication, not an infection</li></ul>',
+admin:'<ul><li>Apply a <strong>1-2 cm ribbon</strong> of ointment to the <strong>lower conjunctival sac</strong> of each eye</li><li>Apply from <strong>inner canthus to outer canthus</strong></li><li>Use a <strong>single-dose unit</strong> to avoid cross-contamination</li><li>Do not irrigate eyes after application</li><li>Application can be <strong>delayed up to 1 hr</strong> after birth to facilitate baby-friendly bonding during first period of reactivity</li></ul>',
+contraindications:'<ul><li>Known hypersensitivity to erythromycin</li></ul>',
+nursing:'<ul><li>Administer within 1 hr of birth (or per facility protocol for delayed application)</li><li>Gently open eyelids; apply thin ribbon along entire lower lid</li><li>Do not touch tube tip to eye</li><li>Allow medication to spread naturally — do not rinse</li><li>Document time of administration and any reactions</li></ul>',
+interactions:'<ul><li>No significant interactions for ophthalmic route</li></ul>',
+education:'<ul><li>Explain that this medication is required by law to protect the baby from eye infection</li><li>Redness and slight swelling is a normal reaction that resolves in 1-2 days</li><li>The ointment may temporarily blur the baby vision — this clears quickly</li></ul>',
+evaluation:'<ul><li>No signs of ophthalmia neonatorum (purulent eye discharge)</li><li>Chemical conjunctivitis resolves within 24-48 hr</li><li>Eyes remain clear and free of infection at discharge</li></ul>'
+};
+
+// ═══ VITAMIN K ═══
+DRUGS['vitamin_k']={
+title:'Vitamin K (Phytonadione)',
+subtitle:'Fat-Soluble Vitamin · Hemorrhage Prevention',
+refs:[{icon:'📘',short:'ATI Maternal Newborn Ed.11 — Ch.24'}],
+action:'<ul><li>Essential cofactor for synthesis of clotting factors II, VII, IX, and X in the liver</li><li>Newborns are born with a sterile gut — vitamin K is not produced until intestinal bacteria colonize the gut (~day 7) after feeding begins</li><li>Without supplementation, newborns are at risk for hemorrhagic disease of the newborn (vitamin K deficiency bleeding)</li></ul>',
+use:'<ul><li>Prevention of hemorrhagic disease of the newborn (vitamin K deficiency bleeding)</li><li>Promotes blood clotting in the newborn until gut bacteria can produce vitamin K naturally</li></ul>',
+complications:'<ul><li>Injection site pain, swelling, tenderness</li><li>Rare: allergic reaction, anaphylaxis</li></ul>',
+admin:'<ul><li><strong>0.5-1 mg IM</strong> into the <strong>vastus lateralis</strong> (lateral thigh) soon after birth</li><li>Vastus lateralis is used because it has adequate muscle development in newborns</li><li><strong>Do NOT give in the same thigh as hepatitis B vaccine</strong></li><li>Use a 25-gauge, ⅝-inch needle</li></ul>',
+contraindications:'<ul><li>Known hypersensitivity</li></ul>',
+nursing:'<ul><li>Administer soon after birth, during initial newborn care</li><li>Use correct site — vastus lateralis (lateral aspect of thigh)</li><li>Verify correct dose (0.5 mg for preterm, 1 mg for term)</li><li>Different thigh than hepatitis B vaccine</li><li>Monitor injection site for bleeding or hematoma</li><li>Document time, dose, route, and site</li></ul>',
+interactions:'<ul><li>Anticoagulants (warfarin): vitamin K antagonizes warfarin effects</li></ul>',
+education:'<ul><li>Explain that the injection prevents a rare but serious bleeding condition</li><li>The baby gut does not make vitamin K until about 1 week old when bacteria colonize after feeding</li><li>This is a one-time injection — not a vaccine</li></ul>',
+evaluation:'<ul><li>No signs of bleeding or hemorrhagic disease</li><li>Normal clotting function</li><li>Injection site without excessive bleeding or hematoma</li></ul>'
+};
+
+// ═══ HEPATITIS B VACCINE ═══
+DRUGS['hep_b_vax']={
+title:'Hepatitis B Vaccine',
+subtitle:'Immunization · Recombinant Vaccine',
+refs:[{icon:'📘',short:'ATI Maternal Newborn Ed.11 — Ch.24'}],
+action:'<ul><li>Recombinant vaccine containing hepatitis B surface antigen (HBsAg)</li><li>Stimulates active immunity by promoting production of anti-HBs antibodies</li><li>Provides long-term protection against hepatitis B virus</li></ul>',
+use:'<ul><li>Immunization of all newborns against hepatitis B infection</li><li>Recommended by AAP and CDC for universal newborn vaccination</li></ul>',
+complications:'<ul><li>Injection site soreness, redness, swelling (most common)</li><li>Low-grade fever, irritability</li><li>Rare: allergic reaction</li></ul>',
+admin:'<ul><li><strong>Healthy parents schedule:</strong> birth, 1 month, 6 months</li><li><strong>Hepatitis B-positive parent schedule:</strong> hepatitis B immunoglobulin (HBIG) AND hepatitis B vaccine within 12 hr of birth; then vaccine alone at 1 month, 2 months, and 12 months</li><li>Administer IM into vastus lateralis</li><li><strong>Informed consent must be obtained</strong> from parents before administration</li><li><strong>Do NOT give in the same thigh as vitamin K</strong></li></ul>',
+contraindications:'<ul><li>Known hypersensitivity to yeast or vaccine components</li><li>Active serious illness (defer until resolved)</li></ul>',
+nursing:'<ul><li>Obtain informed consent before administration</li><li>Verify maternal hepatitis B status to determine appropriate schedule</li><li>If maternal status is unknown: administer vaccine within 12 hr of birth and test maternal blood; give HBIG within 7 days if mother tests positive</li><li>Administer in different thigh than vitamin K</li><li>Monitor for allergic reaction for 20 min</li><li>Document lot number, expiration, dose, site, and consent</li></ul>',
+interactions:'<ul><li>Immunosuppressive therapy may reduce immune response to vaccine</li><li>Can be administered simultaneously with other routine immunizations at different sites</li></ul>',
+education:'<ul><li>Explain that this vaccine protects the baby from hepatitis B, a serious liver infection</li><li>Series requires 3 doses to complete — follow-up doses will be given at well-child visits</li><li>Mild fever and fussiness after injection are common and temporary</li><li>Soreness at injection site may last 1-2 days</li></ul>',
+evaluation:'<ul><li>Vaccine series completed on schedule</li><li>No significant adverse reactions</li><li>Development of adequate anti-HBs antibody levels (tested in high-risk infants)</li></ul>'
+};
+
+function openDrug(id){
+  const d=DRUGS[id]; if(!d){alert('This drug has not been populated yet.');return}
+  document.getElementById('modalTitle').textContent=d.title;
+  document.getElementById('modalSub').textContent=d.subtitle;
+  document.getElementById('modalRefs').innerHTML=d.refs.map(r=>'<span class="modal-ref">'+r.icon+' '+r.short+'</span>').join('');
+  const grid='<div class="pharm-grid">'
+    +'<div class="pharm-grid-cell"><h4>Expected Pharmacological Action</h4>'+d.action+'</div>'
+    +'<div class="pharm-grid-cell"><h4>Therapeutic Use</h4>'+d.use+'</div>'
+    +'<div class="pharm-grid-cell"><h4>Complications / Adverse Effects</h4>'+d.complications+'</div>'
+    +'<div class="pharm-grid-cell"><h4>Medication Administration</h4>'+d.admin+'</div>'
+    +'<div class="pharm-grid-cell"><h4>Contraindications / Precautions</h4>'+d.contraindications+'</div>'
+    +'<div class="pharm-grid-cell"><h4>Nursing Interventions</h4>'+d.nursing+'</div>'
+    +'<div class="pharm-grid-cell"><h4>Interactions</h4>'+d.interactions+'</div>'
+    +'<div class="pharm-grid-cell"><h4>Client Education</h4>'+d.education+'</div>'
+    +'<div class="pharm-grid-cell full-width"><h4>Evaluation of Medication Effectiveness</h4>'+d.evaluation+'</div>'
+    +'</div>';
+  document.getElementById('modalBody').innerHTML=grid;
+  document.getElementById('modalOverlay').classList.add('show');
+  document.body.style.overflow='hidden';
+  // highlight sidebar
+  document.querySelectorAll('.nav-drug').forEach(n=>n.classList.remove('active'));
+  document.querySelectorAll('.nav-drug').forEach(n=>{if(n.textContent.trim()===d.title.split('(')[0].trim()||n.onclick.toString().includes(id))n.classList.add('active')});
+}
+
+function closeDrug(){
+  document.getElementById('modalOverlay').classList.remove('show');
+  document.body.style.overflow='';
+  document.querySelectorAll('.nav-drug').forEach(n=>n.classList.remove('active'));
+}
+loadPharmProgress();
+</script>
+</body>
+</html>

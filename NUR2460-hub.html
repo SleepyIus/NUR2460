@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NUR 2460 · Family Nursing Care</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital,wght@0,400;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0f1117;
+  --surface: #181c27;
+  --surface2: #1e2336;
+  --border: #2a3050;
+  --text: #e8eaf2;
+  --text2: #8b92b8;
+  --text3: #555e85;
+  --accent: #e8527a;
+  --accent2: #c97aac;
+  --green: #3db87a;
+  --red: #e05c6a;
+  --amber: #e8a838;
+  --teal: #2fbfbf;
+}
+
+[data-theme="light"] {
+  --bg: #faf7f2;
+  --surface: #f4f0e8;
+  --surface2: #ece6d8;
+  --border: #d6ccb8;
+  --text: #1e1c18;
+  --text2: #5a5448;
+  --text3: #9e9080;
+  --accent: #b83060;
+  --accent2: #8b3e6e;
+  --green: #1a9157;
+  --red: #c0384a;
+  --amber: #b87418;
+  --teal: #177f7f;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+  font-weight: 400;
+  line-height: 1.5;
+  transition: background 0.2s, color 0.2s;
+}
+
+.bg-deco {
+  position: fixed; inset: 0; z-index: 0;
+  pointer-events: none; overflow: hidden;
+}
+.bg-deco::before, .bg-deco::after {
+  content: ''; position: absolute;
+  border-radius: 50%; filter: blur(120px);
+  opacity: 0.18;
+}
+.bg-deco::before {
+  top: -10%; right: -5%;
+  width: 500px; height: 500px;
+  background: var(--accent);
+}
+.bg-deco::after {
+  bottom: -15%; left: -8%;
+  width: 480px; height: 480px;
+  background: var(--accent2);
+}
+[data-theme="light"] .bg-deco::before,
+[data-theme="light"] .bg-deco::after { opacity: 0.12; }
+
+.wrap {
+  position: relative; z-index: 1;
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 48px 32px 64px;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 60px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text3);
+}
+.brand-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 12px var(--accent);
+}
+
+.theme-toggle {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  letter-spacing: 0.04em;
+  transition: all 0.15s;
+}
+.theme-toggle:hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+.toggle-icon { font-size: 13px; }
+
+.hero {
+  margin-bottom: 56px;
+}
+.course-code {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+.hero h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(40px, 6vw, 64px);
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin-bottom: 16px;
+  color: var(--text);
+}
+.hero h1 em {
+  font-style: italic;
+  color: var(--accent);
+}
+.hero .desc {
+  font-size: 16px;
+  color: var(--text2);
+  max-width: 640px;
+  line-height: 1.65;
+}
+
+.section-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin-bottom: 18px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 18px;
+  margin-bottom: 48px;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 28px 26px 26px;
+  text-decoration: none;
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s;
+}
+.card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  border: 1px solid transparent;
+  pointer-events: none;
+  transition: border-color 0.2s;
+}
+.card:hover {
+  transform: translateY(-2px);
+  background: var(--surface2);
+}
+.card:hover::after {
+  border-color: var(--accent);
+}
+
+.card-icon {
+  width: 42px; height: 42px;
+  border-radius: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  margin-bottom: 18px;
+  background: rgba(232, 82, 122, 0.12);
+  color: var(--accent);
+  border: 1px solid rgba(232, 82, 122, 0.22);
+}
+[data-theme="light"] .card-icon {
+  background: rgba(184, 48, 96, 0.10);
+  border-color: rgba(184, 48, 96, 0.22);
+}
+
+.card-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--text);
+}
+.card-desc {
+  font-size: 13.5px;
+  color: var(--text2);
+  line-height: 1.55;
+  margin-bottom: 22px;
+  flex: 1;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+.card-meta {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text3);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.card-arrow {
+  font-size: 18px;
+  color: var(--text3);
+  transition: all 0.2s;
+}
+.card:hover .card-arrow {
+  color: var(--accent);
+  transform: translateX(4px);
+}
+
+.card.coming-soon {
+  opacity: 0.55;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+.card.coming-soon .card-icon {
+  background: var(--surface2);
+  color: var(--text3);
+  border-color: var(--border);
+}
+.coming-pill {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: var(--surface2);
+  color: var(--text3);
+  border: 1px solid var(--border);
+  margin-left: 8px;
+  vertical-align: middle;
+  text-transform: uppercase;
+}
+
+/* Discreet quiz hub link — sits at very bottom of page, only visible when scrolled to bottom */
+.secret-circle {
+  display: block;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: transparent;
+  border: 1px solid var(--text3);
+  opacity: 0.1;
+  text-decoration: none;
+  margin: 28px 0 0 auto;
+  mix-blend-mode: difference;
+  transition: opacity 0.25s, transform 0.25s, border-color 0.25s;
+}
+.secret-circle:hover {
+  opacity: 0.7;
+  transform: scale(1.25);
+  mix-blend-mode: normal;
+  border-color: var(--accent);
+}
+
+.exams {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 26px 28px;
+  margin-bottom: 32px;
+}
+.exams-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+  margin-top: 16px;
+}
+.exam-item {
+  padding: 14px 16px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+.exam-num {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 6px;
+}
+.exam-topics {
+  font-size: 12px;
+  color: var(--text2);
+  line-height: 1.5;
+}
+
+footer {
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  color: var(--text3);
+  letter-spacing: 0.04em;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+footer a {
+  color: var(--text2);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--text3);
+}
+footer a:hover { color: var(--accent); border-color: var(--accent); }
+
+@media (max-width: 600px) {
+  .wrap { padding: 32px 20px 48px; }
+  .topbar { margin-bottom: 40px; }
+  .hero { margin-bottom: 40px; }
+  .exams { padding: 20px 22px; }
+}
+
+/* Password Gate */
+.pw-gate{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;padding:20px}
+.pw-gate.hidden{display:none}
+.pw-box{text-align:center;max-width:360px;width:100%}
+.pw-emoji{font-size:48px;margin-bottom:16px}
+.pw-title{font-family:'DM Serif Display',serif;font-size:28px;color:var(--text);margin-bottom:6px}
+.pw-sub{font-size:13px;color:var(--text3);margin-bottom:24px}
+.pw-input{width:100%;background:var(--surface);border:2px solid var(--border);color:var(--text);padding:12px 16px;border-radius:10px;font-family:inherit;font-size:14px;outline:0;transition:border-color .2s;text-align:center;letter-spacing:.05em}
+.pw-input:focus{border-color:var(--accent)}
+.pw-input.wrong{border-color:var(--red);animation:shake .4s}
+.pw-btn{margin-top:12px;background:var(--accent);border:none;color:#fff;font-family:inherit;font-size:13px;font-weight:600;padding:10px 32px;border-radius:8px;cursor:pointer;transition:all .15s;width:100%}
+.pw-btn:hover{opacity:.9;transform:translateY(-1px)}
+.pw-error{font-size:11px;color:var(--red);margin-top:8px;min-height:16px}
+@keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+</style>
+</head>
+<body>
+<div class="pw-gate" id="pwGate">
+  <div class="pw-box">
+    <div class="pw-emoji">🔒</div>
+    <div class="pw-title">NUR 2460</div>
+    <div class="pw-sub">Enter password to access the study hub</div>
+    <input type="password" class="pw-input" id="pwInput" placeholder="Password" onkeydown="if(event.key==='Enter')checkPw()">
+    <button class="pw-btn" onclick="checkPw()">Unlock</button>
+    <div class="pw-error" id="pwError"></div>
+  </div>
+</div>
+
+<div class="bg-deco"></div>
+<div class="wrap">
+
+  <div class="topbar">
+    <div class="brand">
+      <span class="brand-dot"></span>
+      <span>Study Hub</span>
+    </div>
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">
+      <span class="toggle-icon" id="themeIcon">☀️</span>
+      <span id="themeLabel">Light</span>
+    </button>
+  </div>
+
+  <div class="hero">
+    <div class="course-code">NUR 2460 · Fall 2026</div>
+    <h1>Family Nursing <em>Care</em></h1>
+    <p class="desc">Obstetric, gynecologic, pediatric, and behavioral health content for the registered nurse providing family-centered care. ATI-aligned with Perry's Maternal Child Nursing Care 7th edition.</p>
+    <p style="font-size:13px;color:var(--text3);margin-top:8px;font-style:italic">Lock in!😴 - Sleepy Ius</p>
+  </div>
+
+  <div class="section-label">Study Tools</div>
+  <div class="cards">
+
+    <a class="card" href="NUR2460-study-tool.html">
+      <div class="card-icon">📚</div>
+      <div class="card-title">Study Tool</div>
+      <div class="card-desc">Topic reference organized by exam, with assessment, diagnostics, patient-centered care, medications, and complications for each condition.</div>
+      <div class="card-footer">
+        <span class="card-meta">Reference</span>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <a class="card" href="NUR2460-flashcards.html">
+      <div class="card-icon">🗃️</div>
+      <div class="card-title">Flashcards</div>
+      <div class="card-desc">High-yield Q&amp;A cards for spaced repetition. Filter by topic, mark for review, and export to Anki for offline study.</div>
+      <div class="card-footer">
+        <span class="card-meta">Practice</span>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <a class="card" href="NUR2460-pharmacology.html">
+      <div class="card-icon">💊</div>
+      <div class="card-title">Pharmacology</div>
+      <div class="card-desc">ATI-style medication cards with pharmacological action, administration, complications, contraindications, nursing interventions, and client education.</div>
+      <div class="card-footer">
+        <span class="card-meta">Drug Reference</span>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+  </div>
+
+  <div class="exams">
+    <div class="section-label" style="border:none; padding:0; margin:0;">Exam Coverage</div>
+    <div class="exams-grid">
+      <div class="exam-item">
+        <div class="exam-num">Exam 1</div>
+        <div class="exam-topics">Antepartum · Prenatal · Healthy L&amp;D · Healthy Newborn · Postpartum &amp; Family</div>
+      </div>
+      <div class="exam-item">
+        <div class="exam-num">Exam 2</div>
+        <div class="exam-topics">High-Risk Pregnancy · HR L&amp;D · HR Newborn · GYN · Growth &amp; Development · Peds GI · Peds Integumentary</div>
+      </div>
+      <div class="exam-item">
+        <div class="exam-num">Exam 3</div>
+        <div class="exam-topics">Peds Musculoskeletal · Neuro · Respiratory · Endocrine · Cardiovascular · Coagulation/Hematology</div>
+      </div>
+      <div class="exam-item">
+        <div class="exam-num">Exam 4</div>
+        <div class="exam-topics">Peds GU · Immunity · Oncology · Abuse &amp; Neglect · Child/Adolescent MH · MDD · Bipolar</div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div>References: ATI 11th ed. · Perry 7th ed. · Keltner 9th ed.</div>
+    <div>Built for Fall 2026 cohort</div>
+  </footer>
+
+  <a class="secret-circle" href="quiz-hub.html" aria-label="Quiz Hub"></a>
+
+</div>
+
+<script>
+function toggleTheme() {
+  const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+  if (isLight) {
+    document.documentElement.removeAttribute('data-theme');
+    document.getElementById('themeIcon').textContent = '☀️';
+    document.getElementById('themeLabel').textContent = 'Light';
+    localStorage.setItem('hubTheme', 'dark');
+  } else {
+    document.documentElement.setAttribute('data-theme', 'light');
+    document.getElementById('themeIcon').textContent = '🌙';
+    document.getElementById('themeLabel').textContent = 'Dark';
+    localStorage.setItem('hubTheme', 'light');
+  }
+}
+(function() {
+  const saved = localStorage.getItem('hubTheme');
+  const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+  if (saved === 'light' || (!saved && prefersLight)) {
+    document.documentElement.setAttribute('data-theme', 'light');
+    document.getElementById('themeIcon').textContent = '🌙';
+    document.getElementById('themeLabel').textContent = 'Dark';
+  }
+})();
+
+// Password gate
+function checkPw(){
+  const input=document.getElementById('pwInput');
+  if(input.value==='WakeUpIus'){
+    document.getElementById('pwGate').classList.add('hidden');
+    sessionStorage.setItem('nur2460_auth','true');
+  }else{
+    input.classList.add('wrong');
+    document.getElementById('pwError').textContent='Wrong password. Try again.';
+    setTimeout(()=>input.classList.remove('wrong'),400);
+    input.value='';
+    input.focus();
+  }
+}
+(function(){
+  if(sessionStorage.getItem('nur2460_auth')==='true'){
+    document.getElementById('pwGate').classList.add('hidden');
+  }else{
+    document.getElementById('pwInput').focus();
+  }
+})();
+</script>
+</body>
+</html>
