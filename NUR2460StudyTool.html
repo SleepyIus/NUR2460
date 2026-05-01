@@ -293,8 +293,19 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',system-ui
       <div class="nav-item populated" onclick="openModal('endo_peds')"><span class="dot"></span> Endocrine Disorders</div>
     </div>
     <div class="nav-section collapsed" id="exam4">
-      <div class="nav-section-label" onclick="toggleSection('exam4')">Exam 4 — Specialty & MH <span class="caret">▾</span></div>
-      <div class="nav-item coming"><span class="dot"></span> Coming soon…</div>
+      <div class="nav-section-label" onclick="toggleSection('exam4')">Exam 4 — Peds GU, Onc, Psych <span class="caret">▾</span></div>
+      <div class="nav-part-label">Part 14 — Peds GU & Renal</div>
+      <div class="nav-item populated" onclick="openModal('gu_peds')"><span class="dot"></span> GU Disorders</div>
+      <div class="nav-item populated" onclick="openModal('renal_peds')"><span class="dot"></span> Renal Disorders</div>
+      <div class="nav-part-label">Part 15 — Immunity & Infectious Disease</div>
+      <div class="nav-item populated" onclick="openModal('immunizations')"><span class="dot"></span> Immunizations</div>
+      <div class="nav-item populated" onclick="openModal('communicable_diseases')"><span class="dot"></span> Communicable Diseases</div>
+      <div class="nav-part-label">Part 16 — Peds Oncology</div>
+      <div class="nav-item populated" onclick="openModal('peds_cancer')"><span class="dot"></span> Pediatric Oncology</div>
+      <div class="nav-part-label">Part 17 — Child/Adolescent MH</div>
+      <div class="nav-item populated" onclick="openModal('abuse_neglect')"><span class="dot"></span> Abuse & Neglect</div>
+      <div class="nav-item populated" onclick="openModal('child_adolescent_mh')"><span class="dot"></span> Child/Adolescent MH</div>
+      <div class="nav-item populated" onclick="openModal('mood_disorders')"><span class="dot"></span> Mood Disorders</div>
     </div>
   </nav>
 </aside>
@@ -523,6 +534,27 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',system-ui
     </div>
   </div>
 
+  <div class="exam-accordion collapsed" id="exam4acc">
+    <div class="exam-header" onclick="this.parentElement.classList.toggle('collapsed')">
+      <span class="exam-caret">▾</span>
+      <span class="exam-title">Exam 4 — Study Planner</span>
+      <span class="exam-count" id="e4count">0 / 8</span>
+    </div>
+    <div class="exam-bar-wrap"><div class="exam-bar-outer"><div class="exam-bar-inner" id="e4bar" style="width:0%"></div></div></div>
+    <div class="exam-body">
+      <div class="planner-row" data-id="gu_peds"><div class="planner-check" onclick="toggleCheck(this)">✓</div><span class="planner-num">14.1</span><span class="planner-name" onclick="openModal('gu_peds')">GU Disorders</span><span class="planner-src">ATI Children Ch.24-25</span><button class="planner-go" onclick="openModal('gu_peds')">Study</button></div>
+      <div class="planner-row" data-id="renal_peds"><div class="planner-check" onclick="toggleCheck(this)">✓</div><span class="planner-num">14.2</span><span class="planner-name" onclick="openModal('renal_peds')">Renal Disorders</span><span class="planner-src">ATI Children Ch.26</span><button class="planner-go" onclick="openModal('renal_peds')">Study</button></div>
+      <div class="planner-row" data-id="immunizations"><div class="planner-check" onclick="toggleCheck(this)">✓</div><span class="planner-num">15.1</span><span class="planner-name" onclick="openModal('immunizations')">Immunizations</span><span class="planner-src">ATI Children Ch.35</span><button class="planner-go" onclick="openModal('immunizations')">Study</button></div>
+      <div class="planner-row" data-id="communicable_diseases"><div class="planner-check" onclick="toggleCheck(this)">✓</div><span class="planner-num">15.2</span><span class="planner-name" onclick="openModal('communicable_diseases')">Communicable Diseases</span><span class="planner-src">ATI Children Ch.36</span><button class="planner-go" onclick="openModal('communicable_diseases')">Study</button></div>
+      <div class="planner-row" data-id="peds_cancer"><div class="planner-check" onclick="toggleCheck(this)">✓</div><span class="planner-num">16.1</span><span class="planner-name" onclick="openModal('peds_cancer')">Pediatric Oncology</span><span class="planner-src">ATI Children Ch.39-41</span><button class="planner-go" onclick="openModal('peds_cancer')">Study</button></div>
+      <div class="planner-row" data-id="abuse_neglect"><div class="planner-check" onclick="toggleCheck(this)">✓</div><span class="planner-num">17.1</span><span class="planner-name" onclick="openModal('abuse_neglect')">Abuse & Neglect</span><span class="planner-src">ATI MH Ch.28 · Perry Ch.36</span><button class="planner-go" onclick="openModal('abuse_neglect')">Study</button></div>
+      <div class="planner-row" data-id="child_adolescent_mh"><div class="planner-check" onclick="toggleCheck(this)">✓</div><span class="planner-num">17.2</span><span class="planner-name" onclick="openModal('child_adolescent_mh')">Child/Adolescent MH</span><span class="planner-src">ATI MH Ch.28</span><button class="planner-go" onclick="openModal('child_adolescent_mh')">Study</button></div>
+      <div class="planner-row" data-id="mood_disorders"><div class="planner-check" onclick="toggleCheck(this)">✓</div><span class="planner-num">17.3</span><span class="planner-name" onclick="openModal('mood_disorders')">Mood Disorders (MDD & Bipolar)</span><span class="planner-src">ATI MH Ch.13-14</span><button class="planner-go" onclick="openModal('mood_disorders')">Study</button></div>
+    </div>
+  </div>
+
+
+
 </main>
 </div>
 
@@ -555,7 +587,7 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',system-ui
 
 // ── Study Planner with localStorage ──────────────────────
 const PLANNER_KEY='nur2460_progress';
-const PARTS={part1:['adapt','prenatal_care','nutrition_pregnancy','fetal_assessment'],part2:['labor_stages','fetal_monitor_pain','nursing_birth'],part3:['newborn_assess','newborn_care'],part4:['pp_physical','pp_psychosocial'],part5:['bleeding_preg','infections_preg','medical_conditions','preterm_prom'],part6:['therapeutic_proc','labor_comp','newborn_comp','pp_disorders'],part7:['contraception','growth_dev'],part8:['peds_gi','peds_integ'],part9:['neuro_acute','seizures','head_injury'],part10:['resp_acute','asthma','cystic_fibrosis'],part11:['cardio_peds','heme_peds'],part12:['fractures','msk_congenital'],part13:['endo_peds']};
+const PARTS={part1:['adapt','prenatal_care','nutrition_pregnancy','fetal_assessment'],part2:['labor_stages','fetal_monitor_pain','nursing_birth'],part3:['newborn_assess','newborn_care'],part4:['pp_physical','pp_psychosocial'],part5:['bleeding_preg','infections_preg','medical_conditions','preterm_prom'],part6:['therapeutic_proc','labor_comp','newborn_comp','pp_disorders'],part7:['contraception','growth_dev'],part8:['peds_gi','peds_integ'],part9:['neuro_acute','seizures','head_injury'],part10:['resp_acute','asthma','cystic_fibrosis'],part11:['cardio_peds','heme_peds'],part12:['fractures','msk_congenital'],part13:['endo_peds'],part14:['gu_peds','renal_peds'],part15:['immunizations','communicable_diseases'],part16:['peds_cancer'],part17:['abuse_neglect','child_adolescent_mh','mood_disorders']};
 
 function getProgress(){try{return JSON.parse(localStorage.getItem(PLANNER_KEY))||{}}catch(e){return{}}}
 function saveProgress(p){localStorage.setItem(PLANNER_KEY,JSON.stringify(p))}
@@ -1681,6 +1713,7 @@ overview:`<div class="content-block">
 <li><strong>Braxton Hicks contractions:</strong> begin irregular, eventually progress in strength and regularity <span class="bsrc bsrc-both">Both</span></li>
 <li><strong>Cervical ripening:</strong> cervix becomes soft, partially effaced, and may begin to dilate <span class="bsrc bsrc-both">Both</span></li>
 <li><strong>Bloody show:</strong> expulsion of cervical mucus plug; brownish or blood-tinged mucus from onset of cervical dilation/effacement <span class="bsrc bsrc-both">Both</span></li>
+<li><strong>Ferguson reflex:</strong> involuntary urge to bear down triggered by presenting part pressing on stretch receptors in the pelvic floor; instruct to push with contractions only when fully dilated (10 cm) <span class="bsrc bsrc-ati">ATI</span></li>
 <li><strong>Weight loss:</strong> 0.5-1.5 kg (1-3.5 lb) <span class="bsrc bsrc-ati">ATI</span></li>
 <li><strong>Backache:</strong> constant low, dull backache from pelvic muscle relaxation <span class="bsrc bsrc-ati">ATI</span></li>
 <li><strong>Energy burst:</strong> sometimes called "nesting" response <span class="bsrc bsrc-ati">ATI</span></li>
@@ -2129,6 +2162,7 @@ dx:`<div class="content-block">
 <h4>Apgar Scoring <span class="src src-both">Both</span></h4>
 <ul>
 <li>Assign Apgar scores at <strong>1 min and 5 min</strong> after birth <span class="bsrc bsrc-both">Both</span></li>
+<li><strong>Apgar criteria:</strong> <strong>A</strong>ppearance (skin color), <strong>P</strong>ulse (heart rate), <strong>G</strong>rimace (reflex irritability), <strong>A</strong>ctivity (muscle tone), <strong>R</strong>espiration (respiratory effort); each scored 0-2; total 7-10 normal, 4-6 moderately depressed, 0-3 severely depressed; if &lt;7 at 5 min, continue scoring q5min up to 20 min <span class="bsrc bsrc-ati">ATI</span></li>
 <li><strong>Heart rate:</strong> absent = 0; less than 100 = 1; greater than 100 = 2 <span class="bsrc bsrc-both">Both</span></li>
 <li><strong>Respiratory effort:</strong> absent = 0; slow/weak cry = 1; good/strong cry = 2 <span class="bsrc bsrc-both">Both</span></li>
 <li><strong>Muscle tone:</strong> limp = 0; some flexion = 1; active motion/well flexed = 2 <span class="bsrc bsrc-both">Both</span></li>
@@ -2305,6 +2339,8 @@ assessment:`<div class="content-block">
 <li>Initially deep red to purple with acrocyanosis (bluish hands/feet); fades to color consistent with genetic background <span class="bsrc bsrc-ati">ATI</span></li>
 <li><strong>Acrocyanosis vs central cyanosis:</strong> acrocyanosis (hands/feet only) is normal for first 7-10 days especially with cold exposure; central cyanosis (trunk, lips, mucous membranes) is ALWAYS abnormal and indicates respiratory or cardiac compromise requiring immediate evaluation <span class="bsrc bsrc-perry">Supp</span></li>
 <li>Jaundice can appear on 3rd day of life from increased bilirubin; usually decreases spontaneously <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Phototherapy:</strong> initiated when bilirubin levels reach threshold based on age in hours (typically 12-20 mg/dL depending on gestational age and risk factors); expose maximum skin surface; cover eyes with opaque mask; monitor temperature; increase fluid intake; assess for bronze baby syndrome; monitor bilirubin levels q4-8hr <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Kernicterus:</strong> bilirubin encephalopathy from severe unconjugated hyperbilirubinemia; bilirubin crosses blood-brain barrier and deposits in basal ganglia → seizures, opisthotonos, hearing loss, cerebral palsy, intellectual disability; MEDICAL EMERGENCY — prevent with timely phototherapy or exchange transfusion <span class="bsrc bsrc-ati">ATI</span></li>
 <li><strong>Vernix caseosa:</strong> protective thick cheesy covering; more present in creases and folds <span class="bsrc bsrc-ati">ATI</span></li>
 <li><strong>Lanugo:</strong> fine downy hair on ears, forehead, shoulders <span class="bsrc bsrc-ati">ATI</span></li>
 <li><strong>Milia:</strong> small pearly white spots on nose, chin, forehead; disappear spontaneously; do NOT squeeze <span class="bsrc bsrc-ati">ATI</span></li>
@@ -2366,7 +2402,7 @@ pcc:`<div class="content-block">
 <li><strong>Eyes:</strong> symmetrical; spacing equals one-third distance across both eyes (wider spacing may indicate chromosomal abnormality); usually blue/gray at birth; lacrimal glands immature (minimal/no tears); pupils reactive; red reflex present <span class="bsrc bsrc-ati">ATI</span></li>
 <li><strong>Ears:</strong> top of ear should align with imaginary line through inner to outer eye canthus; low-set ears may indicate chromosomal abnormality or kidney disorder; firm cartilage (lack indicates prematurity) <span class="bsrc bsrc-ati">ATI</span></li>
 <li><strong>Nose:</strong> midline, flat, broad; obligate nose breathers (do not open mouth for nasal obstruction until 3 weeks); sneeze to clear passages <span class="bsrc bsrc-ati">ATI</span></li>
-<li><strong>Mouth:</strong> check palate closure and suck strength; lips symmetrical; scant saliva (excessive may indicate tracheoesophageal fistula); Epstein pearls (whitish cysts on gums/palate) are normal; protruding tongue may indicate Down syndrome <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Mouth:</strong> check palate closure and suck strength; lips symmetrical; scant saliva (excessive may indicate tracheoesophageal fistula); Epstein pearls (whitish cysts on gums/palate) are normal; protruding tongue may indicate Down syndrome <span class="bsrc bsrc-ati">ATI</span>; <strong>3 C's of TEF</strong>: Coughing, Choking, Cyanosis with first feeding</li>
 <li><strong>Abdomen:</strong> round, dome-shaped, nondistended; cord odorless with 1 vein, 2 arteries; bowel sounds present within minutes of birth <span class="bsrc bsrc-ati">ATI</span></li>
 <li><strong>Genitalia:</strong> male — rugae on scrotum, testes present, meatus at penile tip; female — labia majora covers minora, hymenal tag present; blood-tinged vaginal discharge is normal (from maternal hormones) <span class="bsrc bsrc-ati">ATI</span></li>
 <li><strong>Extremities:</strong> full ROM, symmetrical movement, flexed; bowed legs and flat feet normal; no hip click on abduction; symmetrical gluteal folds <span class="bsrc bsrc-ati">ATI</span></li>
@@ -2492,6 +2528,8 @@ dx:`<div class="content-block">
 <li><strong>PKU:</strong> required in all states; defect in protein metabolism where phenylalanine accumulation causes intellectual disability; treatment in first 2 months prevents disability <span class="bsrc bsrc-ati">ATI</span></li>
 <li><strong>Other genetic tests:</strong> galactosemia, cystic fibrosis, maple syrup urine disease, hypothyroidism, sickle cell disease <span class="bsrc bsrc-ati">ATI</span></li>
 <li><strong>Serum bilirubin:</strong> on all newborns prior to discharge <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Nonstress test (NST):</strong> <strong>Reactive</strong> = 2 or more FHR accelerations of ≥15 bpm lasting ≥15 sec within 20 min (reassuring); <strong>Nonreactive</strong> = criteria not met; requires further testing (BPP or CST) <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Biophysical profile (BPP):</strong> 5 components each scored 0 or 2 (total 10): fetal breathing movements, fetal movement, fetal tone, amniotic fluid volume (AFI), and NST reactivity; score ≥8 = reassuring; ≤4 = concerning, may indicate need for delivery <span class="bsrc bsrc-ati">ATI</span></li>
 <li><strong>Hearing screening:</strong> required in most states; early detection for treatment <span class="bsrc bsrc-ati">ATI</span></li>
 </ul></div>
 
@@ -2688,6 +2726,7 @@ dx:`<div class="content-block">
 <li>If rubella and Rh status unknown: test to determine status <span class="bsrc bsrc-ati">ATI</span></li>
 <li>Rubella vaccine given postpartum if non-immune (live vaccine — contraindicated during pregnancy) <span class="bsrc bsrc-ati">ATI</span></li>
 <li>RhoGAM within 72 hr if Rh-negative mother delivers Rh-positive newborn <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>ABO incompatibility:</strong> most common cause of hemolytic disease of the newborn; occurs when mother is type O and infant is type A, B, or AB; maternal anti-A or anti-B IgG antibodies cross placenta; usually milder than Rh disease; jaundice within first 24 hr; positive direct Coombs test; treatment: phototherapy; rarely needs exchange transfusion <span class="bsrc bsrc-ati">ATI</span></li>
 </ul></div>
 
 <div class="content-block">
@@ -2805,6 +2844,10 @@ adpiecomp:`<div class="content-block">
 <li>Change pads frequently; apply pads front-to-back; hand hygiene after pad changes <span class="bsrc bsrc-ati">ATI</span></li>
 <li><strong>Do NOT use tampons</strong> during postpartum — increased infection risk <span class="bsrc bsrc-ati">ATI</span></li>
 <li>Ice packs first 24 hr → warm packs/sitz baths after 24 hr; Kegel exercises to strengthen pelvic floor <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>REEDA scale (Perry):</strong> perineal assessment — <strong>R</strong>edness, <strong>E</strong>dema, <strong>E</strong>cchymosis, <strong>D</strong>ischarge, <strong>A</strong>pproximation of wound edges; assess in good lighting with woman in side-lying position; ice packs first 24 hr, then sitz baths, peri-bottle with warm water front-to-back after voiding/defecation, tucks pads for hemorrhoids <span class="bsrc bsrc-perry">SUPP</span></li>
+<li><strong>DVT prevention postpartum (Perry):</strong> early ambulation within 4-8 hr of birth; leg exercises if on bedrest; assess Homan sign (calf pain with dorsiflexion — though unreliable); monitor for unilateral leg swelling, warmth, redness, tenderness; apply compression stockings if ordered; risk factors: cesarean birth, obesity, prolonged bedrest, varicosities, history of thromboembolism <span class="bsrc bsrc-perry">SUPP</span></li>
+<li><strong>Postpartum blues vs depression vs psychosis (Perry):</strong> <strong>Blues</strong> (baby blues): emotional lability, crying without reason, peaks day 5, resolves by day 10, affects up to 80%; <strong>Depression</strong> (PPD): onset within 4 weeks to 12 months, persistent sadness/anxiety/hopelessness, inability to care for self/infant, sleep/appetite changes, suicidal ideation possible — screen with Edinburgh Postnatal Depression Scale (EPDS) at discharge, then pediatric visits at 1, 2, and 4 months; <strong>Psychosis</strong>: rare but EMERGENCY — hallucinations, delusions, confusion, disorganized behavior, risk of infanticide — hospitalize immediately <span class="bsrc bsrc-perry">SUPP</span></li>
+<li><strong>Postpartum diaphoresis:</strong> profuse sweating, especially at night; normal physiologic mechanism to eliminate excess fluid accumulated during pregnancy; reassure client; maintain hygiene and dry linens <span class="bsrc bsrc-ati">ATI</span></li>
 </ul></div>`
 };
 
@@ -3479,7 +3522,8 @@ overview:`<div class="content-block">
 <li><strong>Risk factors:</strong> history of cervical trauma (tears, excessive dilation, curettage, biopsy), in utero DES exposure, congenital structural defects <span class="bsrc bsrc-ati">ATI</span></li>
 <li><strong>Findings:</strong> increased pelvic pressure or urge to push, pink-stained discharge or bleeding, possible gush of fluid (ROM), uterine contractions with expulsion <span class="bsrc bsrc-ati">ATI</span></li>
 <li><strong>Diagnosis:</strong> ultrasound showing short cervix (&lt;25 mm), cervical funneling (beaking), or effacement of cervical os <span class="bsrc bsrc-ati">ATI</span></li>
-<li><strong>Treatment:</strong> prophylactic cervical cerclage (heavy ligature placed submucosally around cervix) at 12-14 weeks; removed at 36-38 weeks or when spontaneous labor occurs <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Incompetent cervix (cervical insufficiency):</strong> painless cervical dilation in the second trimester without contractions; history of recurrent second-trimester pregnancy losses; diagnosed by cervical length on transvaginal ultrasound (&lt;25 mm) <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Treatment:</strong> prophylactic cervical cerclage (heavy ligature placed submucosally around cervix) at 12-14 weeks; removed at 36-38 weeks or when spontaneous labor occurs; bedrest; monitor for infection, contractions, PPROM; avoid heavy lifting and intercourse <span class="bsrc bsrc-ati">ATI</span></li>
 </ul></div>
 
 <div class="content-block">
@@ -4292,7 +4336,7 @@ adpiecomp:`<div class="content-block">
 <li><strong>LGA (&gt;90th percentile):</strong> cushingoid (plump) face, sluggish/hypotonic, shoulder dystocia risk, Erb-Duchenne paralysis, clavicle fracture, hypoglycemia, polycythemia, hyperbilirubinemia</li>
 <li><strong>Both:</strong> at risk for hypoglycemia and polycythemia; both need blood glucose monitoring</li>
 <li><strong>Maternal DM:</strong> leading risk factor for LGA; uncontrolled hyperglycemia → congenital heart defects, TEF, CNS anomalies</li>
-</ul></div>`
+<li><strong>Gastroschisis vs Omphalocele:</strong> Gastroschisis = intestines protrude through abdominal wall defect to RIGHT of umbilicus (no sac covering) — cover with sterile moist saline dressing, position on side; Omphalocele = organs protrude through umbilicus covered by peritoneal sac — do NOT rupture sac, cover with sterile moist dressing <span class="bsrc bsrc-perry">SUPP</span></li></ul></div>`
 };
 
 TOPICS['pp_disorders']={
@@ -4358,6 +4402,9 @@ dx:`<div class="content-block">
 <ul>
 <li><strong>Endometritis:</strong> infection of uterine lining; most common postpartum infection; findings include fever &gt;38°C (100.4°F) after first 24 hr, chills, tachycardia, uterine tenderness, foul-smelling lochia, malaise <span class="bsrc bsrc-ati">ATI</span></li>
 <li><strong>Wound infection:</strong> cesarean incision or episiotomy; findings include redness, warmth, edema, tenderness, drainage, wound dehiscence <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Blocked duct:</strong> tender lump in breast, no systemic symptoms; treat with warm compresses, massage toward nipple, frequent nursing on affected side; if untreated can progress to mastitis <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>LATCH breastfeeding assessment:</strong> <strong>L</strong>atch on breast, <strong>A</strong>udible swallowing, <strong>T</strong>ype of nipple, <strong>C</strong>omfort of breast/nipple, <strong>H</strong>old/positioning; each scored 0-2 (total 10); guides nursing interventions for breastfeeding support <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Let-down reflex (milk ejection):</strong> oxytocin from posterior pituitary stimulates myoepithelial cells → milk ejection; triggered by infant suckling, crying, or thinking about infant; inhibited by stress, pain, fatigue <span class="bsrc bsrc-ati">ATI</span></li>
 <li><strong>Mastitis:</strong> breast infection usually from Staphylococcus aureus; can occur as early as day 7 postpartum; findings include localized redness, warmth, swelling, tenderness, fever, flu-like symptoms; usually unilateral <span class="bsrc bsrc-ati">ATI</span></li>
 <li><strong>UTI:</strong> burning on urination, frequency, urgency, hematuria, low-grade fever <span class="bsrc bsrc-ati">ATI</span></li>
 </ul></div>
@@ -5652,6 +5699,7 @@ pcc:`<div class="content-block"><h4>Sick-Day Rules & Education <span class="src 
 <h4>Breastfeeding Complications <span class="src src-ati">ATI</span></h4>
 <ul>
 <li><strong>Blocked (plugged) duct:</strong> tender lump in breast, localized redness; caused by milk stasis, tight clothing, or underwire bra; treatment: warm compress before feeding, massage toward nipple during feeding, nurse frequently starting on affected side, varied positioning; if untreated → can progress to mastitis <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Let-down reflex (milk ejection):</strong> oxytocin released from posterior pituitary stimulates myoepithelial cells to contract → milk ejection; triggered by infant suckling, crying, or thinking about infant; can be inhibited by stress, pain, fatigue <span class="bsrc bsrc-ati">ATI</span></li>
 <li><strong>Mastitis:</strong> breast infection usually caused by S. aureus; findings: flu-like symptoms + localized breast warmth, redness, tenderness, fever ≥100.4°F; usually unilateral; treatment: antibiotics (complete full course), continue breastfeeding (safe for infant, helps drain breast), warm compresses, adequate rest and fluids <span class="bsrc bsrc-ati">ATI</span></li>
 <li><strong>Engorgement:</strong> bilateral breast fullness, tenderness, warmth; usually days 3-5 when milk "comes in"; prevention: frequent nursing (8-12×/day), proper latch; treatment: warm compresses before feeding, cold compresses between feeds, express small amount to soften areola for latch <span class="bsrc bsrc-ati">ATI</span></li>
 <li><strong>Honeymoon period:</strong> temporary remission phase early after diagnosis where remaining beta cells produce some insulin; glucose is easily controlled; does NOT mean DM is cured — will need lifelong insulin <span class="bsrc bsrc-perry">Supp</span></li>
@@ -5712,6 +5760,588 @@ adpiecomp:`<div class="callout danger"><strong>Endocrine Quick Reference:</stron
 <li><strong>Only REGULAR insulin given IV</strong></li>
 <li><strong>Congenital hypothyroidism:</strong> newborn screening; levothyroxine lifelong; if missed → intellectual disability</li>
 <li><strong>Honeymoon period:</strong> temporary remission — does NOT mean cured</li>
+</ul></div>`
+};
+
+// ═══════════════════════════════════════════
+// ═══ EXAM 4 — PEDS GU, IMMUNITY, ONCOLOGY, CHILD MH ═══
+// ═══════════════════════════════════════════
+
+TOPICS['gu_peds']={
+title:'Genitourinary Disorders',
+subtitle:'ATI Children Ch.24-25 · Enuresis, UTIs, Structural GU Defects',
+refs:[{icon:'📘',short:'ATI Children 11th — Ch.24, 25'},{icon:'📗',short:'Perry Maternal Child 7th — Ch.27'}],
+
+overview:`<div class="content-block">
+<h4>Enuresis <span class="src src-ati">ATI</span></h4>
+<ul>
+<li><strong>Enuresis:</strong> uncontrolled urination after age at which bladder control is achieved; evaluate if occurring at least 2x/week for ≥3 months in children with developmental age ≥5 years <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Primary enuresis:</strong> child has never been consistently dry; <strong>Secondary enuresis:</strong> child resumes bed-wetting after a period of dryness (often triggered by emotional events — new sibling, divorce) <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Risk factors:</strong> family history, bladder dysfunction disorders, male sex, behavioral disorders, emotional events <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Management:</strong> urinate before bedtime; restrict fluids 2 hr before bed; avoid caffeine/carbonated drinks; positive reinforcement (never punish, scold, or tease); calendar of wet/dry days; scheduled waking intervals <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Conditioning therapy:</strong> alarm sensor on bed that sounds when child voids to awaken child; Kegel/pelvic exercises; retention control (large fluid intake to stretch bladder if not contraindicated) <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Medications:</strong> desmopressin acetate (DDAVP) — reduces urine volume; give at bedtime; restrict fluids after dinner; PO or intranasal; AE: headaches, nausea, nasal irritation (spray). Tricyclic antidepressants (imipramine). Oxybutynin — reduces bladder contractions <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Complications:</strong> emotional problems (low self-esteem, altered body image, social isolation); support child and family; involve child in management; make referrals to support groups <span class="bsrc bsrc-ati">ATI</span></li>
+</ul></div>
+
+<div class="content-block">
+<h4>Urinary Tract Infections <span class="src src-ati">ATI</span></h4>
+<ul>
+<li><strong>UTI:</strong> infection in any portion of the urinary tract; more common in females due to shorter urethra; uncircumcised males at increased risk in infancy <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Infant presentation:</strong> poor feeding, vomiting, failure to gain weight, increased thirst, frequent urination, straining/screaming with urination, foul-smelling urine, fever, diaper rash, dehydration, seizure, pallor <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Child presentation:</strong> abdominal or back pain, pain with urination (dysuria), urgency, frequency, enuresis in previously toilet-trained child <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Pyelonephritis:</strong> inflammation of the upper urinary tract (kidney); more serious than lower UTI; high fever, flank pain, systemic symptoms <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Nursing:</strong> collect clean-catch or catheterized urine specimen; encourage fluid intake; complete full course of antibiotics; teach wiping front-to-back; avoid bubble baths; cotton underwear; void frequently (do not hold urine) <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Urine collection:</strong> sterile catheterization or suprapubic aspiration are the most accurate methods for infants; clean-catch midstream for older children; for uncircumcised boys, retract foreskin before cleaning and replace afterward <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Diagnostic procedures:</strong> voiding cystourethrogram (VCUG) to detect vesicoureteral reflux; IV pyelogram (IVP); DMSA scan for renal scarring; renal ultrasound <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>UTI prevention:</strong> change infant diapers frequently; if sexually active, void immediately after intercourse; adequate fluid intake; avoid constipation (stool in rectum compresses urethra) <span class="bsrc bsrc-ati">ATI</span></li>
+</ul></div>`,
+
+assessment:`<div class="content-block">
+<h4>Structural GU Defects <span class="src src-ati">ATI</span></h4>
+<ul>
+<li><strong>Hypospadias:</strong> urethral opening on the ventral (under) surface of the penis; may have chordee (ventral curvature); <strong>do NOT circumcise</strong> — foreskin is needed for surgical repair; surgery at 6-12 months of age <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Epispadias:</strong> urethral opening on the dorsal (upper) surface of the penis; may be associated with bladder exstrophy; widened pubic symphysis <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Bladder exstrophy:</strong> eversion of posterior bladder through anterior abdominal wall; exposed bladder, urethra, and ureteral orifices; cover with sterile nonadherent dressing; prepare for immediate surgery <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Cryptorchidism:</strong> undescended testes; inability to palpate testes in scrotum; surgical orchiopexy performed at 6-24 months of age; increased risk for testicular cancer and infertility if untreated <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Risk factors for cryptorchidism:</strong> preterm birth, low birth weight, maternal obesity, family history <span class="bsrc bsrc-perry">Supp</span></li>
+<li><strong>Phimosis:</strong> narrowing of the preputial opening; inability to retract foreskin; normal in infants/young boys — usually resolves with growth; circumcision if persistent <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Hydrocele:</strong> fluid in the scrotum; enlarged scrotal sac; can resolve spontaneously; surgical repair if not resolved in 1 year <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Testicular torsion:</strong> testis twists on its vascular structures; EMERGENCY — loss of blood supply; sudden onset severe scrotal pain; surgical detorsion within 6 hr to save testis <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Vesicoureteral reflux (VUR):</strong> retrograde flow of urine from bladder into ureters/kidneys; predisposes to recurrent UTIs and renal scarring; graded I-V; mild: antibiotic prophylaxis; severe: surgical reimplantation <span class="bsrc bsrc-ati">ATI</span></li>
+</ul></div>
+
+<div class="content-block">
+<h4>Post-operative GU Care <span class="src src-ati">ATI</span></h4>
+<ul>
+<li>Assess pain using age-appropriate tool; administer pain medication; anticholinergics may be given to decrease bladder spasms <span class="bsrc bsrc-ati">ATI</span></li>
+<li>Monitor I&amp;O; monitor urinary catheters, drains, tubes, and stents <span class="bsrc bsrc-ati">ATI</span></li>
+<li>Provide wound and dressing care; monitor for infection (redness, warmth, drainage, edema, fever, lethargy, foul-smelling urine) <span class="bsrc bsrc-ati">ATI</span></li>
+<li>Teach: surgery is not punishment and will not mutilate the body (age-appropriate explanation); no tub baths for ≥1 week; limit activity as prescribed <span class="bsrc bsrc-ati">ATI</span></li>
+<li>Ideally repair structural defects between 6-12 months but before 3 years to minimize impact on body image and promote healthy development <span class="bsrc bsrc-ati">ATI</span></li>
+</ul></div>`,
+
+medsed:`<div class="content-block">
+<h4>GU Medications <span class="src src-ati">ATI</span></h4>
+<ul>
+<li><strong>Antibiotics:</strong> for UTIs — complete full course; prophylactic low-dose antibiotics for VUR and recurrent UTIs <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Desmopressin (DDAVP):</strong> for enuresis; reduces urine volume; give at bedtime; restrict fluids after dinner <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Oxybutynin:</strong> anticholinergic; reduces bladder contractions for enuresis <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Anticholinergics:</strong> post-op to decrease bladder spasms <span class="bsrc bsrc-ati">ATI</span></li>
+</ul></div>`,
+
+adpiecomp:`<div class="callout danger"><strong>GU Quick Reference:</strong><ul>
+<li><strong>Hypospadias:</strong> ventral (under) — do NOT circumcise (need foreskin for repair)</li>
+<li><strong>Epispadias:</strong> dorsal (upper) — may have bladder exstrophy</li>
+<li><strong>Cryptorchidism:</strong> orchiopexy at 6-24 months; cancer risk if untreated</li>
+<li><strong>Testicular torsion:</strong> EMERGENCY — surgical detorsion within 6 hr</li>
+<li><strong>Enuresis:</strong> positive reinforcement, never punish; DDAVP at bedtime</li>
+<li><strong>UTI infants:</strong> poor feeding, vomiting, fever, foul urine; child: dysuria, frequency, urgency</li>
+</ul></div>`
+};
+
+TOPICS['renal_peds']={
+title:'Renal Disorders',
+subtitle:'ATI Children Ch.26 · Glomerulonephritis, Nephrotic Syndrome, HUS, Renal Failure',
+refs:[{icon:'📘',short:'ATI Children 11th — Ch.26'},{icon:'📗',short:'Perry Maternal Child 7th — Ch.27'}],
+
+overview:`<div class="content-block">
+<h4>Acute Post-Streptococcal Glomerulonephritis (APSGN) <span class="src src-ati">ATI</span></h4>
+<ul>
+<li><strong>APSGN:</strong> antibody-antigen inflammatory disease of the glomeruli occurring 1-3 weeks after group A beta-hemolytic streptococcal infection (pharyngitis or skin infection); most common ages 5-8 years <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Classic triad:</strong> hematuria (cloudy, tea-colored urine), edema (periorbital — worse in morning, spreads to extremities/abdomen), hypertension <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Additional findings:</strong> oliguria, proteinuria, irritability, lethargy, anorexia, headache, abdominal pain, low-grade fever, vomiting <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Severe:</strong> encephalopathy (headache, irritability, seizures); circulatory congestion <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Labs:</strong> positive ASO titer (streptococcal antibodies), decreased C3 complement (returns to normal 8-10 weeks), elevated BUN/creatinine, decreased GFR, urinalysis shows proteinuria and hematuria <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Throat culture:</strong> group A beta-hemolytic strep may still be positive; antibiotic therapy does NOT prevent APSGN in susceptible children — treat infection but expect kidney involvement <span class="bsrc bsrc-perry">Supp</span></li>
+</ul></div>
+
+<div class="content-block">
+<h4>APSGN Nursing Care <span class="src src-ati">ATI</span></h4>
+<ul>
+<li>Monitor I&amp;O strictly; monitor urine volume and character (color, specific gravity) <span class="bsrc bsrc-ati">ATI</span></li>
+<li>Daily weights — same scale, same clothing, same time <span class="bsrc bsrc-ati">ATI</span></li>
+<li>Monitor VS (especially BP); neurologic status; seizure precautions if edema/HTN/gross hematuria present <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Diet:</strong> restrict sodium and fluid during edematous/hypertensive phase; restrict potassium during oliguria; restrict protein for severe azotemia <span class="bsrc bsrc-ati">ATI</span></li>
+<li>Assess activity tolerance; provide rest periods; cluster care; age-appropriate diversional activities <span class="bsrc bsrc-ati">ATI</span></li>
+<li>Monitor and prevent infection; antibiotics for streptococcal infection <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Medications:</strong> diuretics and antihypertensives (monitor for hypokalemia); antibiotics for strep; phosphate binders; sodium polystyrene sulfonate (Kayexalate) for hyperkalemia <span class="bsrc bsrc-ati">ATI</span></li>
+</ul></div>`,
+
+assessment:`<div class="content-block">
+<h4>Nephrotic Syndrome <span class="src src-ati">ATI</span></h4>
+<ul>
+<li><strong>Nephrotic syndrome:</strong> alterations in glomerular membrane allow proteins (especially albumin) to pass into urine → decreased blood osmotic pressure → massive proteinuria, hypoalbuminemia, hyperlipidemia, and generalized edema <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Minimal Change Nephrotic Syndrome (MCNS):</strong> most common type in children; peak incidence ages 2-3; cause unknown <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Findings:</strong> weight gain over days/weeks, facial and periorbital edema (decreased throughout day), ascites, edema of lower extremities and genitalia, Muehrcke lines on fingernails (white lines parallel to lunula), pallor, anorexia, diarrhea, irritability <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Labs:</strong> massive proteinuria (3+ to 4+ on dipstick), hypoalbuminemia, hyperlipidemia, elevated Hgb/Hct/platelets (hemoconcentration), possible hyponatremia, decreased calcium, elevated ESR <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Muehrcke lines:</strong> white lines on fingernails parallel to the lunula — indicative of hypoalbuminemia in nephrotic syndrome <span class="bsrc bsrc-perry">Supp</span></li>
+</ul></div>
+
+<div class="content-block">
+<h4>Nephrotic Syndrome Nursing & Treatment <span class="src src-ati">ATI</span></h4>
+<ul>
+<li><strong>Goal:</strong> decrease excretion of protein by the kidneys <span class="bsrc bsrc-ati">ATI</span></li>
+<li>Strict I&amp;O (weigh infant diapers); monitor urine for protein; daily weights; VS; measure abdominal girth daily at widest area <span class="bsrc bsrc-ati">ATI</span></li>
+<li>Assess degree of pitting edema, skin color and texture; elevate legs/feet; assess skin for breakdown <span class="bsrc bsrc-ati">ATI</span></li>
+<li>Monitor and prevent infection — increased risk for URIs; steroid therapy further increases infection risk <span class="bsrc bsrc-ati">ATI</span></li>
+<li>Restrict sodium during edematous phase; encourage nutritional intake within guidelines <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Medications:</strong> prednisone 60 mg/m²/day × 4-6 weeks, then alternate-day taper × 2-5 months; administer with meals; AE: hirsutism, slowed growth, HTN, GI bleeding, infection, hyperglycemia, moon face, mood swings <span class="bsrc bsrc-ati">ATI</span></li>
+<li>Furosemide for excess fluid removal (monitor K+); 25% albumin for plasma expansion (monitor for anaphylaxis); cyclophosphamide if steroid-resistant (monitor for leukopenia) <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Education:</strong> avoid large crowds; adhere to medication regimen; monitor BP, daily weight, urine protein at home; complete all immunizations; report signs of infection or relapse <span class="bsrc bsrc-ati">ATI</span></li>
+</ul></div>`,
+
+medsed:`<div class="content-block">
+<h4>Hemolytic Uremic Syndrome (HUS) <span class="src src-ati">ATI</span></h4>
+<ul>
+<li><strong>HUS:</strong> triad of hemolytic anemia + thrombocytopenia + acute renal failure; most common cause of acute renal failure in young children <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Most commonly caused by E. coli O157:H7</strong> (contaminated undercooked beef, unpasteurized milk/juice); toxin damages endothelial cells of glomeruli <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Do NOT give antibiotics</strong> for E. coli — can worsen HUS by increasing toxin release <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Findings:</strong> bloody diarrhea → oliguria/anuria → pallor, bruising, petechiae → edema, HTN → irritability, seizures <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Treatment:</strong> supportive — fluid management, electrolyte correction, dialysis if needed, blood transfusions for severe anemia, platelet transfusion for active bleeding only <span class="bsrc bsrc-ati">ATI</span></li>
+</ul></div>
+
+<div class="content-block">
+<h4>Acute vs Chronic Renal Failure <span class="src src-ati">ATI</span></h4>
+<ul>
+<li><strong>Acute Renal Failure (ARF/AKI):</strong> sudden deterioration of renal function; can be prerenal (dehydration, shock), intrarenal (HUS, glomerulonephritis), or postrenal (obstruction); often reversible with treatment <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>ARF findings:</strong> oliguria/anuria, fluid overload (edema, HTN, weight gain), electrolyte imbalances (hyperkalemia, hyperphosphatemia, hypocalcemia), metabolic acidosis, elevated BUN/creatinine <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Chronic Renal Failure (CRF/CKD):</strong> progressive, irreversible loss of renal function; stages based on GFR; may require dialysis or transplant <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>CRF complications:</strong> growth failure, anemia (decreased erythropoietin), renal osteodystrophy (altered Ca/PO4 metabolism), fluid/electrolyte imbalance, metabolic acidosis, uremia <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>CRF management:</strong> dietary restrictions (sodium, potassium, phosphorus, protein); erythropoietin for anemia; calcium/vitamin D supplements; phosphate binders; antihypertensives; growth hormone; dialysis (peritoneal or hemodialysis) <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Hemodialysis access (AV fistula):</strong> arteriovenous fistula created surgically; assess for thrill (palpable vibration) and bruit (audible swishing sound) — absence indicates clotting; do NOT take BP, draw blood, or start IV in the access arm; monitor distal pulses and circulation <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Peritoneal dialysis in children:</strong> preferred over hemodialysis for young children; can be performed at home; assess catheter exit site for infection; monitor for peritonitis (cloudy effluent, abdominal pain, fever); strict aseptic technique <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Sodium polystyrene sulfonate (Kayexalate):</strong> used for hyperkalemia in renal failure; exchanges sodium for potassium in the GI tract; can be given PO or rectally <span class="bsrc bsrc-ati">ATI</span></li>
+</ul></div>`,
+
+adpiecomp:`<div class="callout danger"><strong>Renal Quick Reference:</strong><ul>
+<li><strong>APSGN:</strong> post-strep → tea-colored urine + periorbital edema + HTN; positive ASO titer; restrict Na/K/fluid</li>
+<li><strong>Nephrotic:</strong> massive proteinuria + hypoalbuminemia + edema + hyperlipidemia; prednisone is first-line; monitor for relapse</li>
+<li><strong>Key difference:</strong> APSGN = hematuria dominant + HTN + oliguria; Nephrotic = proteinuria/edema dominant + hypoalbuminemia + hyperlipidemia</li>
+<li><strong>APSGN prognosis:</strong> excellent in children — most recover completely within 1-2 weeks; monitor BP and urinalysis for months after <span class="bsrc bsrc-perry">Supp</span></li>
+<li><strong>HUS:</strong> E. coli → hemolytic anemia + thrombocytopenia + renal failure; do NOT give antibiotics for E. coli</li>
+<li><strong>ARF:</strong> sudden onset, often reversible; CRF: progressive, irreversible → dialysis/transplant</li>
+</ul></div>`
+};
+
+TOPICS['immunizations']={
+title:'Immunizations',
+subtitle:'ATI Children Ch.35 · Childhood Vaccine Schedule, Contraindications, Adverse Effects',
+refs:[{icon:'📘',short:'ATI Children 11th — Ch.35'}],
+
+overview:`<div class="content-block">
+<h4>Childhood Immunization Schedule <span class="src src-ati">ATI</span></h4>
+<ul>
+<li><strong>Birth:</strong> HepB (dose 1) <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>2 months:</strong> HepB (dose 2), RV, DTaP, Hib, PCV13, IPV <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>4 months:</strong> RV, DTaP, Hib, PCV13, IPV <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>6 months:</strong> HepB (dose 3), RV (if 3-dose series), DTaP, Hib (if 4-dose series), PCV13, IPV, IIV (yearly starting at 6 mo) <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>12-15 months:</strong> Hib (booster), PCV13, MMR (dose 1), Varicella (dose 1), HepA (dose 1) <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>15-18 months:</strong> DTaP (dose 4) <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>4-6 years:</strong> DTaP (dose 5), IPV (dose 4), MMR (dose 2), Varicella (dose 2) <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>11-12 years:</strong> Tdap, MenACWY, HPV (2-3 dose series) <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>16 years:</strong> MenACWY (booster) <span class="bsrc bsrc-ati">ATI</span></li>
+<li>Preterm infants receive vaccines according to chronological age, not corrected age <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Herd immunity:</strong> when a critical portion of the population is immunized, the spread of disease is reduced, protecting those who cannot be vaccinated (immunocompromised, too young) <span class="bsrc bsrc-perry">Supp</span></li>
+<li>For missed immunizations, use the CDC "catch-up" schedule <span class="bsrc bsrc-ati">ATI</span></li>
+</ul></div>`,
+
+assessment:`<div class="content-block">
+<h4>Key Contraindications & Precautions <span class="src src-ati">ATI</span></h4>
+<ul>
+<li><strong>ALL vaccines:</strong> severe allergic reaction (anaphylaxis) to prior dose or vaccine component is a contraindication to further doses; severe febrile illness is a contraindication to all vaccines; common cold and minor illnesses are NOT contraindications <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Live virus vaccines (MMR, Varicella, LAIV):</strong> contraindicated in pregnancy, severe immunodeficiency, and if blood products received within 3 months <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>DTaP:</strong> encephalopathy within 7 days of prior dose = contraindication; seizures within 3 days, fever ≥105°F within 48 hr, inconsolable crying &gt;3 hr within 48 hr, shock-like state within 48 hr = precautions <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Rotavirus:</strong> history of intussusception or SCID = contraindication; max age for last dose is 8 months <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>MMR:</strong> pregnancy, immunodeficiency = contraindication; precaution with thrombocytopenia history, anaphylaxis to eggs/gelatin/neomycin <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Varicella:</strong> pregnancy, anaphylaxis to gelatin/neomycin = contraindication; avoid aspirin for 6 weeks after vaccine (Reye syndrome risk) <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Varicella-zoster immune globulin (VZIG/VariZIG):</strong> passive immunization given to high-risk exposed individuals who cannot receive live vaccine (immunocompromised, pregnant, newborns of mothers with varicella); administer within 96 hr (ideally within 72 hr) of exposure <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Influenza (IIV):</strong> Guillain-Barré syndrome within 6 weeks of prior flu vaccine = precaution; egg allergy is no longer a contraindication per CDC — administer in medical setting <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>HepB:</strong> anaphylaxis to yeast = contraindication <span class="bsrc bsrc-ati">ATI</span></li>
+</ul></div>`,
+
+medsed:`<div class="content-block">
+<h4>Administration & Nursing Care <span class="src src-ati">ATI</span></h4>
+<ul>
+<li>Obtain <strong>informed consent</strong> from legal guardian before administration; provide and review Vaccine Information Sheets (VIS) <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Reassure parents:</strong> there is NO association between MMR vaccine and autism <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>IM site:</strong> vastus lateralis or ventrogluteal in infants/young children; deltoid for older children and adolescents <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>SubQ site:</strong> outer aspect of upper arm or anterolateral thigh <span class="bsrc bsrc-ati">ATI</span></li>
+<li>Select needle size based on route, site, age, and medication amount; adequate length reduces swelling/tenderness <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Comfort measures:</strong> provide distraction, topical anesthetic (EMLA), concentrated oral sucrose 2 min before injection for infants, non-nutritive sucking (pacifier), cool compress after <span class="bsrc bsrc-ati">ATI</span></li>
+<li>Have <strong>emergency equipment</strong> (epinephrine) available for anaphylaxis <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Documentation:</strong> date, route, site, vaccine type/manufacturer/lot number/expiration date, evidence of consent, nurse name/address/title <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Post-vaccination:</strong> do NOT give aspirin for fever after live virus vaccine (Reye syndrome risk); use acetaminophen or ibuprofen; report adverse reactions to VAERS <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Vaccine storage (cold chain):</strong> maintain proper storage temperatures; refrigerate most vaccines at 2-8°C (36-46°F); some vaccines (varicella, MMRV, zoster) require freezer storage; monitor temperatures twice daily; discard vaccines exposed to improper temperatures <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Multiple vaccines:</strong> can administer multiple vaccines at same visit using different sites and separate syringes; if two live vaccines not given on same day, wait at least 28 days between them <span class="bsrc bsrc-ati">ATI</span></li>
+</ul></div>`,
+
+adpiecomp:`<div class="callout danger"><strong>Immunization Quick Reference:</strong><ul>
+<li><strong>Live virus vaccines:</strong> MMR, Varicella, LAIV, Rotavirus — contraindicated in pregnancy and severe immunodeficiency</li>
+<li><strong>DTaP:</strong> encephalopathy within 7 days = stop; fever ≥105°F, seizures, inconsolable crying = precaution</li>
+<li><strong>Rotavirus:</strong> max age 8 months; history of intussusception = stop</li>
+<li><strong>No aspirin</strong> after live virus vaccines (Reye syndrome)</li>
+<li><strong>IM sites:</strong> vastus lateralis (infants) → deltoid (older children)</li>
+<li><strong>Egg allergy:</strong> NO longer a contraindication for flu vaccine per CDC</li>
+<li><strong>MMR ≠ autism</strong> — reassure parents</li>
+</ul></div>`
+};
+
+TOPICS['communicable_diseases']={
+title:'Communicable Diseases',
+subtitle:'ATI Children Ch.36 · Measles, Mumps, Rubella, Varicella, Pertussis, Fifth Disease',
+refs:[{icon:'📘',short:'ATI Children 11th — Ch.36'}],
+
+overview:`<div class="content-block">
+<h4>Common Childhood Communicable Diseases <span class="src src-ati">ATI</span></h4>
+<ul>
+<li><strong>Measles (rubeola):</strong> spread by airborne/droplet; incubation 10-20 days; communicable 4 days before to 5 days after rash; prodrome: fever, conjunctivitis, cough, runny nose, sore throat; <strong>Koplik spots</strong> (tiny white spots in mouth 2 days before rash); red/reddish-brown rash starting on face and spreading downward; spike in fever with rash. <strong>Isolation: Airborne</strong> <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Mumps (paramyxovirus):</strong> direct contact/droplet; incubation 14-21 days; communicable immediately before and after swelling; <strong>painful swollen parotid glands</strong>, fever, muscle aches, headache, earache worse with chewing, fatigue. <strong>Isolation: Droplet</strong> <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Rubella (German measles):</strong> direct contact/droplet; incubation 14-21 days; communicable 7 days before to 5 days after rash; low-grade fever, sore throat, lymphadenopathy; red rash starting on face spreading to body, lasting 2-3 days. <strong>Most dangerous to PREGNANT women</strong> — congenital rubella syndrome causes cataracts, cardiac defects (PDA, pulmonary stenosis), sensorineural deafness, intellectual disability, hepatosplenomegaly, thrombocytopenic purpura ("blueberry muffin" rash); greatest risk in first trimester; virus can be shed for months after birth — contact precautions for infected newborns. <strong>Isolation: Droplet</strong> <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Varicella (chickenpox):</strong> direct contact/airborne/contaminated objects; incubation 14-16 days; communicable 1-2 days before lesions until ALL lesions crusted; macules → papules → vesicles → crusts, starting on trunk spreading to face and extremities; all stages present simultaneously. <strong>Isolation: Airborne + Contact</strong> <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Pertussis (whooping cough):</strong> direct contact/droplet; incubation 7-10 days; most communicable during catarrhal stage (before paroxysmal coughing); starts as common cold → progresses to violent rapid coughing with loud <strong>"whooping" sound on inspiration</strong>. <strong>Isolation: Droplet</strong> <span class="bsrc bsrc-ati">ATI</span></li>
+</ul></div>
+
+<div class="content-block">
+<h4>Other Communicable Diseases <span class="src src-ati">ATI</span></h4>
+<ul>
+<li><strong>Fifth disease (erythema infectiosum/parvovirus B19):</strong> droplet/blood; incubation 4-21 days; communicable BEFORE rash appears; <strong>"slapped cheek"</strong> facial rash → maculopapular rash on extremities; may have fever/runny nose/headache before rash; dangerous in pregnancy (hydrops fetalis) and sickle cell (aplastic crisis) <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Infectious mononucleosis (EBV):</strong> spread by saliva ("kissing disease"); incubation 30-50 days; fever, lethargy, sore throat, swollen lymph glands, <strong>splenomegaly</strong> (avoid contact sports — splenic rupture risk), hepatic involvement, atypical lymphocytes <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Roseola (exanthem subitum/HHV-6):</strong> most common in 6-24 months; high fever (up to 105°F) for 3-5 days → fever breaks suddenly → maculopapular rash appears on trunk and spreads; child appears well after fever breaks; febrile seizures may occur during high fever phase; supportive care only <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Scarlet fever (group A strep):</strong> follows streptococcal pharyngitis; sandpaper-like rash starting on trunk, flushed cheeks with circumoral pallor, strawberry tongue, Pastia lines (red streaks in skin folds), palatal petechiae; treated with antibiotics (penicillin); can lead to rheumatic fever or APSGN if untreated <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Diphtheria:</strong> thick gray-white membrane on pharynx/tonsils that can obstruct airway; bull-neck appearance from lymph node swelling; low-grade fever; treatment: diphtheria antitoxin + antibiotics; DTaP vaccine prevents <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Hand-foot-mouth disease (coxsackievirus):</strong> painful vesicles/ulcers in mouth + maculopapular/vesicular rash on palms and soles; common in children &lt;5 yr; low-grade fever; highly contagious (fecal-oral/respiratory); self-limiting; supportive care (cold fluids, soft foods, pain management) <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Conjunctivitis:</strong> direct contact; viral (bilateral, self-limiting 7-14 days), bacterial (purulent discharge, clears with antibiotics), allergic (clears with allergy meds); highly contagious — strict hand hygiene <span class="bsrc bsrc-ati">ATI</span></li>
+</ul></div>`,
+
+medsed:`<div class="content-block">
+<h4>Nursing Care for Communicable Diseases <span class="src src-ati">ATI</span></h4>
+<ul>
+<li><strong>Antipyretics:</strong> for fever — do NOT give aspirin (Reye syndrome risk); use acetaminophen or ibuprofen <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Antipruritic:</strong> calamine lotion topically for itching; keep skin clean and dry to prevent secondary infection <span class="bsrc bsrc-ati">ATI</span></li>
+<li>Provide fluids and nutritious foods of child's preference; promote rest with naps; quiet diversional activities <span class="bsrc bsrc-ati">ATI</span></li>
+<li>Keep lights dim for photophobia; keep child out of sun <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Skin care (varicella):</strong> keep child cool but prevent chilling; lightweight loose clothing; tepid water baths; keep fingernails clean and short; apply mittens if child scratches <span class="bsrc bsrc-ati">ATI</span></li>
+<li>Notify school/daycare of infection; obtain plan for schoolwork at home <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Report communicable diseases to the health department</strong> <span class="bsrc bsrc-ati">ATI</span></li>
+<li>Change linens daily; teach good oral hygiene; saline rinses and lozenges for sore throat <span class="bsrc bsrc-ati">ATI</span></li>
+</ul></div>
+
+<div class="content-block">
+<h4>Isolation Precautions <span class="src src-ati">ATI</span></h4>
+<ul>
+<li><strong>Airborne + Contact:</strong> Varicella (chickenpox) <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Airborne:</strong> Measles (rubeola) — N95 respirator, negative pressure room <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Droplet:</strong> Mumps, Rubella, Pertussis — surgical mask within 3-6 feet <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Standard precautions:</strong> Fifth disease (not contagious once rash appears) <span class="bsrc bsrc-ati">ATI</span></li>
+</ul></div>`,
+
+adpiecomp:`<div class="callout danger"><strong>Communicable Diseases Quick Reference:</strong><ul>
+<li><strong>Measles:</strong> Koplik spots → downward-spreading rash; Airborne isolation</li>
+<li><strong>Varicella:</strong> trunk → face; all lesion stages at once; Airborne + Contact isolation; contagious until ALL crusted</li>
+<li><strong>Pertussis:</strong> "whooping" sound; most contagious BEFORE coughing starts</li>
+<li><strong>Fifth disease:</strong> "slapped cheek" → contagious BEFORE rash; dangerous in pregnancy and sickle cell</li>
+<li><strong>Mumps:</strong> swollen parotid glands; pain worse with chewing</li>
+<li><strong>Mono:</strong> splenomegaly — NO contact sports (splenic rupture)</li>
+<li><strong>ALL:</strong> No aspirin (Reye syndrome); report to health department</li>
+</ul></div>`
+};
+
+TOPICS['peds_cancer']={
+title:'Pediatric Oncology',
+subtitle:'ATI Children Ch.39-41 · Wilms Tumor, Neuroblastoma, Leukemia, Bone Cancers, Chemo Care',
+refs:[{icon:'📘',short:'ATI Children 11th — Ch.39, 40, 41'}],
+
+overview:`<div class="content-block">
+<h4>Wilms Tumor (Nephroblastoma) <span class="src src-ati">ATI</span></h4>
+<ul>
+<li><strong>Wilms tumor:</strong> malignancy of the kidney; usually unilateral (10% bilateral); most common ages 2-3; metastasis is rare <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Findings:</strong> painless, firm, nontender abdominal mass; fatigue, malaise, weight loss; fever; hematuria; hypertension <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>CRITICAL: Do NOT palpate the abdomen</strong> — can rupture the encapsulated tumor and cause spread; use extreme caution when handling or bathing <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Treatment:</strong> surgical removal of tumor and kidney within 24-48 hr of diagnosis; post-op chemotherapy (actinomycin D + vincristine) and/or radiation; if bilateral, preoperative chemo to shrink tumors and potentially preserve one kidney <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Metastasis signs:</strong> dyspnea, cough, shortness of breath, chest pain <span class="bsrc bsrc-ati">ATI</span></li>
+</ul></div>
+
+<div class="content-block">
+<h4>Retinoblastoma <span class="src src-perry">Supp</span></h4>
+<ul>
+<li><strong>Retinoblastoma:</strong> malignant tumor of the retina; most common intraocular tumor of childhood; hereditary (bilateral) or sporadic (unilateral); average age at diagnosis: 2 years <span class="bsrc bsrc-perry">Supp</span></li>
+<li><strong>Cat's eye reflex (leukocoria):</strong> whitish "glow" in the pupil — often first sign noticed by parents; represents visualization of tumor as light falls on the mass; may be noticed in flash photographs <span class="bsrc bsrc-perry">Supp</span></li>
+<li><strong>Other signs:</strong> strabismus (from poor fixation of visually impaired eye), blindness (late sign); red reflex absent on ophthalmoscopic exam; may be noticed when flash photograph is taken <span class="bsrc bsrc-perry">Supp</span></li>
+<li><strong>Treatment:</strong> enucleation (removal of eye) for large unilateral tumors; chemotherapy + focal therapies (laser, cryotherapy) for bilateral cases to preserve vision; genetic counseling for hereditary form <span class="bsrc bsrc-perry">Supp</span></li>
+</ul></div>
+
+<div class="content-block">
+<h4>Neuroblastoma <span class="src src-ati">ATI</span></h4>
+<ul>
+<li><strong>Neuroblastoma:</strong> malignancy of the adrenal gland or sympathetic chain; usually manifests during toddler years (median age 22 months); 95% diagnosed before age 10; more common in males <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Half of all cases have metastasized before diagnosis</strong> <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Metastasis findings:</strong> ill appearance, periorbital ecchymoses ("raccoon eyes"), proptosis, bone pain, weight loss, irritability <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Labs:</strong> urine catecholamines elevated (VMA, HVA, dopamine, norepinephrine) <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Treatment:</strong> surgical removal; chemo and/or radiation for metastasis (cyclophosphamide, doxorubicin, cisplatin, etoposide, vincristine) <span class="bsrc bsrc-ati">ATI</span></li>
+</ul></div>`,
+
+assessment:`<div class="content-block">
+<h4>Leukemia <span class="src src-ati">ATI</span></h4>
+<ul>
+<li><strong>Leukemia:</strong> most common childhood cancer; peak onset ages 2-5; ALL (acute lymphoid) is most common type; AML is less common but more aggressive <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Pathophysiology:</strong> overproduction of immature WBCs (leukoblasts) → crowding of normal bone marrow → decreased RBCs (anemia), decreased platelets (thrombocytopenia), decreased mature WBCs (neutropenia) <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Early findings:</strong> low-grade fever, pallor, increased bruising/petechiae, listlessness, enlarged liver/lymph nodes/joints, bone/joint pain, constipation, headache, anorexia, unsteady gait <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Late findings:</strong> pain, hematuria, oral ulcerations, enlarged kidneys/testicles, increased ICP signs <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Diagnosis:</strong> bone marrow aspiration/biopsy (most definitive — shows prolific blast cells); CBC shows anemia, thrombocytopenia, neutropenia, leukemic blasts <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>CNS sanctuary:</strong> intrathecal methotrexate administered prophylactically to prevent CNS complications (blood-brain barrier protects leukemic cells) <span class="bsrc bsrc-ati">ATI</span></li>
+</ul></div>
+
+<div class="content-block">
+<h4>Leukemia Treatment Phases <span class="src src-ati">ATI</span></h4>
+<ul>
+<li><strong>Induction/remission:</strong> goal is complete remission (&lt;5% blast cells in bone marrow); vincristine, doxorubicin, corticosteroids <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Intensification/consolidation:</strong> destroy remaining leukemic cells; prevent resistant cells from emerging <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Maintenance:</strong> sustain remission phase; requires frequent CBC monitoring <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>HSCT (hematopoietic stem cell transplant):</strong> indicated for AML in first remission, ALL after second remission; high-dose chemo ± total body radiation → donor stem cells IV; protective isolation (private positive-pressure room, HEPA filtration, ≥12 air exchanges/hr, no fresh flowers/plants) <span class="bsrc bsrc-ati">ATI</span></li>
+</ul></div>`,
+
+medsed:`<div class="content-block">
+<h4>Bone & Soft Tissue Cancers <span class="src src-ati">ATI</span></h4>
+<ul>
+<li><strong>Osteosarcoma:</strong> peak age 15 during growth spurts; more common in boys; occurs in metaphysis of long bones (usually femur); nonspecific bone pain often mistaken for injury or "growing pains"; treatment: limb salvage procedure or amputation + chemotherapy (high-dose methotrexate with leucovorin rescue, doxorubicin, cisplatin) <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Ewing sarcoma:</strong> occurs in shafts of long bones and trunk bones; ages &lt;30; more common in Caucasians; treatment: surgical biopsy + intensive radiation + chemotherapy (vincristine, doxorubicin, cyclophosphamide alternating with ifosfamide and etoposide); NO amputation <span class="bsrc bsrc-ati">ATI</span></li>
+<li></ul></div>
+
+<div class="content-block">
+<h4>Brain Tumors <span class="src src-perry">Supp</span></h4>
+<ul>
+<li><strong>Brain tumors:</strong> second most common childhood cancer; 60% are infratentorial (below tentorium — posterior fossa, cerebellum, brainstem); signs related to increased ICP and tumor location <span class="bsrc bsrc-perry">Supp</span></li>
+<li><strong>Most common type:</strong> cerebellar astrocytoma (20% of childhood brain tumors) — slow growing; medulloblastoma (18%) — fast growing, can invade CSF pathways <span class="bsrc bsrc-perry">Supp</span></li>
+<li><strong>Findings:</strong> headache (especially morning, relieved by vomiting), vomiting (not related to feeding), ataxia, head tilt, cranial nerve deficits; in infants: bulging fontanel, increased head circumference <span class="bsrc bsrc-perry">Supp</span></li>
+<li><strong>Post-craniotomy care:</strong> infratentorial — position flat (avoid neck flexion); supratentorial — elevate HOB; monitor neuro status q1-2hr; maintain seizure precautions <span class="bsrc bsrc-perry">Supp</span></li>
+</ul></div>
+
+<div class="content-block">
+<h4>Lymphoma <span class="src src-perry">Supp</span></h4>
+<ul>
+<li><strong>Hodgkin lymphoma:</strong> originates in lymphoid system; peak age 15-19; painless firm cervical/supraclavicular lymphadenopathy; Reed-Sternberg cells on biopsy (diagnostic); "B symptoms" (fever, night sweats, weight loss &gt;10%); excellent prognosis with treatment (90%+ cure rate) <span class="bsrc bsrc-perry">Supp</span></li>
+<li><strong>Non-Hodgkin lymphoma:</strong> more common in children &lt;15; diffuse disease (not localized like Hodgkin); more aggressive; treatment depends on staging <span class="bsrc bsrc-perry">Supp</span></li>
+<li><strong>Rhabdomyosarcoma:</strong> most common soft tissue malignancy in children; originates in skeletal muscle; most commonly head/neck (orbit of eye); more common &lt;5 yr; treatment: surgical biopsy + localized radiation + chemotherapy; findings depend on location <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Phantom limb pain:</strong> after amputation; treat with amitriptyline (tricyclic antidepressant) — NOT aspirin; fit temporary prosthesis soon after surgery <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Radiation skin care:</strong> do not wash off skin marks; use lukewarm water/hands (no washcloth); no soaps/creams/lotions unless prescribed; loose cotton clothing; protect from sun; report blisters/weeping/redness <span class="bsrc bsrc-ati">ATI</span></li>
+</ul></div>
+
+<div class="content-block">
+<h4>Chemotherapy Side Effects & Nursing Care <span class="src src-ati">ATI</span></h4>
+<ul>
+<li><strong>Myelosuppression:</strong> decreased RBCs (anemia), WBCs (neutropenia → infection risk), platelets (thrombocytopenia → bleeding risk) <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Neutropenic precautions (ANC &lt;500):</strong> private room, restrict ill visitors/staff, strict hand hygiene, aseptic technique for all procedures, avoid live vaccines, avoid fresh fruits/vegetables, no rectal temps/injections if possible, monitor for infection — report temp &gt;100°F (37.8°C) immediately <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>ANC calculation:</strong> (segs% + bands%) × total WBC = ANC <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Bleeding precautions:</strong> monitor for petechiae, ecchymoses, hematuria, bleeding gums, tarry stools; avoid skin punctures; apply pressure 5 min to puncture sites; no aspirin/NSAIDs; soft toothbrush; gentle perineal care <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Mucositis:</strong> soft bland foods; soft toothbrush; salt/baking soda rinses; lubricate lips; avoid hydrogen peroxide, lemon glycerin swabs, and viscous lidocaine (depresses gag reflex → aspiration risk) <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>N/V:</strong> administer antiemetics BEFORE chemo; avoid strong odors; small frequent meals; do NOT offer favorite foods during chemo (child develops aversion); administer chemo early in day <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Alopecia:</strong> prepare child/family in advance; hair regrows 3-6 months after therapy; cotton hat, scarf, or wig; gentle shampoo; no blow dryers/curling irons <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Neuropathy:</strong> constipation (high fiber, stool softeners), foot drop (footboard, high-top shoes), jaw pain (soft/liquid diet), weakness and numbness of extremities <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Growth factor support:</strong> filgrastim (G-CSF) SubQ daily for WBCs; epoetin alfa SubQ 2-3×/week for RBCs; oprelvekin SubQ daily for platelets <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Hemorrhagic cystitis:</strong> from cyclophosphamide; encourage fluids and frequent voiding; administer chemo early in morning for adequate hydration time; administer mesna for bladder protection <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>LATE EFFECTS of childhood cancer treatment:</strong> cardiomyopathy (from anthracyclines like doxorubicin), cognitive and neuropsychological deficits, secondary cancers, growth impairment, infertility — long-term follow-up essential <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Central venous access:</strong> long-term CVAD or PICC line used for chemotherapy administration; must be administered through central line or port — NOT peripheral IV <span class="bsrc bsrc-ati">ATI</span></li>
+</ul></div>`,
+
+adpiecomp:`<div class="callout danger"><strong>Oncology Quick Reference:</strong><ul>
+<li><strong>Wilms tumor:</strong> Do NOT palpate abdomen; surgery within 24-48 hr</li>
+<li><strong>Neuroblastoma:</strong> elevated urine catecholamines (VMA/HVA); 50% metastasized at diagnosis; "raccoon eyes"</li>
+<li><strong>Leukemia:</strong> most common childhood cancer; bone marrow biopsy is definitive; ALL most common type</li>
+<li><strong>ANC &lt;500 = neutropenic precautions</strong>; ANC = (segs + bands) × WBC</li>
+<li><strong>Mucositis:</strong> NO viscous lidocaine (aspiration), NO hydrogen peroxide, NO lemon glycerin</li>
+<li><strong>N/V:</strong> antiemetics BEFORE chemo; do NOT offer favorite foods during treatment</li>
+<li><strong>Osteosarcoma:</strong> "growing pains" in adolescent = red flag; Ewing = no amputation</li>
+</ul></div>`
+};
+
+TOPICS['abuse_neglect']={
+title:'Abuse & Neglect',
+subtitle:'ATI Mental Health Ch.28 · Physical/Sexual/Emotional Abuse, Mandatory Reporting, Documentation',
+refs:[{icon:'📘',short:'ATI Mental Health 11th — Ch.28'},{icon:'📗',short:'Perry Maternal Child 7th — Ch.36'}],
+
+overview:`<div class="content-block">
+<h4>Types of Abuse <span class="src src-ati">ATI</span></h4>
+<ul>
+<li><strong>Physical abuse indicators:</strong> bruises in various stages of healing, burns (cigarette, immersion — stocking/glove pattern), fractures inconsistent with developmental age, injuries inconsistent with reported history, excessive injuries, bite marks, abdominal injuries <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Sexual abuse indicators:</strong> difficulty walking or sitting, torn/stained/bloody undergarments, pain or itching in genital area, bruises or bleeding in genital/rectal area, STIs in a child, pregnancy in young adolescent, age-inappropriate sexual knowledge or behavior <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Emotional abuse indicators:</strong> speech disorders, delayed physical development, failure to thrive without organic cause, habit disorders (biting, rocking, sucking), antisocial/destructive behavior, sleep disorders, withdrawal <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Neglect indicators:</strong> consistent hunger, poor hygiene, inappropriate clothing for weather, unattended medical/dental needs, lack of supervision, abandonment, failure to thrive <span class="bsrc bsrc-ati">ATI</span></li>
+</ul></div>
+
+<div class="content-block">
+<h4>Special Abuse Syndromes <span class="src src-both">Both</span></h4>
+<ul>
+<li><strong>Shaken baby syndrome (abusive head trauma):</strong> violent shaking causes intracranial hemorrhage, retinal hemorrhages, and brain damage; findings include irritability, altered LOC, vomiting, bulging fontanel, seizures; can be fatal or cause permanent disability <span class="bsrc bsrc-perry">Supp</span></li>
+<li><strong>AHT pathophysiology (Perry):</strong> infants have large head-to-body ratio, weak neck muscles, and high brain water content; violent shaking causes brain rotation within skull → shearing forces tear blood vessels and neurons → subdural/subarachnoid hematomas + bilateral retinal hemorrhages (80% of cases); often NO external injury visible <span class="bsrc bsrc-perry">Supp</span></li>
+<li><strong>AHT statistics:</strong> 1,200-1,400 children shaken annually in US; 25-30% die; survivors have lifelong complications (seizure disorders, blindness, developmental delays, cerebral palsy) <span class="bsrc bsrc-perry">Supp</span></li>
+<li><strong>Prevention:</strong> teach caregivers about normal infant crying patterns and coping techniques for inconsolable crying; PURPLE crying program <span class="bsrc bsrc-perry">Supp</span></li>
+<li><strong>Forensic nursing (Keltner):</strong> sexual assault nurse examiners (SANEs) provide specialized care — clinical histories, evidence collection, photography of injuries, medicolegal framework; chain of custody must be maintained for all evidence <span class="bsrc bsrc-perry">Supp</span></li>
+<li><strong>Adverse childhood experiences (ACEs) (Keltner):</strong> traumatic childhood experiences are more common than expected; associated with pervasive emotional dysregulation, depression, anxiety, PTSD in adulthood <span class="bsrc bsrc-perry">Supp</span></li>
+<li><strong>Measles complications (Perry):</strong> otitis media, bronchopneumonia, obstructive laryngitis (croup), encephalitis; most dangerous in immunocompromised and malnourished children <span class="bsrc bsrc-perry">Supp</span></li>
+<li><strong>Pertussis in infants (Perry):</strong> may NOT present with classic "whoop" — instead presents with apnea, cyanosis, and feeding difficulties; leading cause of vaccine-preventable deaths in infants &lt;6 months <span class="bsrc bsrc-perry">Supp</span></li>
+<li><strong>Munchausen syndrome by proxy (factitious disorder imposed on another):</strong> caregiver fabricates or induces illness in a child to gain attention; child has unexplained recurrent illness, findings only occur when caregiver is present, caregiver appears attentive and knowledgeable <span class="bsrc bsrc-perry">Supp</span></li>
+</ul></div>`,
+
+medsed:`<div class="content-block">
+<h4>Nursing Responsibilities <span class="src src-ati">ATI</span></h4>
+<ul>
+<li><strong>Mandatory reporting:</strong> nurses are MANDATORY REPORTERS — legally required to report suspected abuse or neglect; failure to report is a criminal offense; do NOT need proof — reasonable suspicion is sufficient <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Documentation:</strong> record objective findings only (size/color/location of injuries); use body map; document child's exact quotes using quotation marks; do not interpret or give opinions; photograph injuries per facility policy <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Assessment:</strong> obtain detailed history; note discrepancies between reported mechanism and injuries; assess child's developmental level; note interaction between child and caregiver (does child avoid or seem fearful of caregiver?) <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Nursing care:</strong> ensure child's immediate safety; treat injuries; provide emotional support; use nonjudgmental approach with family; refer to child protective services and social services <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Red flags:</strong> delay in seeking treatment, history inconsistent with injury, multiple ED visits, child is overly compliant or withdrawn, caregiver blames child, caregiver shows little concern <span class="bsrc bsrc-ati">ATI</span></li>
+</ul></div>`,
+
+adpiecomp:`<div class="callout danger"><strong>Abuse Quick Reference:</strong><ul>
+<li><strong>Nurses are MANDATORY REPORTERS</strong> — report suspicion, not proof</li>
+<li><strong>Document objectively:</strong> size, color, location; child's exact quotes; body map</li>
+<li><strong>Shaken baby:</strong> retinal hemorrhages + intracranial hemorrhage + no external injury</li>
+<li><strong>Burns:</strong> stocking/glove immersion pattern, cigarette burns = abuse indicators</li>
+<li><strong>Key red flag:</strong> injuries inconsistent with developmental age or reported history</li>
+</ul></div>`
+};
+
+TOPICS['child_adolescent_mh']={
+title:'Child & Adolescent Mental Health',
+subtitle:'ATI Mental Health Ch.28 · ADHD, Autism, ODD, Conduct Disorder, Eating Disorders',
+refs:[{icon:'📘',short:'ATI Mental Health 11th — Ch.28'}],
+
+overview:`<div class="content-block">
+<h4>ADHD <span class="src src-ati">ATI</span></h4>
+<ul>
+<li><strong>ADHD:</strong> inability to control behaviors requiring sustained attention; behaviors must be present before age 12 and in more than one setting <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Inattention:</strong> difficulty paying attention, listening, focusing, following through on tasks <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Hyperactivity:</strong> fidgeting, inability to sit still, running/climbing inappropriately, difficulty playing quietly, talking excessively <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Impulsivity:</strong> difficulty waiting turns, constantly interrupting, acting without considering consequences <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Types:</strong> predominantly inattentive, predominantly hyperactive-impulsive, or combined type <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Medications:</strong> CNS stimulants (methylphenidate/Ritalin, amphetamine/Adderall) — give in morning to prevent insomnia; monitor growth (appetite suppression); drug holidays on weekends/summer; non-stimulant: atomoxetine (Strattera) <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Stimulant adverse effects (Keltner):</strong> appetite suppression (give after meals; offer high-calorie snack at bedtime), growth suppression (monitor height/weight at every visit), insomnia (give last dose before 4 PM), tics (may worsen existing tic disorders), rebound irritability; Schedule II controlled substance — potential for misuse in adolescents <span class="bsrc bsrc-perry">Supp</span></li>
+<li><strong>ASD medications (ATI):</strong> SSRIs (for repetitive behaviors, anxiety); antipsychotics (risperidone, olanzapine, quetiapine, aripiprazole) for aggression and irritability <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Play therapy (Keltner):</strong> uses play as primary communication medium; children express feelings and traumatic experiences through art, music, puppets, sand trays, and storytelling that they cannot verbalize <span class="bsrc bsrc-perry">SUPP</span></li>
+<li><strong>Token economy:</strong> behavioral modification using tokens/points as positive reinforcement for desired behaviors; tokens exchanged for rewards; effective for ADHD and conduct disorder <span class="bsrc bsrc-perry">SUPP</span></li>
+<li><strong>Milieu therapy:</strong> using the total environment as a therapeutic tool; structured, safe, predictable setting with clear expectations, consistent limits, and opportunities for social interaction and skill-building <span class="bsrc bsrc-perry">SUPP</span></li>
+<li><strong>Conduct disorder medications:</strong> target specific problem behaviors — second-generation antipsychotics, mood stabilizers, anticonvulsants, antidepressants; ODD: medications not generally prescribed <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Nursing:</strong> calm firm respectful approach; short clear directions; get child's attention first; set clear consistent limits; plan physical activities for energy release; reward system (tokens, wall chart); positive feedback for meeting expectations <span class="bsrc bsrc-ati">ATI</span></li>
+</ul></div>
+
+<div class="content-block">
+<h4>Autism Spectrum Disorder <span class="src src-ati">ATI</span></h4>
+<ul>
+<li><strong>ASD:</strong> complex neurodevelopmental disorder; genetic origin; wide spectrum of behaviors affecting communication and social interaction; more common in boys; present in early childhood <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Key features:</strong> inability to maintain eye contact, repetitive actions/behaviors, strict observance of routines, delayed cognitive and language development, sensory integration dysfunction <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Functioning range:</strong> poor (unable to perform self-care or communicate) to high (near normal levels) <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Comorbidities:</strong> sleep disorders, digestive/feeding disorders, epilepsy, allergies <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Nursing:</strong> structured environment; short concise communication; identify and reward desired behaviors; role-model social skills; role-play conflict situations; limit self-stimulating/ritualistic behaviors with alternative activities; give plenty of notice before changing routines; early intervention referrals (PT, OT, speech therapy) <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Applied Behavior Analysis (ABA):</strong> gold standard behavioral therapy for ASD; uses positive reinforcement to increase desired behaviors and decrease harmful/interfering behaviors; intensive (20-40 hr/week); most effective when started before age 5 <span class="bsrc bsrc-perry">Supp</span></li>
+<li><strong>Sensory integration issues (Keltner):</strong> children with ASD may be hyper- or hyposensitive to sounds, lights, textures, tastes; may become overwhelmed in noisy/crowded environments; reduce environmental stimuli during episodes of agitation <span class="bsrc bsrc-perry">Supp</span></li>
+<li><strong>MMR vaccine does NOT cause autism</strong> — reassure parents <span class="bsrc bsrc-ati">ATI</span></li>
+</ul></div>`,
+
+assessment:`<div class="content-block">
+<h4>Disruptive Behavior Disorders <span class="src src-ati">ATI</span></h4>
+<ul>
+<li><strong>Oppositional Defiant Disorder (ODD):</strong> recurrent pattern of negativity, disobedience, hostility, defiance toward authority figures; stubbornness, argumentativeness, limit testing; children do not see themselves as defiant — view behavior as response to unreasonable demands; can develop into conduct disorder <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Conduct Disorder:</strong> persistent pattern violating rights of others or rules of society; aggression to people/animals, destruction of property, deceitfulness/theft, serious rule violations; lacks remorse; bullies and intimidates; childhood onset (&lt;10, more males) vs adolescent onset (&gt;10, equal ratio) <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Contributing factors for conduct disorder:</strong> parental rejection/neglect, inconsistent discipline, physical/sexual abuse, lack of supervision, early institutionalization, association with delinquent peers, chaotic home life <span class="bsrc bsrc-ati">ATI</span></li>
+</ul></div>
+
+<div class="content-block">
+<h4>Eating Disorders <span class="src src-ati">ATI</span></h4>
+<ul>
+<li><strong>Anorexia nervosa:</strong> self-imposed starvation; distorted body image (perceives self as fat despite emaciation); intense fear of gaining weight; amenorrhea; lanugo; bradycardia; hypotension; electrolyte imbalances; osteoporosis <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Bulimia nervosa:</strong> binge eating followed by purging (self-induced vomiting, laxatives, diuretics); often normal weight; dental erosion (from stomach acid), Russell sign (calluses on knuckles from inducing vomiting), parotid gland enlargement, metabolic alkalosis, hypokalemia <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>REFEEDING SYNDROME:</strong> life-threatening complication when malnourished patients begin eating; rapid shift in electrolytes (especially phosphorus) → cardiac, respiratory, and neurologic complications; monitor electrolytes closely; advance nutrition slowly; supplement phosphorus, potassium, magnesium <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Nursing:</strong> monitor weight (same time, same clothing); observe during and 1-2 hr after meals (prevent purging); set weight gain goals; address distorted body image; encourage group therapy; monitor cardiac status and electrolytes <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Anorexia complications (Keltner):</strong> osteopenia/osteoporosis from prolonged amenorrhea and malnutrition; cardiac arrhythmias from electrolyte imbalance (especially hypokalemia); pitting edema may develop during refeeding; peripheral neuropathy; death rate of 5-20% (highest mortality of any psychiatric disorder) <span class="bsrc bsrc-perry">Supp</span></li>
+<li><strong>Family-Based Treatment (Maudsley approach):</strong> considered first-line therapy for adolescents with anorexia; parents take active role in re-nourishing the child; three phases: weight restoration → returning control to adolescent → establishing healthy identity <span class="bsrc bsrc-perry">Supp</span></li>
+</ul></div>`,
+
+adpiecomp:`<div class="callout danger"><strong>Child/Adolescent MH Quick Reference:</strong><ul>
+<li><strong>ADHD:</strong> stimulants in AM (prevent insomnia); monitor growth; drug holidays</li>
+<li><strong>ASD:</strong> structured environment; routine; short communication; early intervention; MMR ≠ autism</li>
+<li><strong>ODD → can progress to Conduct Disorder</strong></li>
+<li><strong>Anorexia:</strong> self-starvation, distorted body image, amenorrhea, lanugo, bradycardia</li>
+<li><strong>Bulimia:</strong> binge-purge, dental erosion, Russell sign, hypokalemia</li>
+<li><strong>Refeeding syndrome:</strong> hypophosphatemia → cardiac failure; advance nutrition SLOWLY</li>
+</ul></div>`
+};
+
+TOPICS['mood_disorders']={
+title:'Mood Disorders (MDD & Bipolar)',
+subtitle:'ATI Mental Health Ch.13-14 · Depression, Suicide, Bipolar, Lithium',
+refs:[{icon:'📘',short:'ATI Mental Health 11th — Ch.13, 14'}],
+
+overview:`<div class="content-block">
+<h4>Major Depressive Disorder (MDD) <span class="src src-ati">ATI</span></h4>
+<ul>
+<li><strong>MDD:</strong> single or recurrent episodes of unipolar depression; requires at least 5 clinical findings present almost every day for minimum 2 weeks <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Findings:</strong> depressed mood, sleep disturbance (insomnia or hypersomnia), indecisiveness, decreased concentration, suicidal ideation, psychomotor agitation or retardation, anhedonia (inability to feel pleasure), weight change (&gt;5% in 1 month), fatigue/loss of energy <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>In children/adolescents:</strong> may present as irritability, temper tantrums, aggression, poor school performance, high-risk behaviors, somatic complaints rather than classic sadness <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Risk factors:</strong> female sex, chronic illness, family history, history of anxiety disorder, recent loss/stressor, abuse/neglect, bullying, learning disabilities <span class="bsrc bsrc-ati">ATI</span></li>
+</ul></div>
+
+<div class="content-block">
+<h4>Suicide Assessment & Precautions <span class="src src-ati">ATI</span></h4>
+<ul>
+<li><strong>Greatest risk for suicide:</strong> during the acute phase of MDD and during the first weeks of antidepressant therapy (as energy returns before mood improves, client has energy to carry out plan) <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Risk factors:</strong> previous attempt (strongest predictor), specific plan with lethal means, male sex, age (adolescents 10-24), substance use, hopelessness, giving away possessions, sudden improvement in mood <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Suicide precautions:</strong> one-to-one observation if imminent risk; remove all potentially harmful items (sharps, belts, shoelaces, glass); check on client at irregular intervals (predictable rounds allow planning); assess lethality of plan; no-suicide contract is NOT sufficient alone <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Safety planning (Keltner):</strong> develop a written safety plan WITH the patient; include crisis call center numbers, identified support persons, coping strategies, means restriction plan, and reasons for living <span class="bsrc bsrc-perry">Supp</span></li>
+<li><strong>Suicide contagion/cluster (Keltner):</strong> exposure to suicide (media, peer, family) can increase risk — especially in adolescents; "copycat" suicides; limit media details about method; postvention programs in schools after a student suicide to support peers and identify at-risk individuals <span class="bsrc bsrc-perry">SUPP</span></li>
+<li><strong>Means restriction:</strong> most effective suicide prevention strategy; remove or secure access to lethal means (firearms, medications, ligatures); ask specifically about access to firearms <span class="bsrc bsrc-perry">Supp</span></li>
+<li><strong>Safety planning (Keltner):</strong> develop a safety plan WITH the patient before discharge; include crisis call center numbers, identified support persons, coping strategies, means restriction plan, and reasons for living <span class="bsrc bsrc-perry">Supp</span></li>
+<li><strong>Suicide contagion/cluster (Keltner):</strong> exposure to suicide (media, peer, family) can increase risk — especially in adolescents; "copycat" suicides; limit media details about method; postvention programs in schools after a student suicide to support peers and identify at-risk individuals <span class="bsrc bsrc-perry">SUPP</span></li>
+<li><strong>Means restriction:</strong> most effective suicide prevention strategy; remove or secure access to lethal means (firearms, medications, ligatures); ask specifically about access to firearms in the home <span class="bsrc bsrc-perry">Supp</span></li>
+<li><strong>Communication:</strong> ask directly about suicidal thoughts (does NOT plant the idea); make time to be with client even if they don't speak; give simple concrete directions; allow sufficient time for verbal response <span class="bsrc bsrc-ati">ATI</span></li>
+</ul></div>`,
+
+assessment:`<div class="content-block">
+<h4>Bipolar Disorder <span class="src src-ati">ATI</span></h4>
+<ul>
+<li><strong>Bipolar disorder:</strong> mood disorder with recurrent episodes of depression AND mania; usually emerges in early adulthood but can be diagnosed in children; in children, can mimic ADHD <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Bipolar I:</strong> at least one manic episode alternating with major depression; <strong>Bipolar II:</strong> hypomanic episodes alternating with major depression <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Manic characteristics:</strong> euphoria, agitation, irritability, flight of ideas (rapid continuous speech with sudden topic changes), grandiosity, impulsivity (spending sprees, giving away money), demanding/manipulative behavior, decreased sleep, neglect of ADLs, poor judgment, flashy/inappropriate dress, possible delusions/hallucinations, denial of illness <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Hypomania:</strong> less severe mania lasting ≥4 days; does not require hospitalization; can progress to mania <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Nursing during mania:</strong> decrease stimulation (reduce noise, TV, other clients); calm matter-of-fact approach; firm consistent limits; protect from poor judgment; provide portable nutritious food (client can't sit to eat); monitor sleep/fluids/nutrition; provide outlets for physical activity (short duration, not competitive); do NOT argue or engage in power struggles <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Kindling theory (Keltner):</strong> repeated bipolar episodes lower the threshold for future episodes — early and consistent treatment is critical to prevent progressive worsening; untreated episodes "kindle" the brain to have more frequent and severe episodes <span class="bsrc bsrc-perry">Supp</span></li>
+<li><strong>RELAPSE mnemonic (Keltner):</strong> <strong>R</strong>hythm disturbances (shift work, jet lag), <strong>E</strong>nding treatment, <strong>L</strong>ife change (divorce, job loss), <strong>A</strong>dditional drugs (opiates, steroids, antidepressants can induce mania), <strong>P</strong>hysical health changes, <strong>S</strong>ubstance use, <strong>E</strong>nd of drug response <span class="bsrc bsrc-perry">Supp</span></li>
+<li><strong>Patient noncompliance is the biggest treatment challenge (Keltner):</strong> accounts for 50% of treatment difficulties; patients miss the euphoria of mania; education about chronic nature of illness and medication adherence is essential <span class="bsrc bsrc-perry">Supp</span></li>
+</ul></div>`,
+
+medsed:`<div class="content-block">
+<h4>Mood Disorder Medications <span class="src src-ati">ATI</span></h4>
+<ul>
+<li><strong>SSRIs (first-line for MDD):</strong> fluoxetine, sertraline, citalopram; 2-4 weeks for full effect; AE: nausea, headache, insomnia, sexual dysfunction, weight gain; <strong>BLACK BOX:</strong> increased suicidality risk in children/adolescents/young adults (18-24) — monitor closely first weeks <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Serotonin syndrome:</strong> agitation, restlessness, tachycardia, hyperthermia, diaphoresis, tremor, muscle rigidity — can be fatal; risk with concurrent serotonergic drugs; stop medication and notify provider immediately <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>NEVER stop SSRIs abruptly</strong> — taper gradually (discontinuation syndrome: dizziness, nausea, headache, irritability) <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Lithium (first-line mood stabilizer for bipolar):</strong> narrow therapeutic range <strong>0.6-1.2 mEq/L</strong>; monitor levels 12 hr after last dose; draw levels weekly initially then monthly <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Lithium toxicity signs:</strong> early (1.5): N/V/diarrhea, fine hand tremor, drowsiness, thirst, polyuria; moderate (1.5-2.0): coarse tremor, confusion, slurred speech, muscle twitching; severe (&gt;2.0): seizures, coma, death <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Lithium nursing:</strong> maintain adequate sodium and fluid intake (dehydration/low sodium increases toxicity); monitor thyroid and renal function (can cause hypothyroidism and nephrogenic DI); avoid NSAIDs and diuretics (increase lithium levels); effective contraception (teratogenic — Pregnancy Category D, especially first trimester) <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Lithium therapeutic effects:</strong> GI distress (take with meals/milk — usually transient), fine hand tremor (propranolol may help; report increase), polyuria/mild thirst (maintain 1,500-3,000 mL/day fluid intake), weight gain (healthy diet and exercise) <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Lithium renal toxicity:</strong> monitor I&amp;O; assess baseline kidney function and monitor periodically; keep dose as low as possible <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Lithium and hypothyroidism:</strong> obtain baseline T3, T4, and TSH before starting treatment, then annually; administer levothyroxine if hypothyroid effects develop; monitor for cold/dry skin, decreased HR, weight gain <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Lithium advanced toxicity (2.0-2.5 mEq/L):</strong> extreme polyuria of dilute urine, tinnitus, involuntary extremity movements, blurred vision, ataxia, seizures, severe hypotension → coma → death; treatment: whole bowel irrigation; <strong>>2.5 mEq/L:</strong> hemodialysis <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Use aspirin</strong> (NOT NSAIDs) as a mild analgesic when on lithium — NSAIDs increase renal reabsorption of lithium causing toxicity <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Ebstein anomaly (Keltner):</strong> lithium in first trimester increases risk of fetal cardiac malformation (tricuspid valve displacement); major congenital abnormalities in 4-12% of lithium-exposed fetuses; lithium present in breast milk at 30-80% of maternal serum level — breastfeeding discouraged <span class="bsrc bsrc-perry">Supp</span></li>
+<li><strong>Lithium antisuicide effect (Keltner):</strong> lithium has a greater antisuicide effect than other antimanic drugs — clinically significant for high-risk patients <span class="bsrc bsrc-perry">Supp</span></li>
+<li><strong>Nephrogenic diabetes insipidus (Keltner):</strong> lithium inhibits ADH → polyuria (>3 L/day) in ~60% of patients; may require dose reduction or discontinuation <span class="bsrc bsrc-perry">Supp</span></li>
+<li><strong>Clinical response lag:</strong> lithium requires 7-10 days; benzodiazepines or antipsychotics given during this time for acute symptom management <span class="bsrc bsrc-perry">Supp</span></li>
+<li><strong>No antidote for lithium poisoning</strong> — discontinue drug, gastric lavage, parenteral NS, forced diuresis or hemodialysis for severe cases <span class="bsrc bsrc-perry">Supp</span></li>
+<li><strong>Maintain adequate sodium intake:</strong> reduced sodium decreases lithium excretion → toxicity; replace sodium and fluid during exercise, hot weather, illness with vomiting/diarrhea <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Other mood stabilizers:</strong> valproic acid (50-100 mcg/mL; monitor LFTs, teratogenic), carbamazepine (4-12 mcg/mL; monitor CBC for aplastic anemia), lamotrigine (risk of Stevens-Johnson syndrome — report ANY rash immediately) <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>ECT:</strong> for treatment-resistant depression; pre: NPO, remove dentures, void, consent; post: monitor VS, reorient, assess memory; confusion and memory loss are temporary <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>MAOIs (phenelzine):</strong> avoid tyramine-containing foods (aged cheese, fermented meats, red wine, beer, avocados, soy sauce) — risk of hypertensive crisis; avoid ALL other medications without provider approval; wait 14 days between MAOI and SSRI <span class="bsrc bsrc-ati">ATI</span></li>
+<li><strong>Tricyclics (amitriptyline):</strong> anticholinergic effects (dry mouth, constipation, urinary retention, blurred vision); orthostatic hypotension; lethal in overdose — assess for suicidality before prescribing <span class="bsrc bsrc-ati">ATI</span></li>
+</ul></div>`,
+
+adpiecomp:`<div class="callout danger"><strong>Mood Disorders Quick Reference:</strong><ul>
+<li><strong>MDD:</strong> ≥5 findings for ≥2 weeks; in kids = irritability, not sadness</li>
+<li><strong>Suicide risk HIGHEST:</strong> first weeks of antidepressant therapy (energy returns before mood improves)</li>
+<li><strong>SSRIs BLACK BOX:</strong> suicidality in youth &lt;24 — monitor closely</li>
+<li><strong>Mania:</strong> flight of ideas + grandiosity + decreased sleep + impulsivity; decrease stimulation; firm limits; portable food</li>
+<li><strong>Lithium range:</strong> 0.6-1.2 mEq/L; toxicity ≥1.5; maintain Na/fluid intake; no NSAIDs/diuretics</li>
+<li><strong>Lamotrigine:</strong> ANY rash = stop immediately (Stevens-Johnson risk)</li>
 </ul></div>`
 };
 
