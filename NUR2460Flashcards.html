@@ -175,6 +175,46 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',system-ui
 .grid-card-src{position:absolute;bottom:10px;right:12px}
 
 
+
+/* Performance Dashboard */
+.perf-dashboard{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:24px}
+.perf-title{font-family:'DM Serif Display',serif;font-size:18px;color:var(--text);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.perf-tiers{display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap}
+.perf-tier{flex:1;min-width:70px;text-align:center;padding:10px 6px;border-radius:10px;background:var(--bg)}
+.perf-tier-count{font-size:24px;font-weight:700;line-height:1}
+.perf-tier-label{font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin-top:4px;color:var(--text3)}
+.tier-new .perf-tier-count{color:var(--text3)}
+.tier-learning .perf-tier-count{color:#e67e22}
+.tier-familiar .perf-tier-count{color:#3498db}
+.tier-mastered .perf-tier-count{color:#27ae60}
+.perf-topics{margin-top:4px}
+.perf-topic-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:12px}
+.perf-topic-name{width:100px;flex-shrink:0;color:var(--text2);text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.perf-topic-bar-wrap{flex:1;height:14px;background:var(--bg);border-radius:7px;overflow:hidden;position:relative}
+.perf-topic-bar{height:100%;border-radius:7px;transition:width .3s}
+.perf-topic-pct{width:36px;flex-shrink:0;font-size:11px;font-weight:600;color:var(--text2)}
+.perf-toggle{background:none;border:none;color:var(--accent);font-size:12px;font-weight:600;cursor:pointer;padding:4px 0;font-family:inherit}
+.perf-toggle:hover{text-decoration:underline}
+
+/* Session summary overlay */
+.session-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(6px);z-index:100;justify-content:center;align-items:center}
+.session-overlay.show{display:flex}
+.session-modal{background:var(--surface);border-radius:16px;padding:28px;max-width:420px;width:90%;max-height:80vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.session-header{font-family:'DM Serif Display',serif;font-size:22px;color:var(--text);margin-bottom:4px}
+.session-sub{font-size:13px;color:var(--text3);margin-bottom:16px}
+.session-stat-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px}
+.session-stat{text-align:center;padding:10px;background:var(--bg);border-radius:8px}
+.session-stat-val{font-size:22px;font-weight:700;line-height:1}
+.session-stat-label{font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-top:3px}
+.session-section-title{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin:12px 0 8px}
+.session-tier-changes{margin-bottom:12px}
+.session-tier-row{font-size:12px;color:var(--text2);padding:3px 0;display:flex;align-items:center;gap:6px}
+.session-tier-arrow{color:var(--accent);font-weight:700}
+.session-btn{display:block;width:100%;padding:12px;border:none;border-radius:10px;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;margin-top:8px;transition:all .15s}
+.session-btn-primary{background:var(--accent);color:#fff}
+.session-btn-primary:hover{filter:brightness(1.1)}
+.session-btn-secondary{background:var(--bg);color:var(--text2)}
+.session-btn-secondary:hover{background:var(--border)}
 </style>
 </head>
 <body>
@@ -218,12 +258,26 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',system-ui
 </div>
 
 <div class="grid-view active" id="gridView">
+
+<div class="perf-dashboard" id="perfDashboard">
+  <div class="perf-title">📊 Performance Tracker</div>
+  <div class="perf-tiers">
+    <div class="perf-tier tier-new"><div class="perf-tier-count" id="tierNew">0</div><div class="perf-tier-label">New</div></div>
+    <div class="perf-tier tier-learning"><div class="perf-tier-count" id="tierLearning">0</div><div class="perf-tier-label">Learning</div></div>
+    <div class="perf-tier tier-familiar"><div class="perf-tier-count" id="tierFamiliar">0</div><div class="perf-tier-label">Familiar</div></div>
+    <div class="perf-tier tier-mastered"><div class="perf-tier-count" id="tierMastered">0</div><div class="perf-tier-label">Mastered</div></div>
+  </div>
+  <button class="perf-toggle" id="perfToggle" onclick="toggleTopicBars()">Show topic accuracy ▾</button>
+  <div class="perf-topics" id="perfTopics" style="display:none"></div>
+</div>
+
   <div class="grid-filter">
     <span class="grid-filter-label">Filter:</span>
     <select id="gridExamFilter" onchange="renderGrid()">
       <option value="all">All Exams</option>
       <option value="Exam 1">Exam 1</option>
       <option value="Exam 2">Exam 2</option>
+      <option value="Exam 3">Exam 3</option>
     </select>
     <select id="gridTopicFilter" onchange="renderGrid()">
       <option value="all">All Topics</option>
@@ -277,6 +331,24 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',system-ui
 </div>
 </div>
 
+</div>
+
+<div class="session-overlay" id="sessionOverlay">
+  <div class="session-modal">
+    <div class="session-header">Session Complete</div>
+    <div class="session-sub" id="sessionSub"></div>
+    <div class="session-stat-grid">
+      <div class="session-stat"><div class="session-stat-val" id="sesRight" style="color:#27ae60">0</div><div class="session-stat-label">Correct</div></div>
+      <div class="session-stat"><div class="session-stat-val" id="sesWrong" style="color:#e74c3c">0</div><div class="session-stat-label">Wrong</div></div>
+      <div class="session-stat"><div class="session-stat-val" id="sesPct" style="color:var(--accent)">0%</div><div class="session-stat-label">Accuracy</div></div>
+    </div>
+    <div class="session-section-title">Topic Breakdown</div>
+    <div id="sesTopicBreakdown"></div>
+    <div class="session-section-title">Mastery Changes</div>
+    <div class="session-tier-changes" id="sesTierChanges"></div>
+    <button class="session-btn session-btn-primary" onclick="closeSession()">Continue</button>
+    <button class="session-btn session-btn-secondary" id="sesReviewBtn" onclick="closeSession();reviewWrong()">Review Wrong Answers</button>
+  </div>
 </div>
 
 <script>
@@ -551,7 +623,7 @@ function buildSidebar(){
   let h='';
   Object.keys(EXAMS).forEach(examName=>{
     const topics=EXAMS[examName];
-    h+='<div class="sb-section"><div class="sb-section-label" onclick="toggleExamSection(this)"><span class="caret">▾</span>'+examName+'</div>';
+    h+='<div class="sb-section collapsed"><div class="sb-section-label" onclick="toggleExamSection(this)"><span class="caret">▾</span>'+examName+'</div>';
     Object.keys(topics).forEach(tKey=>{
       const tName=topics[tKey];
       const count=CARDS.filter(c=>c.t===tName).length;
@@ -565,12 +637,12 @@ function buildSidebar(){
 }
 
 function openSidebar(){
-  document.querySelector('.sidebar').classList.add('open');
-  document.getElementById('sidebarOverlay').classList.add('show');
+  var sb=document.querySelector('.sidebar');if(sb)sb.classList.add('open');
+  var ov=document.getElementById('sidebarOverlay');if(ov)ov.classList.add('show');
 }
 function closeSidebar(){
-  document.querySelector('.sidebar').classList.remove('open');
-  document.getElementById('sidebarOverlay').classList.remove('show');
+  var sb=document.querySelector('.sidebar');if(sb)sb.classList.remove('open');
+  var ov=document.getElementById('sidebarOverlay');if(ov)ov.classList.remove('show');
 }
 
 function toggleExamSection(el){el.parentElement.classList.toggle('collapsed')}
@@ -592,13 +664,18 @@ function deselectAll(){
 function toggleShuffle(){shuffleOn=!shuffleOn;document.getElementById('shuffleBtn').classList.toggle('active',shuffleOn);startRound()}
 function toggleStarFilter(){starFilterOn=!starFilterOn;document.getElementById('starFilter').classList.toggle('active',starFilterOn);startRound()}
 
+// Session tracking
+var sessionChanges=[];
+var sessionTopicStats={};
+function resetSessionTracking(){sessionChanges=[];sessionTopicStats={};}
+
 function startRound(){
   let pool=CARDS.filter(c=>selectedTopics.has(c.t));
   if(starFilterOn)pool=pool.filter((_,i)=>starred[CARDS.indexOf(_)]);
   // Close mobile sidebar
   closeSidebar();
   if(shuffleOn)pool.sort(()=>Math.random()-.5);
-  deck=pool;current=0;rightN=0;wrongN=0;wrongCards=[];
+  deck=pool;current=0;rightN=0;wrongN=0;wrongCards=[];resetSessionTracking();
   document.getElementById('endScreen').style.display='none';
   document.getElementById('cardWrapper').style.display='';
   if(deck.length)showCard();
@@ -632,6 +709,14 @@ function revealAnswer(){
 function answer(correct){
   if(correct)rightN++;
   else{wrongN++;wrongCards.push(deck[current])}
+  // Track mastery and accuracy
+  const cardIdx=CARDS.indexOf(deck[current]);
+  const change=updateMastery(cardIdx,correct);
+  sessionChanges.push(change);
+  const topic=deck[current].t;
+  if(!sessionTopicStats[topic])sessionTopicStats[topic]={r:0,w:0};
+  if(correct)sessionTopicStats[topic].r++;else sessionTopicStats[topic].w++;
+  updateAccuracy(topic,correct);
   const card=document.getElementById('flashcard');
   card.classList.add(correct?'swiping-right':'swiping-left');
   setTimeout(()=>{
@@ -672,6 +757,7 @@ function showEnd(){
   const pct=deck.length?Math.round(rightN/deck.length*100):0;
   document.getElementById('endSub').textContent=pct+'% correct — '+(pct>=80?'Great job!':pct>=60?'Getting there!':'Keep studying!');
   document.getElementById('reviewBtn').style.display=wrongCards.length?'':'none';
+  showSessionSummary();
 }
 
 function restartAll(){startRound()}
@@ -812,6 +898,128 @@ function renderGrid(){
 // Initialize grid on load
 populateTopicFilter();
 renderGrid();
+
+// ═══ PERFORMANCE TRACKER ═══
+const MASTERY_KEY='nur2460_fc_mastery';
+const ACCURACY_KEY='nur2460_fc_accuracy';
+const TIER_NAMES=['New','Learning','Familiar','Mastered'];
+
+function getMastery(){try{return JSON.parse(localStorage.getItem(MASTERY_KEY))||{}}catch(e){return{}}}
+function saveMastery(m){localStorage.setItem(MASTERY_KEY,JSON.stringify(m))}
+function getAccuracy(){try{return JSON.parse(localStorage.getItem(ACCURACY_KEY))||{}}catch(e){return{}}}
+function saveAccuracy(a){localStorage.setItem(ACCURACY_KEY,JSON.stringify(a))}
+
+function getTier(streak){
+  if(streak>=3) return 3; // Mastered
+  if(streak>=2) return 2; // Familiar
+  if(streak>=1) return 1; // Learning
+  return 0; // New
+}
+
+function updateMastery(cardIdx,correct){
+  const m=getMastery();
+  const prev=m[cardIdx]||0;
+  if(correct) m[cardIdx]=(prev>=0?prev+1:1);
+  else m[cardIdx]=0;
+  saveMastery(m);
+  return {prev:getTier(prev),now:getTier(m[cardIdx])};
+}
+
+function updateAccuracy(topic,correct){
+  const a=getAccuracy();
+  if(!a[topic]) a[topic]={r:0,w:0};
+  if(correct) a[topic].r++;
+  else a[topic].w++;
+  saveAccuracy(a);
+}
+
+
+function renderDashboard(){
+  if(!document.getElementById('tierNew'))return;
+  const m=getMastery();
+  let tiers=[0,0,0,0];
+  CARDS.forEach((c,i)=>{
+    const streak=m[i]||0;
+    tiers[getTier(streak)]++;
+  });
+  // Cards not in mastery data are "New"
+  const tracked=Object.keys(m).length;
+  tiers[0]=CARDS.length-tiers[1]-tiers[2]-tiers[3];
+  
+  document.getElementById('tierNew').textContent=tiers[0];
+  document.getElementById('tierLearning').textContent=tiers[1];
+  document.getElementById('tierFamiliar').textContent=tiers[2];
+  document.getElementById('tierMastered').textContent=tiers[3];
+}
+
+function toggleTopicBars(){
+  const el=document.getElementById('perfTopics');
+  const btn=document.getElementById('perfToggle');
+  if(el.style.display==='none'){
+    el.style.display='';
+    btn.textContent='Hide topic accuracy ▴';
+    renderTopicBars();
+  } else {
+    el.style.display='none';
+    btn.textContent='Show topic accuracy ▾';
+  }
+}
+
+function renderTopicBars(){
+  const a=getAccuracy();
+  const topics=new Set(CARDS.map(c=>c.t));
+  let h='';
+  topics.forEach(t=>{
+    const d=a[t]||{r:0,w:0};
+    const total=d.r+d.w;
+    const pct=total?Math.round(d.r/total*100):0;
+    const color=pct>=80?'#27ae60':pct>=60?'#e67e22':'#e74c3c';
+    h+='<div class="perf-topic-row"><span class="perf-topic-name">'+t+'</span><div class="perf-topic-bar-wrap"><div class="perf-topic-bar" style="width:'+pct+'%;background:'+color+'"></div></div><span class="perf-topic-pct">'+(total?pct+'%':'—')+'</span></div>';
+  });
+  document.getElementById('perfTopics').innerHTML=h;
+}
+
+function showSessionSummary(){
+  if(!document.getElementById('sessionOverlay'))return;
+  document.getElementById('sesRight').textContent=rightN;
+  document.getElementById('sesWrong').textContent=wrongN;
+  const pct=deck.length?Math.round(rightN/deck.length*100):0;
+  document.getElementById('sesPct').textContent=pct+'%';
+  document.getElementById('sessionSub').textContent=pct>=80?'Excellent work!':pct>=60?'Good progress, keep going!':'Keep studying, you will get there!';
+  
+  // Topic breakdown
+  let topicH='';
+  Object.keys(sessionTopicStats).forEach(t=>{
+    const s=sessionTopicStats[t];
+    const total=s.r+s.w;
+    const tp=total?Math.round(s.r/total*100):0;
+    const color=tp>=80?'#27ae60':tp>=60?'#e67e22':'#e74c3c';
+    topicH+='<div class="perf-topic-row"><span class="perf-topic-name">'+t+'</span><div class="perf-topic-bar-wrap"><div class="perf-topic-bar" style="width:'+tp+'%;background:'+color+'"></div></div><span class="perf-topic-pct">'+tp+'%</span></div>';
+  });
+  document.getElementById('sesTopicBreakdown').innerHTML=topicH;
+  
+  // Mastery changes
+  let changesH='';
+  const ups=sessionChanges.filter(c=>c.now>c.prev);
+  const downs=sessionChanges.filter(c=>c.now<c.prev);
+  if(ups.length) changesH+='<div class="session-tier-row"><span class="session-tier-arrow">▲</span> '+ups.length+' card'+(ups.length>1?'s':'')+' leveled up</div>';
+  if(downs.length) changesH+='<div class="session-tier-row"><span class="session-tier-arrow" style="color:#e74c3c">▼</span> '+downs.length+' card'+(downs.length>1?'s':'')+' dropped tier</div>';
+  if(!ups.length&&!downs.length) changesH='<div class="session-tier-row" style="color:var(--text3)">No tier changes this session</div>';
+  document.getElementById('sesTierChanges').innerHTML=changesH;
+  
+  document.getElementById('sesReviewBtn').style.display=wrongCards.length?'':'none';
+  document.getElementById('sessionOverlay').classList.add('show');
+}
+
+function closeSession(){
+  document.getElementById('sessionOverlay').classList.remove('show');
+  renderDashboard();
+  if(document.getElementById('perfTopics').style.display!=='none') renderTopicBars();
+}
+
+// Initialize dashboard on load
+renderDashboard();
+
 </script>
 </body>
 </html>

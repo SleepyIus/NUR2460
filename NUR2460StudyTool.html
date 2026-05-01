@@ -234,7 +234,7 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',system-ui
     <div id="searchResults"></div>
   </div>
   <nav id="navList" style="flex:1;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border) transparent;">
-    <div class="nav-section" id="exam1">
+    <div class="nav-section collapsed" id="exam1">
       <div class="nav-section-label" onclick="toggleSection('exam1')">Exam 1 — Antepartum to Postpartum <span class="caret">▾</span></div>
       <div class="nav-part-label" onclick="togglePart(this)">Part 1 — Antepartum <span class="caret">▾</span></div>
       <div class="nav-item populated" onclick="openModal('adapt')"><span class="dot"></span> Maternal Physiologic Adaptations</div>
@@ -253,7 +253,7 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',system-ui
       <div class="nav-item populated" onclick="openModal('pp_psychosocial')"><span class="dot"></span> Postpartum Psychosocial & Family</div>
 
     </div>
-    <div class="nav-section" id="exam2">
+    <div class="nav-section collapsed" id="exam2">
       <div class="nav-section-label" onclick="toggleSection('exam2')">Exam 2 — High-Risk OB & Peds <span class="caret">▾</span></div>
       <div class="nav-part-label" onclick="togglePart(this)">Part 5 — High-Risk Pregnancy <span class="caret">▾</span></div>
       <div class="nav-item populated" onclick="openModal('bleeding_preg')"><span class="dot"></span> Bleeding During Pregnancy</div>
@@ -273,7 +273,7 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',system-ui
       <div class="nav-item populated" onclick="openModal('peds_integ')"><span class="dot"></span> Pediatric Integumentary</div>
 
     </div>
-    <div class="nav-section" id="exam3">
+    <div class="nav-section collapsed" id="exam3">
       <div class="nav-section-label" onclick="toggleSection('exam3')">Exam 3 — Peds Systems <span class="caret">▾</span></div>
       <div class="nav-part-label" onclick="togglePart(this)">Part 9 — Peds Neuro <span class="caret">▾</span></div>
       <div class="nav-item populated" onclick="openModal('neuro_acute')"><span class="dot"></span> Acute Neuro Disorders</div>
@@ -306,7 +306,7 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',system-ui
 
   <div class="section-divider">Study Planner</div>
 
-  <div class="exam-accordion" id="exam1acc">
+  <div class="exam-accordion collapsed" id="exam1acc">
     <div class="exam-header" onclick="this.parentElement.classList.toggle('collapsed')">
       <span class="exam-caret">▾</span>
       <span class="exam-title">Exam 1 — Antepartum to Postpartum</span>
@@ -446,7 +446,7 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',system-ui
     </div>
   </div>
 
-  <div class="exam-accordion" id="exam3acc">
+  <div class="exam-accordion collapsed" id="exam3acc">
     <div class="exam-header" onclick="this.parentElement.classList.toggle('collapsed')">
       <span class="exam-caret">▾</span>
       <span class="exam-title">Exam 3 — Peds Systems</span>

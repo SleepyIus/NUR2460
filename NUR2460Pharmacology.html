@@ -173,7 +173,7 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',system-ui
     <div id="searchResults"></div>
   </div>
   <nav class="sidebar-nav" id="sidebarNav">
-    <div class="nav-exam-group" id="neg1"><div class="nav-exam-label" onclick="this.parentElement.classList.toggle('collapsed')" style="font-size:12px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);padding:12px 16px 4px;cursor:pointer;display:flex;align-items:center;gap:6px;user-select:none"><span class="caret" style="font-size:14px;transition:transform .2s">▾</span>Exam 1</div><div class="nav-exam-body">
+    <div class="nav-exam-group collapsed" id="neg1"><div class="nav-exam-label" onclick="this.parentElement.classList.toggle('collapsed')" style="font-size:12px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);padding:12px 16px 4px;cursor:pointer;display:flex;align-items:center;gap:6px;user-select:none"><span class="caret" style="font-size:14px;transition:transform .2s">▾</span>Exam 1</div><div class="nav-exam-body">
     <div class="nav-cat" id="nc1"><div class="nav-cat-label" onclick="this.parentElement.classList.toggle('collapsed')"><span class="caret">▾</span>Prenatal Supplements</div>
       <div class="nav-drug" onclick="openDrug('folic_acid')">Folic Acid</div>
       <div class="nav-drug" onclick="openDrug('iron_supp')">Iron</div>
@@ -213,7 +213,7 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',system-ui
       <div class="nav-drug" onclick="openDrug('hep_b_vax')">Hepatitis B Vaccine</div>
     </div>
     </div></div>
-    <div class="nav-exam-group" id="neg2"><div class="nav-exam-label" onclick="this.parentElement.classList.toggle('collapsed')" style="font-size:12px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);padding:16px 16px 4px;border-top:1px solid var(--border);margin-top:8px;cursor:pointer;display:flex;align-items:center;gap:6px;user-select:none"><span class="caret" style="font-size:14px;transition:transform .2s">▾</span>Exam 2</div><div class="nav-exam-body">
+    <div class="nav-exam-group collapsed" id="neg2"><div class="nav-exam-label" onclick="this.parentElement.classList.toggle('collapsed')" style="font-size:12px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);padding:16px 16px 4px;border-top:1px solid var(--border);margin-top:8px;cursor:pointer;display:flex;align-items:center;gap:6px;user-select:none"><span class="caret" style="font-size:14px;transition:transform .2s">▾</span>Exam 2</div><div class="nav-exam-body">
     <div class="nav-cat" id="nc8"><div class="nav-cat-label" onclick="this.parentElement.classList.toggle('collapsed')"><span class="caret">▾</span>HR Pregnancy Meds</div>
       <div class="nav-drug" onclick="openDrug('methotrexate')">Methotrexate</div>
       <div class="nav-drug" onclick="openDrug('hydralazine')">Hydralazine</div>
@@ -243,7 +243,7 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',system-ui
       <div class="nav-drug" onclick="openDrug('griseofulvin')">Griseofulvin</div>
     </div>
     </div></div>
-    <div class="nav-exam-group" id="neg3"><div class="nav-exam-label" onclick="this.parentElement.classList.toggle('collapsed')" style="font-size:12px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);padding:16px 16px 4px;border-top:1px solid var(--border);margin-top:8px;cursor:pointer;display:flex;align-items:center;gap:6px;user-select:none"><span class="caret" style="font-size:14px;transition:transform .2s">▾</span>Exam 3</div><div class="nav-exam-body">
+    <div class="nav-exam-group collapsed" id="neg3"><div class="nav-exam-label" onclick="this.parentElement.classList.toggle('collapsed')" style="font-size:12px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);padding:16px 16px 4px;border-top:1px solid var(--border);margin-top:8px;cursor:pointer;display:flex;align-items:center;gap:6px;user-select:none"><span class="caret" style="font-size:14px;transition:transform .2s">▾</span>Exam 3</div><div class="nav-exam-body">
     <div class="nav-cat" id="nnc13"><div class="nav-cat-label" onclick="this.parentElement.classList.toggle('collapsed')"><span class="caret">▾</span>Neuro Meds</div>
       <div class="nav-drug" onclick="openDrug('phenytoin_e3')">Phenytoin</div>
       <div class="nav-drug" onclick="openDrug('carbamazepine')">Carbamazepine</div>
@@ -272,7 +272,7 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',system-ui
   <h1 class="main-title">Pharmacology <em>Reference</em></h1>
   <p class="main-desc">Comprehensive medication reference organized by ATI template. Check off drugs as you review them — progress is saved automatically.</p>
 
-  <div class="exam-accordion" id="exam1pharm">
+  <div class="exam-accordion collapsed" id="exam1pharm">
     <div class="exam-header" onclick="this.parentElement.classList.toggle('collapsed')">
       <span class="exam-caret">▾</span>
       <span class="exam-title">Exam 1 — Medications</span>
@@ -355,7 +355,7 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',system-ui
   </div>
 
 
-  <div class="exam-accordion" id="exam2pharm">
+  <div class="exam-accordion collapsed" id="exam2pharm">
     <div class="exam-header" onclick="this.parentElement.classList.toggle('collapsed')">
       <span class="exam-caret">▾</span>
       <span class="exam-title">Exam 2 — Medications</span>
@@ -419,7 +419,7 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',system-ui
   </div>
 
 
-  <div class="exam-accordion" id="exam3acc">
+  <div class="exam-accordion collapsed" id="exam3acc">
     <div class="exam-header" onclick="this.parentElement.classList.toggle('collapsed')">
       <span class="exam-caret">▾</span>
       <span class="exam-title">Exam 3 — Medications</span>

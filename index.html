@@ -594,10 +594,10 @@ function checkPw(){
 
 
 // ═══ PROGRESS SYNC ═══
-const SYNC_KEYS=['studyTheme','nur2460_progress','nur2460_pharm_progress','nur2460_fc_stars'];
+const SYNC_KEYS=['studyTheme','nur2460_progress','nur2460_pharm_progress','nur2460_fc_stars','nur2460_fc_mastery','nur2460_fc_accuracy'];
 
 function getProgressStats(){
-  let stats={studyTopics:0,pharmDrugs:0,fcStars:0};
+  let stats={studyTopics:0,pharmDrugs:0,fcStars:0,fcMastered:0,fcAccTotal:0};
   try{
     const sp=JSON.parse(localStorage.getItem('nur2460_progress')||'{}');
     stats.studyTopics=Object.values(sp).filter(v=>v).length;
@@ -610,6 +610,15 @@ function getProgressStats(){
     const fc=JSON.parse(localStorage.getItem('nur2460_fc_stars')||'{}');
     stats.fcStars=Object.values(fc).filter(v=>v).length;
   }catch(e){}
+  try{
+    const fm=JSON.parse(localStorage.getItem('nur2460_fc_mastery')||'{}');
+    stats.fcMastered=Object.values(fm).filter(v=>v>=3).length;
+  }catch(e){}
+  try{
+    const fa=JSON.parse(localStorage.getItem('nur2460_fc_accuracy')||'{}');
+    let tr=0,tt=0;Object.values(fa).forEach(v=>{tr+=v.r||0;tt+=(v.r||0)+(v.w||0)});
+    stats.fcAccTotal=tt?Math.round(tr/tt*100):0;
+  }catch(e){}
   return stats;
 }
 
@@ -620,7 +629,9 @@ function renderProgressSummary(){
   el.innerHTML=
     '<div class="progress-item"><div class="progress-item-num">'+s.studyTopics+'</div><div class="progress-item-label">Topics Studied</div></div>'+
     '<div class="progress-item"><div class="progress-item-num">'+s.pharmDrugs+'</div><div class="progress-item-label">Drugs Reviewed</div></div>'+
-    '<div class="progress-item"><div class="progress-item-num">'+s.fcStars+'</div><div class="progress-item-label">Cards Starred</div></div>';
+    '<div class="progress-item"><div class="progress-item-num">'+s.fcStars+'</div><div class="progress-item-label">Cards Starred</div></div>'+
+    '<div class="progress-item"><div class="progress-item-num">'+s.fcMastered+'</div><div class="progress-item-label">Cards Mastered</div></div>'+
+    '<div class="progress-item"><div class="progress-item-num">'+(s.fcAccTotal?s.fcAccTotal+'%':'—')+'</div><div class="progress-item-label">Overall Accuracy</div></div>';
 }
 
 function exportProgress(){
@@ -692,7 +703,7 @@ function importProgress(){
 }
 
 function confirmReset(){
-  if(!confirm('This will erase ALL your study progress, drug reviews, starred cards, and theme preference. This cannot be undone.\n\nAre you sure?')) return;
+  if(!confirm('This will erase ALL your study progress, drug reviews, starred cards, mastery tiers, accuracy data, and theme preference. This cannot be undone.\n\nAre you sure?')) return;
   if(!confirm('Really? Export your progress first if you want to save it.')) return;
   SYNC_KEYS.forEach(key=>localStorage.removeItem(key));
   renderProgressSummary();
