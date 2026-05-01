@@ -458,21 +458,31 @@ const CARDS=[
 ];
 
 // ═══ ENGINE ═══
-const PARTS={1:'Antepartum',2:'Labor & Delivery',3:'Newborn',4:'Postpartum',5:'Pharmacology'};
 let deck=[],current=0,rightN=0,wrongN=0,wrongCards=[];
 let shuffleOn=false,starFilterOn=false;
 let starred=JSON.parse(localStorage.getItem('nur2460_fc_stars')||'{}');
 
 const EXAMS={
   'Exam 1':{
-    1:'Antepartum',
-    2:'Labor & Delivery',
-    3:'Newborn',
-    4:'Postpartum',
-    5:'Pharmacology'
+    'Antepartum':'Antepartum',
+    'Labor & Delivery':'Labor & Delivery',
+    'Newborn':'Newborn',
+    'Postpartum':'Postpartum',
+    'Pharmacology':'Pharmacology'
+  },
+  'Exam 2':{
+    'HR Pregnancy':'HR Pregnancy',
+    'HR L&D':'HR L&D',
+    'NB Complications':'NB Complications',
+    'PP Disorders':'PP Disorders',
+    'Contraception':'Contraception',
+    'Growth & Dev':'Growth & Dev',
+    'Peds GI':'Peds GI',
+    'Peds Integ':'Peds Integ',
+    'E2 Pharm':'E2 Pharm'
   }
 };
-let selectedTopics=new Set(Object.keys(PARTS).map(Number));
+let selectedTopics=new Set(CARDS.map(c=>c.t));
 
 function buildSidebar(){
   const sb=document.getElementById('sidebarBody');
@@ -480,11 +490,12 @@ function buildSidebar(){
   Object.keys(EXAMS).forEach(examName=>{
     const topics=EXAMS[examName];
     h+='<div class="sb-section"><div class="sb-section-label" onclick="toggleExamSection(this)"><span class="caret">▾</span>'+examName+'</div>';
-    Object.keys(topics).forEach(p=>{
-      const pNum=parseInt(p);
-      const count=CARDS.filter(c=>c.p===pNum).length;
-      const checked=selectedTopics.has(pNum)?'checked':'';
-      h+='<div class="sb-topic"><input type="checkbox" id="tp'+pNum+'" '+checked+' onchange="toggleTopic('+pNum+',this.checked)"><label for="tp'+pNum+'">'+topics[p]+'</label><span class="count">'+count+'</span></div>';
+    Object.keys(topics).forEach(tKey=>{
+      const tName=topics[tKey];
+      const count=CARDS.filter(c=>c.t===tName).length;
+      const checked=selectedTopics.has(tName)?'checked':'';
+      const safeId=tName.replace(/[^a-zA-Z0-9]/g,'_');
+      h+='<div class="sb-topic"><input type="checkbox" id="tp_'+safeId+'" '+checked+' onchange="toggleTopic(\''+tName+'\',this.checked)"><label for="tp_'+safeId+'">'+tName+'</label><span class="count">'+count+'</span></div>';
     });
     h+='</div>';
   });
@@ -502,12 +513,12 @@ function closeSidebar(){
 
 function toggleExamSection(el){el.parentElement.classList.toggle('collapsed')}
 
-function toggleTopic(p,on){
-  if(on)selectedTopics.add(p);else selectedTopics.delete(p);
+function toggleTopic(t,on){
+  if(on)selectedTopics.add(t);else selectedTopics.delete(t);
 }
 
 function selectAll(){
-  Object.keys(PARTS).forEach(p=>selectedTopics.add(parseInt(p)));
+  CARDS.forEach(c=>selectedTopics.add(c.t));
   document.querySelectorAll('.sb-topic input').forEach(cb=>cb.checked=true);
 }
 
@@ -520,7 +531,7 @@ function toggleShuffle(){shuffleOn=!shuffleOn;document.getElementById('shuffleBt
 function toggleStarFilter(){starFilterOn=!starFilterOn;document.getElementById('starFilter').classList.toggle('active',starFilterOn);startRound()}
 
 function startRound(){
-  let pool=CARDS.filter(c=>selectedTopics.has(c.p));
+  let pool=CARDS.filter(c=>selectedTopics.has(c.t));
   if(starFilterOn)pool=pool.filter((_,i)=>starred[CARDS.indexOf(_)]);
   // Close mobile sidebar
   closeSidebar();
