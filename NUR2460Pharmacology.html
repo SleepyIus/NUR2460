@@ -32,14 +32,30 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',system-ui
 .nav-cat-label .caret{font-size:14px;color:var(--text2);transition:transform .2s;flex-shrink:0;order:-1}
 .nav-cat.collapsed .nav-cat-label .caret{transform:rotate(-90deg)}
 .nav-cat.collapsed .nav-drug{display:none}
+.nav-exam-group.collapsed .nav-exam-body{display:none}
+.nav-exam-group.collapsed .nav-exam-label .caret{transform:rotate(-90deg)}
+.nav-exam-label:hover{opacity:1!important}
 .nav-drug{font-size:12px;color:var(--text2);padding:5px 0 5px 22px;cursor:pointer;transition:color .15s;border-left:2px solid transparent}
 .nav-drug:hover{color:var(--accent)}
 .nav-drug.active{color:var(--accent);border-left-color:var(--accent);font-weight:600}
 
 /* Search */
-.search-wrap{padding:12px 16px;border-bottom:1px solid var(--border);flex-shrink:0}
+.search-wrap{padding:12px 16px;border-bottom:1px solid var(--border);flex-shrink:0;position:relative}
 #searchInput{width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:8px 10px;border-radius:6px;font-family:inherit;font-size:12px;outline:0;transition:border-color .15s}
 #searchInput:focus{border-color:var(--accent)}
+#searchResults{position:absolute;top:calc(100% - 1px);left:12px;right:12px;background:var(--surface);border:1px solid var(--border);border-top:0;border-radius:0 0 8px 8px;max-height:400px;overflow-y:auto;z-index:20;display:none;box-shadow:0 8px 24px rgba(0,0,0,.2)}
+#searchResults.show{display:block}
+.sr-item{padding:10px 14px;cursor:pointer;border-bottom:1px solid var(--border);transition:background .1s}
+.sr-item:last-child{border-bottom:none}
+.sr-item:hover{background:var(--surface2)}
+.sr-title{font-size:12px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:8px}
+.sr-section{font-size:9px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--accent);background:rgba(232,82,122,.1);padding:2px 6px;border-radius:3px;flex-shrink:0}
+.sr-snippet{font-size:11px;color:var(--text3);margin-top:4px;line-height:1.4;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.sr-snippet mark{background:rgba(232,82,122,.2);color:var(--accent);padding:0 2px;border-radius:2px}
+.search-highlight{background:rgba(232,82,122,.25);color:var(--accent);padding:1px 2px;border-radius:3px;outline:2px solid rgba(232,82,122,.3);animation:hlFade 3s ease forwards}
+@keyframes hlFade{0%{outline-color:rgba(232,82,122,.5)}70%{outline-color:rgba(232,82,122,.3)}100%{outline-color:transparent}}
+
+.sr-count{padding:8px 14px;font-size:10px;color:var(--text3);border-bottom:1px solid var(--border);font-weight:600}
 
 /* Main content */
 .main-content{margin-left:280px;padding:48px 48px 60px;flex:1;max-width:960px}
@@ -153,9 +169,11 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',system-ui
     <button id="themeToggle" onclick="toggleTheme()"><span id="themeIcon">☀️</span> <span id="themeLabel">Light Mode</span></button>
   </div>
   <div class="search-wrap">
-    <input type="text" id="searchInput" placeholder="Search medications…" oninput="filterDrugs(this.value)">
+    <input type="text" id="searchInput" placeholder="Search medications…" oninput="searchDrugs(this.value)">
+    <div id="searchResults"></div>
   </div>
   <nav class="sidebar-nav" id="sidebarNav">
+    <div class="nav-exam-group" id="neg1"><div class="nav-exam-label" onclick="this.parentElement.classList.toggle('collapsed')" style="font-size:12px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);padding:12px 16px 4px;cursor:pointer;display:flex;align-items:center;gap:6px;user-select:none"><span class="caret" style="font-size:14px;transition:transform .2s">▾</span>Exam 1</div><div class="nav-exam-body">
     <div class="nav-cat" id="nc1"><div class="nav-cat-label" onclick="this.parentElement.classList.toggle('collapsed')"><span class="caret">▾</span>Prenatal Supplements</div>
       <div class="nav-drug" onclick="openDrug('folic_acid')">Folic Acid</div>
       <div class="nav-drug" onclick="openDrug('iron_supp')">Iron</div>
@@ -193,6 +211,36 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',system-ui
       <div class="nav-drug" onclick="openDrug('erythromycin_eye')">Erythromycin Eye</div>
       <div class="nav-drug" onclick="openDrug('vitamin_k')">Vitamin K</div>
       <div class="nav-drug" onclick="openDrug('hep_b_vax')">Hepatitis B Vaccine</div>
+    </div>
+    </div></div>
+    <div class="nav-exam-group" id="neg2"><div class="nav-exam-label" onclick="this.parentElement.classList.toggle('collapsed')" style="font-size:12px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);padding:16px 16px 4px;border-top:1px solid var(--border);margin-top:8px;cursor:pointer;display:flex;align-items:center;gap:6px;user-select:none"><span class="caret" style="font-size:14px;transition:transform .2s">▾</span>Exam 2</div><div class="nav-exam-body">
+    <div class="nav-cat" id="nc8"><div class="nav-cat-label" onclick="this.parentElement.classList.toggle('collapsed')"><span class="caret">▾</span>HR Pregnancy Meds</div>
+      <div class="nav-drug" onclick="openDrug('methotrexate')">Methotrexate</div>
+      <div class="nav-drug" onclick="openDrug('hydralazine')">Hydralazine</div>
+      <div class="nav-drug" onclick="openDrug('labetalol')">Labetalol</div>
+      <div class="nav-drug" onclick="openDrug('acyclovir')">Acyclovir</div>
+    </div>
+    <div class="nav-cat" id="nc9"><div class="nav-cat-label" onclick="this.parentElement.classList.toggle('collapsed')"><span class="caret">▾</span>Anticoagulants & PPD</div>
+      <div class="nav-drug" onclick="openDrug('heparin_pp')">Heparin/Enoxaparin</div>
+      <div class="nav-drug" onclick="openDrug('warfarin_pp')">Warfarin</div>
+      <div class="nav-drug" onclick="openDrug('sertraline_pp')">Sertraline (PPD)</div>
+    </div>
+    <div class="nav-cat" id="nc10"><div class="nav-cat-label" onclick="this.parentElement.classList.toggle('collapsed')"><span class="caret">▾</span>Contraception & Infertility</div>
+      <div class="nav-drug" onclick="openDrug('coc')">Combined Oral Contraceptives</div>
+      <div class="nav-drug" onclick="openDrug('depo_provera')">Depo-Provera</div>
+      <div class="nav-drug" onclick="openDrug('clomiphene')">Clomiphene (Clomid)</div>
+    </div>
+    <div class="nav-cat" id="nc11"><div class="nav-cat-label" onclick="this.parentElement.classList.toggle('collapsed')"><span class="caret">▾</span>Neonatal Meds</div>
+      <div class="nav-drug" onclick="openDrug('surfactant')">Lung Surfactant</div>
+      <div class="nav-drug" onclick="openDrug('nas_meds')">NAS Medications</div>
+    </div>
+    <div class="nav-cat" id="nc12"><div class="nav-cat-label" onclick="this.parentElement.classList.toggle('collapsed')"><span class="caret">▾</span>Peds GI & Integumentary</div>
+      <div class="nav-drug" onclick="openDrug('ors')">Oral Rehydration Solution</div>
+      <div class="nav-drug" onclick="openDrug('metronidazole')">Metronidazole</div>
+      <div class="nav-drug" onclick="openDrug('permethrin')">Permethrin</div>
+      <div class="nav-drug" onclick="openDrug('silvadene')">Silver Sulfadiazine</div>
+      <div class="nav-drug" onclick="openDrug('isotretinoin')">Isotretinoin (Accutane)</div>
+      <div class="nav-drug" onclick="openDrug('griseofulvin')">Griseofulvin</div>
     </div>
   </nav>
 </aside>
@@ -284,6 +332,70 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',system-ui
     </div>
   </div>
 
+
+  <div class="exam-accordion" id="exam2pharm">
+    <div class="exam-header" onclick="this.parentElement.classList.toggle('collapsed')">
+      <span class="exam-caret">▾</span>
+      <span class="exam-title">Exam 2 — Medications</span>
+      <span class="exam-count" id="pharmCount2">0 / 18</span>
+    </div>
+    <div class="exam-bar-wrap">
+      <div class="exam-bar-outer"><div class="exam-bar-inner" id="pharmBar2" style="width:0%"></div></div>
+    </div>
+    <div class="exam-body">
+
+    <div class="pharm-cat" id="pc8">
+      <div class="pharm-cat-header" onclick="this.parentElement.classList.toggle('collapsed')"><span class="pharm-cat-caret">▾</span><span class="pharm-cat-title">High-Risk Pregnancy</span><span class="pharm-cat-count" id="pc8count">0/4</span></div>
+      <div class="pharm-cat-body">
+        <div class="pharm-drug-row"><div class="pharm-check" data-drug="methotrexate" onclick="togglePharmCheck(this)">✓</div><button class="pharm-pill populated" data-drug="methotrexate" onclick="openDrug('methotrexate')">Methotrexate</button></div>
+        <div class="pharm-drug-row"><div class="pharm-check" data-drug="hydralazine" onclick="togglePharmCheck(this)">✓</div><button class="pharm-pill populated" data-drug="hydralazine" onclick="openDrug('hydralazine')">Hydralazine</button></div>
+        <div class="pharm-drug-row"><div class="pharm-check" data-drug="labetalol" onclick="togglePharmCheck(this)">✓</div><button class="pharm-pill populated" data-drug="labetalol" onclick="openDrug('labetalol')">Labetalol</button></div>
+        <div class="pharm-drug-row"><div class="pharm-check" data-drug="acyclovir" onclick="togglePharmCheck(this)">✓</div><button class="pharm-pill populated" data-drug="acyclovir" onclick="openDrug('acyclovir')">Acyclovir</button></div>
+      </div>
+    </div>
+
+    <div class="pharm-cat" id="pc9">
+      <div class="pharm-cat-header" onclick="this.parentElement.classList.toggle('collapsed')"><span class="pharm-cat-caret">▾</span><span class="pharm-cat-title">Anticoagulants & PP Depression</span><span class="pharm-cat-count" id="pc9count">0/3</span></div>
+      <div class="pharm-cat-body">
+        <div class="pharm-drug-row"><div class="pharm-check" data-drug="heparin_pp" onclick="togglePharmCheck(this)">✓</div><button class="pharm-pill populated" data-drug="heparin_pp" onclick="openDrug('heparin_pp')">Heparin/Enoxaparin</button></div>
+        <div class="pharm-drug-row"><div class="pharm-check" data-drug="warfarin_pp" onclick="togglePharmCheck(this)">✓</div><button class="pharm-pill populated" data-drug="warfarin_pp" onclick="openDrug('warfarin_pp')">Warfarin</button></div>
+        <div class="pharm-drug-row"><div class="pharm-check" data-drug="sertraline_pp" onclick="togglePharmCheck(this)">✓</div><button class="pharm-pill populated" data-drug="sertraline_pp" onclick="openDrug('sertraline_pp')">Sertraline (PPD)</button></div>
+      </div>
+    </div>
+
+    <div class="pharm-cat" id="pc10">
+      <div class="pharm-cat-header" onclick="this.parentElement.classList.toggle('collapsed')"><span class="pharm-cat-caret">▾</span><span class="pharm-cat-title">Contraception & Infertility</span><span class="pharm-cat-count" id="pc10count">0/3</span></div>
+      <div class="pharm-cat-body">
+        <div class="pharm-drug-row"><div class="pharm-check" data-drug="coc" onclick="togglePharmCheck(this)">✓</div><button class="pharm-pill populated" data-drug="coc" onclick="openDrug('coc')">Combined Oral Contraceptives</button></div>
+        <div class="pharm-drug-row"><div class="pharm-check" data-drug="depo_provera" onclick="togglePharmCheck(this)">✓</div><button class="pharm-pill populated" data-drug="depo_provera" onclick="openDrug('depo_provera')">Depo-Provera</button></div>
+        <div class="pharm-drug-row"><div class="pharm-check" data-drug="clomiphene" onclick="togglePharmCheck(this)">✓</div><button class="pharm-pill populated" data-drug="clomiphene" onclick="openDrug('clomiphene')">Clomiphene (Clomid)</button></div>
+      </div>
+    </div>
+
+    <div class="pharm-cat" id="pc11">
+      <div class="pharm-cat-header" onclick="this.parentElement.classList.toggle('collapsed')"><span class="pharm-cat-caret">▾</span><span class="pharm-cat-title">Neonatal Medications</span><span class="pharm-cat-count" id="pc11count">0/2</span></div>
+      <div class="pharm-cat-body">
+        <div class="pharm-drug-row"><div class="pharm-check" data-drug="surfactant" onclick="togglePharmCheck(this)">✓</div><button class="pharm-pill populated" data-drug="surfactant" onclick="openDrug('surfactant')">Lung Surfactant</button></div>
+        <div class="pharm-drug-row"><div class="pharm-check" data-drug="nas_meds" onclick="togglePharmCheck(this)">✓</div><button class="pharm-pill populated" data-drug="nas_meds" onclick="openDrug('nas_meds')">NAS Medications</button></div>
+      </div>
+    </div>
+
+    <div class="pharm-cat" id="pc12">
+      <div class="pharm-cat-header" onclick="this.parentElement.classList.toggle('collapsed')"><span class="pharm-cat-caret">▾</span><span class="pharm-cat-title">Pediatric GI & Integumentary</span><span class="pharm-cat-count" id="pc12count">0/6</span></div>
+      <div class="pharm-cat-body">
+        <div class="pharm-drug-row"><div class="pharm-check" data-drug="ors" onclick="togglePharmCheck(this)">✓</div><button class="pharm-pill populated" data-drug="ors" onclick="openDrug('ors')">Oral Rehydration Solution</button></div>
+        <div class="pharm-drug-row"><div class="pharm-check" data-drug="metronidazole" onclick="togglePharmCheck(this)">✓</div><button class="pharm-pill populated" data-drug="metronidazole" onclick="openDrug('metronidazole')">Metronidazole</button></div>
+        <div class="pharm-drug-row"><div class="pharm-check" data-drug="permethrin" onclick="togglePharmCheck(this)">✓</div><button class="pharm-pill populated" data-drug="permethrin" onclick="openDrug('permethrin')">Permethrin</button></div>
+        <div class="pharm-drug-row"><div class="pharm-check" data-drug="silvadene" onclick="togglePharmCheck(this)">✓</div><button class="pharm-pill populated" data-drug="silvadene" onclick="openDrug('silvadene')">Silver Sulfadiazine</button></div>
+        <div class="pharm-drug-row"><div class="pharm-check" data-drug="isotretinoin" onclick="togglePharmCheck(this)">✓</div><button class="pharm-pill populated" data-drug="isotretinoin" onclick="openDrug('isotretinoin')">Isotretinoin (Accutane)</button></div>
+        <div class="pharm-drug-row"><div class="pharm-check" data-drug="griseofulvin" onclick="togglePharmCheck(this)">✓</div><button class="pharm-pill populated" data-drug="griseofulvin" onclick="openDrug('griseofulvin')">Griseofulvin</button></div>
+      </div>
+    </div>
+
+    <div class="exam-reset"><button onclick="resetPharmProgress()">Reset Progress</button></div>
+    </div>
+  </div>
+
 </main>
 </div>
 
@@ -321,15 +433,65 @@ function toggleTheme(){
 }
 (function(){const t=localStorage.getItem('studyTheme');if(t==='light'){document.documentElement.dataset.theme='light';document.getElementById('themeIcon').textContent='🌙';document.getElementById('themeLabel').textContent='Dark Mode'}})();
 
-function filterDrugs(q){
-  q=q.toLowerCase().trim();
+function searchDrugs(val){
+  const q=val.toLowerCase().trim();
+  const box=document.getElementById('searchResults');
+  // Always filter sidebar and pills by name
   document.querySelectorAll('.nav-drug').forEach(d=>{
     d.style.display=(!q||d.textContent.toLowerCase().includes(q))?'':'none';
   });
-  document.querySelectorAll('.pharm-pill').forEach(p=>{
-    p.style.display=(!q||p.textContent.toLowerCase().includes(q))?'':'none';
+  document.querySelectorAll('.pharm-drug-row').forEach(r=>{
+    const pill=r.querySelector('.pharm-pill');
+    if(pill)r.style.display=(!q||pill.textContent.toLowerCase().includes(q))?'':'none';
   });
+  // Content search with dropdown
+  if(!q||q.length<2){box.classList.remove('show');box.innerHTML='';return}
+  const results=[];
+  const sections=['action','use','complications','admin','contraindications','nursing','interactions','education','evaluation'];
+  const sectionLabels={action:'Action',use:'Use',complications:'Complications',admin:'Administration',contraindications:'Contraindications',nursing:'Nursing',interactions:'Interactions',education:'Education',evaluation:'Evaluation'};
+  const words=q.split(/\s+/);
+  Object.keys(DRUGS).forEach(id=>{
+    const d=DRUGS[id];
+    // Search title
+    if(d.title.toLowerCase().includes(q)){
+      results.push({id,title:d.title,section:'Drug',snippet:d.subtitle||'',score:100});
+    }
+    // Search content
+    sections.forEach(sec=>{
+      const raw=(d[sec]||'');
+      const c=raw.replace(/<[^>]+>/g,' ').replace(/\s+/g,' ');
+      const cl=c.toLowerCase();
+      if(words.every(w=>cl.includes(w))){
+        const idx=cl.indexOf(words[0]);
+        const start=Math.max(0,idx-40);
+        const end=Math.min(c.length,idx+80);
+        let snippet=(start>0?'\u2026':'')+c.substring(start,end).trim()+(end<c.length?'\u2026':'');
+        words.forEach(w=>{
+          const re=new RegExp('('+w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi');
+          snippet=snippet.replace(re,'<mark>$1</mark>');
+        });
+        const score=cl.indexOf(q)>=0?50:10;
+        results.push({id,title:d.title,section:sectionLabels[sec],snippet,score});
+      }
+    });
+  });
+  // Deduplicate
+  const seen={};
+  const unique=results.filter(r=>{
+    const key=r.id+'_'+r.section;
+    if(seen[key])return false;
+    seen[key]=true;return true;
+  }).sort((a,b)=>b.score-a.score);
+  if(unique.length===0){box.innerHTML='<div style="padding:12px;font-size:11px;color:var(--text3);font-style:italic">No results for \u201c'+val+'\u201d</div>';box.classList.add('show');return}
+  let html='<div class="sr-count">'+unique.length+' result'+(unique.length>1?'s':'')+'</div>';
+  html+=unique.slice(0,15).map(r=>'<div class="sr-item" onclick="pendingHighlight=document.getElementById(\'searchInput\').value;openDrug(\''+r.id+'\');document.getElementById(\'searchResults\').classList.remove(\'show\');document.getElementById(\'searchInput\').value=\'\'"><div class="sr-title">'+r.title+'<span class="sr-section">'+r.section+'</span></div>'+(r.snippet?'<div class="sr-snippet">'+r.snippet+'</div>':'')+'</div>').join('');
+  box.innerHTML=html;
+  box.classList.add('show');
 }
+
+// Close search on outside click or escape
+document.addEventListener('click',function(e){if(!e.target.closest('.search-wrap')){var b=document.getElementById('searchResults');if(b)b.classList.remove('show')}});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeDrug();var b=document.getElementById('searchResults');if(b)b.classList.remove('show')}});
 
 
 // ── Pharmacology Progress with localStorage ──
@@ -341,7 +503,7 @@ const PHARM_CATS={
   pc4:['terbutaline','mag_sulfate','nifedipine','indomethacin'],
   pc5:['oxytocin_pp','methergine','carboprost','misoprostol_pp'],
   pc6:['betamethasone'],
-  pc7:['erythromycin_eye','vitamin_k','hep_b_vax']
+  pc7:['erythromycin_eye','vitamin_k','hep_b_vax'],pc8:['methotrexate','hydralazine','labetalol','acyclovir'],pc9:['heparin_pp','warfarin_pp','sertraline_pp'],pc10:['coc','depo_provera','clomiphene'],pc11:['surfactant','nas_meds'],pc12:['ors','metronidazole','permethrin','silvadene','isotretinoin','griseofulvin']
 };
 
 function getPharmProgress(){try{return JSON.parse(localStorage.getItem(PHARM_KEY))||{}}catch(e){return{}}}
@@ -362,7 +524,8 @@ function togglePharmCheck(el){
 function updatePharmBars(){
   const p=getPharmProgress();
   let total=0,done=0;
-  Object.keys(PHARM_CATS).forEach(catId=>{
+  const e1cats=['pc1','pc2','pc3','pc4','pc5','pc6','pc7'];
+  e1cats.forEach(catId=>{
     const ids=PHARM_CATS[catId];
     const catDone=ids.filter(id=>p[id]).length;
     total+=ids.length;done+=catDone;
@@ -371,6 +534,19 @@ function updatePharmBars(){
   });
   const pct=total?Math.round((done/total)*100):0;
   document.getElementById('pharmCount').textContent=done+' / '+total;
+  // Exam 2 pharm
+  const e2cats=['pc8','pc9','pc10','pc11','pc12'];
+  let e2total=0,e2done=0;
+  e2cats.forEach(catId=>{
+    const ids=PHARM_CATS[catId];if(!ids)return;
+    const catDone=ids.filter(id=>p[id]).length;
+    e2total+=ids.length;e2done+=catDone;
+    const el=document.getElementById(catId+'count');
+    if(el)el.textContent=catDone+'/'+ids.length;
+  });
+  const e2pct=e2total?Math.round((e2done/e2total)*100):0;
+  var e2c=document.getElementById('pharmCount2');if(e2c)e2c.textContent=e2done+' / '+e2total;
+  var e2b=document.getElementById('pharmBar2');if(e2b)e2b.style.width=e2pct+'%';
   document.getElementById('pharmBar').style.width=pct+'%';
 }
 
@@ -782,6 +958,309 @@ education:'<ul><li>Explain that this vaccine protects the baby from hepatitis B,
 evaluation:'<ul><li>Vaccine series completed on schedule</li><li>No significant adverse reactions</li><li>Development of adequate anti-HBs antibody levels (tested in high-risk infants)</li></ul>'
 };
 
+let pendingHighlight='';
+
+function highlightInModal(query){
+  if(!query)return;
+  const words=query.toLowerCase().trim().split(/\s+/).filter(w=>w.length>=2);
+  if(!words.length)return;
+  const body=document.getElementById('modalBody');
+  const walker=document.createTreeWalker(body,NodeFilter.SHOW_TEXT,null,false);
+  const textNodes=[];
+  while(walker.nextNode())textNodes.push(walker.currentNode);
+  textNodes.forEach(node=>{
+    const text=node.textContent;
+    const lc=text.toLowerCase();
+    let hasMatch=words.some(w=>lc.includes(w));
+    if(!hasMatch)return;
+    const span=document.createElement('span');
+    let html=text;
+    words.forEach(w=>{
+      const re=new RegExp('('+w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi');
+      html=html.replace(re,'<span class="search-highlight">$1</span>');
+    });
+    span.innerHTML=html;
+    node.parentNode.replaceChild(span,node);
+  });
+  setTimeout(()=>{
+    const first=body.querySelector('.search-highlight');
+    if(first)first.scrollIntoView({behavior:'smooth',block:'center'});
+  },200);
+}
+
+
+// ═══ EXAM 2 DRUGS ═══
+
+DRUGS['methotrexate']={
+title:'Methotrexate',
+subtitle:'Antimetabolite · Ectopic Pregnancy Treatment',
+refs:[{icon:'📘',short:'ATI Maternal Newborn Ed.11 — Ch.7'},{icon:'💊',short:'ATI Pharmacology Ed.8'}],
+action:'<ul><li>Folic acid antagonist that inhibits cell division and enlargement of the embryo</li><li>Dissolves the ectopic pregnancy without surgical intervention</li></ul>',
+use:'<ul><li>Medical management of unruptured ectopic pregnancy when tube preservation is desired</li><li>Also used after molar pregnancy evacuation if malignant cells detected</li></ul>',
+complications:'<ul><li>Stomatitis, N/V, diarrhea</li><li>Bone marrow suppression (monitor CBC)</li><li>Hepatotoxicity and nephrotoxicity (monitor liver/renal function)</li><li>Photosensitivity</li><li>Abdominal pain from tubal abortion (expected during treatment)</li></ul>',
+admin:'<ul><li>Single-dose IM injection is most common protocol</li><li>Multi-dose regimen may be used for larger ectopic pregnancies</li><li>Monitor serum hCG levels after treatment — should decrease; if not declining, repeat dose or surgical intervention</li></ul>',
+contraindications:'<ul><li>Ruptured ectopic pregnancy (requires surgical intervention)</li><li>Immunodeficiency, blood dyscrasias</li><li>Active liver or renal disease</li><li>Breastfeeding</li></ul>',
+nursing:'<ul><li>Obtain baseline labs: hCG, CBC, liver/renal function, blood type and Rh</li><li>Monitor hCG levels serially (should decline — confirms resolution)</li><li>Administer RhoGAM if Rh-negative</li><li>Assess for signs of ruptured ectopic: sharp abdominal pain, referred shoulder pain, hemodynamic instability</li></ul>',
+interactions:'<ul><li>NSAIDs: increased methotrexate toxicity</li><li>Folic acid supplements: reduce effectiveness of methotrexate</li></ul>',
+education:'<ul><li><strong>AVOID folic acid supplements</strong> — counteracts methotrexate and can cause toxic response</li><li>Use sun protection (photosensitivity)</li><li>Avoid alcohol during treatment</li><li>Avoid sexual intercourse until hCG is undetectable</li><li>Report signs of rupture: severe abdominal pain, shoulder pain, dizziness, fainting</li><li>Reliable contraception during treatment</li></ul>',
+evaluation:'<ul><li>Serial hCG levels declining to undetectable</li><li>No signs of tubal rupture</li><li>No significant adverse effects</li></ul>'
+};
+
+DRUGS['hydralazine']={
+title:'Hydralazine',
+subtitle:'Direct-Acting Vasodilator · Antihypertensive',
+refs:[{icon:'📘',short:'ATI Maternal Newborn Ed.11 — Ch.9'},{icon:'💊',short:'ATI Pharmacology Ed.8'}],
+action:'<ul><li>Direct relaxation of arteriolar smooth muscle causing peripheral vasodilation</li><li>Reduces peripheral vascular resistance and lowers BP</li></ul>',
+use:'<ul><li>Treatment of severe hypertension in preeclampsia/eclampsia</li><li>Used when BP is ≥160/110 to prevent maternal stroke</li></ul>',
+complications:'<ul><li>Maternal tachycardia (reflex from vasodilation)</li><li>Headache, flushing, palpitations</li><li>Hypotension (especially with rapid IV push)</li><li>N/V</li><li>Lupus-like syndrome with prolonged use</li></ul>',
+admin:'<ul><li>5-10 mg IV push over 1-2 min; may repeat every 20-30 min</li><li>Can also be given IM</li><li>Maximum dose 20-30 mg per episode</li><li>Monitor BP every 5 min after administration</li></ul>',
+contraindications:'<ul><li>Hypersensitivity</li><li>Coronary artery disease, mitral valve disease</li><li>Severe tachycardia</li></ul>',
+nursing:'<ul><li>Monitor BP closely before, during, and after administration</li><li>Monitor FHR continuously</li><li>Assess for headache, flushing, tachycardia</li><li>Keep client on bed rest in lateral position</li><li>Have IV fluids running for volume expansion</li></ul>',
+interactions:'<ul><li>MAOIs: increased hypotensive effect</li><li>Other antihypertensives: additive hypotension</li><li>NSAIDs: may decrease antihypertensive effect</li></ul>',
+education:'<ul><li>Report severe headache, chest pain, or vision changes</li><li>Medication is given to protect you from stroke</li><li>BP will be monitored very frequently</li></ul>',
+evaluation:'<ul><li>BP decreases to safe range without dropping too low</li><li>No signs of fetal distress</li><li>No maternal complications (stroke, organ damage)</li></ul>'
+};
+
+DRUGS['labetalol']={
+title:'Labetalol',
+subtitle:'Alpha/Beta-Adrenergic Blocker · Antihypertensive',
+refs:[{icon:'📘',short:'ATI Maternal Newborn Ed.11 — Ch.9'},{icon:'💊',short:'ATI Pharmacology Ed.8'}],
+action:'<ul><li>Combined alpha1 and beta-adrenergic blocker</li><li>Reduces peripheral vascular resistance without significantly decreasing cardiac output or heart rate</li></ul>',
+use:'<ul><li>Treatment of severe hypertension in preeclampsia</li><li>Often used as first-line IV antihypertensive for acute severe hypertension in pregnancy</li></ul>',
+complications:'<ul><li>Hypotension, dizziness, fatigue</li><li>Bradycardia</li><li>Bronchospasm</li><li>Neonatal bradycardia and hypoglycemia if given close to delivery</li></ul>',
+admin:'<ul><li>IV: 20 mg initially, then 40-80 mg every 10 min (max 300 mg total)</li><li>Oral: 100-400 mg twice daily for maintenance</li><li>Keep client supine during IV administration to prevent orthostatic hypotension</li></ul>',
+contraindications:'<ul><li><strong>Asthma or reactive airway disease</strong> (beta-blocker effect causes bronchospasm)</li><li>Heart block, severe bradycardia</li><li>Uncompensated heart failure</li></ul>',
+nursing:'<ul><li>Monitor BP and HR before and after each dose</li><li>Keep client supine during IV infusion</li><li>Monitor FHR</li><li>Assess for bronchospasm</li><li>Assess newborn for bradycardia and hypoglycemia after delivery</li></ul>',
+interactions:'<ul><li>Other antihypertensives: additive hypotension</li><li>Insulin/oral hypoglycemics: may mask signs of hypoglycemia</li><li>Bronchodilators: effectiveness may be decreased</li></ul>',
+education:'<ul><li>Do not discontinue abruptly (rebound hypertension)</li><li>Rise slowly from lying/sitting position</li><li>Report dizziness, difficulty breathing, or slow heartbeat</li></ul>',
+evaluation:'<ul><li>BP within target range</li><li>No bronchospasm or severe bradycardia</li><li>Reassuring FHR maintained</li></ul>'
+};
+
+DRUGS['acyclovir']={
+title:'Acyclovir (Zovirax)',
+subtitle:'Antiviral · HSV Treatment',
+refs:[{icon:'📘',short:'ATI Maternal Newborn Ed.11 — Ch.8'}],
+action:'<ul><li>Inhibits viral DNA synthesis by interfering with herpes virus DNA polymerase</li><li>Active against HSV-1, HSV-2, and varicella-zoster virus</li></ul>',
+use:'<ul><li>Treatment and suppression of genital herpes outbreaks during pregnancy</li><li>Suppressive therapy starting at 36 weeks to reduce risk of active lesions at delivery</li></ul>',
+complications:'<ul><li>N/V, diarrhea, headache</li><li>Renal toxicity (ensure adequate hydration)</li><li>Rare: tremors, confusion, seizures</li></ul>',
+admin:'<ul><li>Oral: 400 mg three times daily for outbreaks; 400 mg twice daily for suppression</li><li>IV: for severe or disseminated infection</li><li>Begin suppressive therapy at 36 weeks gestation</li></ul>',
+contraindications:'<ul><li>Hypersensitivity</li><li>Renal impairment (dose adjustment needed)</li></ul>',
+nursing:'<ul><li>Encourage adequate fluid intake to prevent renal toxicity</li><li>Monitor renal function</li><li>Assess lesions for healing</li><li>If active lesions or prodromal symptoms at labor onset → cesarean delivery</li></ul>',
+interactions:'<ul><li>Nephrotoxic drugs: increased renal toxicity risk</li><li>Probenecid: increases acyclovir levels</li></ul>',
+education:'<ul><li>Take as prescribed; complete full course</li><li>Drink plenty of fluids</li><li>Does not cure herpes — manages outbreaks and reduces transmission</li><li>Report prodromal symptoms (tingling, burning) to provider before labor</li></ul>',
+evaluation:'<ul><li>No active lesions at time of labor (vaginal delivery possible)</li><li>Decreased frequency and severity of outbreaks</li><li>No neonatal herpes transmission</li></ul>'
+};
+
+DRUGS['heparin_pp']={
+title:'Heparin / Enoxaparin (Lovenox)',
+subtitle:'Anticoagulant · DVT/PE Treatment',
+refs:[{icon:'📘',short:'ATI Maternal Newborn Ed.11 — Ch.20'},{icon:'💊',short:'ATI Pharmacology Ed.8'}],
+action:'<ul><li>Heparin: inhibits thrombin and prevents conversion of fibrinogen to fibrin</li><li>Enoxaparin (LMWH): inhibits factor Xa; more predictable dose response than unfractionated heparin</li></ul>',
+use:'<ul><li>Treatment and prevention of DVT and PE in postpartum period</li><li>Prevention of clot enlargement and new clot formation</li></ul>',
+complications:'<ul><li>Hemorrhage (most serious)</li><li>Heparin-induced thrombocytopenia (HIT) — monitor platelet count</li><li>Injection site hematomas</li><li>Osteoporosis with long-term use</li></ul>',
+admin:'<ul><li><strong>Heparin:</strong> IV continuous infusion 3-5 days; dose adjusted to aPTT (1.5-2.5× control of 30-40 sec)</li><li><strong>Enoxaparin:</strong> SubQ 1 mg/kg every 12 hr; does NOT require routine aPTT monitoring</li><li>Do NOT massage injection site</li><li>Rotate SubQ injection sites (abdomen preferred)</li></ul>',
+contraindications:'<ul><li>Active bleeding, hemophilia, severe thrombocytopenia</li><li>Recent surgery of eye, brain, or spinal cord</li><li>Severe liver or kidney disease</li></ul>',
+nursing:'<ul><li>Monitor aPTT for unfractionated heparin (therapeutic: 1.5-2.5× control)</li><li>Monitor platelet count for HIT</li><li>Assess for signs of bleeding: gums, nose, urine, stool, bruising, petechiae</li><li><strong>Antidote: protamine sulfate</strong> — must be readily available</li><li>Do NOT give IM (risk of hematoma)</li></ul>',
+interactions:'<ul><li>Aspirin, NSAIDs: increased bleeding risk</li><li>Thrombolytics: additive bleeding risk</li><li>Platelet inhibitors: increased bleeding risk</li></ul>',
+education:'<ul><li>Report: bleeding gums, nosebleeds, blood in urine or stool, heavy vaginal bleeding, excessive bruising</li><li>Use electric razor, soft toothbrush</li><li>Avoid contact sports</li><li>Do not rub injection site after SubQ injection</li></ul>',
+evaluation:'<ul><li>aPTT within therapeutic range (heparin)</li><li>No signs of new clot formation</li><li>No significant bleeding complications</li><li>DVT symptoms improving</li></ul>'
+};
+
+DRUGS['warfarin_pp']={
+title:'Warfarin (Coumadin)',
+subtitle:'Oral Anticoagulant · Long-Term DVT/PE Treatment',
+refs:[{icon:'📘',short:'ATI Maternal Newborn Ed.11 — Ch.20'},{icon:'💊',short:'ATI Pharmacology Ed.8'}],
+action:'<ul><li>Inhibits synthesis of vitamin K-dependent clotting factors (II, VII, IX, X)</li><li>Takes 3-5 days to reach therapeutic levels (heparin bridge needed)</li></ul>',
+use:'<ul><li>Long-term anticoagulation after initial heparin therapy for DVT/PE</li><li>Safe for use postpartum and during breastfeeding</li></ul>',
+complications:'<ul><li>Hemorrhage (most serious)</li><li>Skin necrosis (rare)</li><li><strong>TERATOGENIC</strong> — contraindicated during pregnancy (causes fetal warfarin syndrome)</li></ul>',
+admin:'<ul><li>Oral daily dosing; titrated to PT/INR</li><li>Therapeutic INR: 2.0-3.0 for DVT/PE</li><li>Overlapped with heparin for 4-5 days until INR therapeutic</li><li>Take at same time each day</li></ul>',
+contraindications:'<ul><li><strong>PREGNANCY</strong> (highly teratogenic — crosses placenta)</li><li>Active bleeding, recent surgery</li><li>Severe liver disease</li></ul>',
+nursing:'<ul><li>Monitor PT/INR regularly; therapeutic INR 2.0-3.0</li><li>Assess for bleeding</li><li><strong>Antidote: vitamin K (phytonadione)</strong></li><li>Safe during breastfeeding</li><li>Extensive food and drug interactions — maintain consistent vitamin K intake</li></ul>',
+interactions:'<ul><li><strong>Vitamin K-rich foods</strong> decrease effect (kale, spinach, broccoli, Brussels sprouts) — maintain CONSISTENT intake, do not suddenly increase or decrease</li><li>Aspirin, NSAIDs: increased bleeding</li><li><strong>Alcohol:</strong> inhibits warfarin metabolism</li><li>Antibiotics: can increase warfarin effect by killing gut bacteria that produce vitamin K</li><li>Many drug interactions — always check before adding new medications</li></ul>',
+education:'<ul><li>Take at same time daily; do not double doses</li><li>Maintain consistent diet — do not suddenly change vitamin K intake</li><li>Avoid alcohol</li><li>Use electric razor, soft toothbrush</li><li>Wear medical alert identification</li><li>Report: bleeding, dark stool, blood in urine, excessive bruising</li><li>Avoid aspirin and NSAIDs unless prescribed</li></ul>',
+evaluation:'<ul><li>INR maintained within 2.0-3.0</li><li>No recurrence of thromboembolism</li><li>No significant bleeding</li></ul>'
+};
+
+DRUGS['sertraline_pp']={
+title:'Sertraline (Zoloft)',
+subtitle:'SSRI · Postpartum Depression Treatment',
+refs:[{icon:'📘',short:'ATI Maternal Newborn Ed.11 — Ch.22'},{icon:'💊',short:'ATI Pharmacology Ed.8'}],
+action:'<ul><li>Selective serotonin reuptake inhibitor (SSRI) — blocks reuptake of serotonin in the synaptic cleft</li><li>Increases serotonin availability in the brain</li></ul>',
+use:'<ul><li>Treatment of postpartum depression (PPD)</li><li>Preferred SSRI for breastfeeding mothers due to lower levels in breast milk</li></ul>',
+complications:'<ul><li>N/V, diarrhea, dry mouth, headache</li><li>Insomnia or drowsiness</li><li>Sexual dysfunction</li><li>Serotonin syndrome (if combined with other serotonergic drugs): agitation, hyperthermia, tachycardia, muscle rigidity</li><li><strong>Black box warning:</strong> increased suicidal ideation in young adults (monitor closely first 4-6 weeks)</li></ul>',
+admin:'<ul><li>25-50 mg PO daily initially; may increase gradually (max 200 mg/day)</li><li>Takes 2-4 weeks for full therapeutic effect</li><li>Take consistently — same time each day</li><li>Do NOT discontinue abruptly (taper to prevent withdrawal)</li></ul>',
+contraindications:'<ul><li>Concurrent use of MAOIs (wait 14 days between)</li><li>Concurrent use with pimozide or thioridazine</li></ul>',
+nursing:'<ul><li>Screen for PPD at every postpartum encounter using Edinburgh Postnatal Depression Scale</li><li>Monitor for suicidal ideation, especially first 4-6 weeks</li><li>Assess for serotonin syndrome</li><li>Monitor mother-infant bonding</li><li>Ensure client safety and infant safety</li><li>Provide emotional support and referral to mental health services</li></ul>',
+interactions:'<ul><li><strong>MAOIs:</strong> potentially fatal serotonin syndrome — 14-day washout period required</li><li>Tramadol, triptans, St. John wort: increased serotonin syndrome risk</li><li>Warfarin: may increase bleeding risk</li></ul>',
+education:'<ul><li>Takes 2-4 weeks to feel full effect — do not stop taking because it seems like it is not working</li><li>Do NOT stop abruptly — must taper</li><li>Report worsening depression, suicidal thoughts, agitation, or unusual behavior changes</li><li>Safe to continue breastfeeding (discuss with provider)</li><li>Attend follow-up appointments and therapy sessions</li></ul>',
+evaluation:'<ul><li>Improved mood and ability to function</li><li>Increased interest in infant and self-care</li><li>No suicidal ideation</li><li>Mother demonstrates appropriate bonding and caregiving</li></ul>'
+};
+
+DRUGS['coc']={
+title:'Combined Oral Contraceptives (COCs)',
+subtitle:'Estrogen + Progestin · Hormonal Contraception',
+refs:[{icon:'📘',short:'ATI Maternal Newborn Ed.11 — Ch.1'}],
+action:'<ul><li>Suppress ovulation by inhibiting FSH and LH from anterior pituitary</li><li>Thicken cervical mucus (impedes sperm motility)</li><li>Thin endometrial lining (prevents implantation)</li></ul>',
+use:'<ul><li>Prevention of pregnancy</li><li>Also used for: menstrual regulation, dysmenorrhea, endometriosis, acne, PCOS</li></ul>',
+complications:'<ul><li><strong>Thromboembolic events:</strong> DVT, PE, stroke, MI — most serious risk</li><li>Hypertension, headaches, breast tenderness</li><li>N/V, weight changes, mood changes</li><li>Breakthrough bleeding</li><li>Cholestatic jaundice</li></ul>',
+admin:'<ul><li>Take one pill at the same time daily</li><li>21 active pills + 7 placebo (or 24/4 regimen)</li><li>Start on first day of menses or first Sunday after menses begins</li><li>Use backup method for first 7 days if not starting on day 1 of menses</li></ul>',
+contraindications:'<ul><li><strong>Smokers &gt;35 years</strong> (increased thromboembolism and MI risk)</li><li>History of thromboembolic disorders, stroke, or heart disease</li><li>Breast cancer or estrogen-dependent tumors</li><li>Pregnancy, liver disease</li><li>Migraines with aura</li><li>Uncontrolled hypertension</li></ul>',
+nursing:'<ul><li>Obtain baseline BP before starting; monitor periodically</li><li>Teach ACHES warning signs</li><li>Assess smoking status and age</li><li>Review drug interactions that decrease effectiveness</li></ul>',
+interactions:'<ul><li><strong>Decrease effectiveness:</strong> rifampin, anticonvulsants (phenytoin, carbamazepine), some antibiotics, St. John wort</li><li>COCs may decrease effectiveness of: warfarin, insulin, oral hypoglycemics</li></ul>',
+education:'<ul><li><strong>ACHES warning signs — report immediately:</strong> A=Abdominal pain, C=Chest pain/SOB, H=Headaches (severe), E=Eye problems (visual changes), S=Severe leg pain/swelling</li><li>Missed 1 pill: take as soon as remembered; missed 2+: use backup method 7 days</li><li>Does NOT protect against STIs — use condoms for dual protection</li></ul>',
+evaluation:'<ul><li>No unintended pregnancy</li><li>No thromboembolic events</li><li>Client verbalizes ACHES warning signs</li></ul>'
+};
+
+DRUGS['depo_provera']={
+title:'Medroxyprogesterone (Depo-Provera)',
+subtitle:'Progestin-Only Injectable · Long-Acting Contraception',
+refs:[{icon:'📘',short:'ATI Maternal Newborn Ed.11 — Ch.1'}],
+action:'<ul><li>Progestin suppresses ovulation and thickens cervical mucus</li><li>No estrogen component — safe for breastfeeding and estrogen-contraindicated clients</li></ul>',
+use:'<ul><li>Long-acting reversible contraception</li><li>Safe for breastfeeding clients</li></ul>',
+complications:'<ul><li>Irregular bleeding, amenorrhea (common with prolonged use)</li><li>Weight gain (average 5 lb first year)</li><li><strong>Bone density loss</strong> — concern with long-term use (&gt;2 years)</li><li>Headache, mood changes, decreased libido</li><li><strong>Delayed return to fertility</strong> — up to 12 months after discontinuation</li></ul>',
+admin:'<ul><li>150 mg deep IM (deltoid or gluteal) every 11-13 weeks</li><li>First injection within first 5 days of menses</li><li>Can be given immediately postpartum (does not affect breastfeeding)</li></ul>',
+contraindications:'<ul><li>Known or suspected pregnancy</li><li>Unexplained vaginal bleeding</li><li>Breast cancer</li><li>Severe liver disease</li></ul>',
+nursing:'<ul><li>Confirm client is not pregnant before first injection</li><li>Schedule follow-up injection every 11-13 weeks</li><li>Monitor weight</li><li>Assess bone density with long-term use</li></ul>',
+interactions:'<ul><li>Aminoglutethimide: may decrease effectiveness</li><li>Minimal drug interactions compared to COCs</li></ul>',
+education:'<ul><li>Irregular bleeding is common initially — may progress to amenorrhea</li><li>Fertility may be delayed up to 12 months after stopping</li><li>Weight-bearing exercise and adequate calcium/vitamin D for bone health</li><li>Must return every 11-13 weeks for injection — mark calendar</li></ul>',
+evaluation:'<ul><li>No unintended pregnancy</li><li>Client returns on schedule for injections</li><li>No significant bone density loss</li></ul>'
+};
+
+DRUGS['clomiphene']={
+title:'Clomiphene Citrate (Clomid)',
+subtitle:'Ovulation Stimulant · Infertility Treatment',
+refs:[{icon:'📘',short:'ATI Maternal Newborn Ed.11 — Ch.2'}],
+action:'<ul><li>Blocks estrogen receptors in the hypothalamus → body perceives low estrogen → increases FSH and LH release from pituitary → stimulates ovarian follicle development and ovulation</li></ul>',
+use:'<ul><li>Induction of ovulation in anovulatory or oligo-ovulatory women</li><li>First-line medication for infertility treatment</li></ul>',
+complications:'<ul><li><strong>Ovarian hyperstimulation syndrome (OHSS):</strong> ovaries become enlarged and painful; fluid shifts to third spaces; findings: abdominal distension, rapid weight gain, N/V, decreased urine output, ascites — can be life-threatening</li><li>Multiple gestation (twins: 5-10% incidence)</li><li>Hot flashes, mood swings, visual disturbances</li><li>Ovarian cysts</li></ul>',
+admin:'<ul><li>50 mg PO daily for 5 days beginning on day 3 or 5 of menstrual cycle</li><li>May increase to 100 mg if no response</li><li>Usually limited to 3-6 cycles</li><li>Ovulation typically occurs 5-10 days after last dose</li></ul>',
+contraindications:'<ul><li>Pregnancy (teratogenic)</li><li>Liver disease</li><li>Ovarian cysts</li><li>Undiagnosed vaginal bleeding</li></ul>',
+nursing:'<ul><li>Monitor for OHSS: report abdominal pain, bloating, weight gain &gt;2 lb/day, decreased urine output</li><li>Monitor ovarian response with ultrasound</li><li>Provide emotional support — infertility causes significant psychological distress</li><li>Teach client about timing of intercourse relative to ovulation</li></ul>',
+interactions:'<ul><li>Danazol: may inhibit response to clomiphene</li></ul>',
+education:'<ul><li>Report abdominal pain/bloating, rapid weight gain, N/V, decreased urination (OHSS)</li><li>Hot flashes and mood changes are common side effects</li><li>Report visual disturbances (stop medication)</li><li>Timed intercourse recommended every other day beginning 5 days after last pill</li><li>Multiple pregnancy is a possibility — discuss with provider</li></ul>',
+evaluation:'<ul><li>Ovulation achieved (confirmed by progesterone level, BBT shift, or ultrasound)</li><li>No OHSS</li><li>Successful conception</li></ul>'
+};
+
+DRUGS['surfactant']={
+title:'Lung Surfactant (Beractant/Calfactant)',
+subtitle:'Pulmonary Surfactant · Neonatal RDS Treatment',
+refs:[{icon:'📘',short:'ATI Nursing Care of Children Ed.11 — Ch.27'}],
+action:'<ul><li>Restores surfactant in premature lungs</li><li>Surfactant reduces surface tension in alveoli, preventing alveolar collapse (atelectasis)</li><li>Improves respiratory compliance and gas exchange</li></ul>',
+use:'<ul><li>Treatment and prevention of respiratory distress syndrome (RDS) in premature neonates</li><li>Administered to neonates who are intubated and on mechanical ventilation</li></ul>',
+complications:'<ul><li>Transient bradycardia during administration</li><li>Oxygen desaturation</li><li>Airway obstruction from mucus</li><li>Pulmonary hemorrhage (rare)</li></ul>',
+admin:'<ul><li>Administered via endotracheal tube as intratracheal instillation</li><li>Neonate must be intubated</li><li>Verify ET tube placement before administration</li><li>Suction newborn BEFORE administration</li><li><strong>Do NOT suction ET tube for 1 hr after administration</strong> (allows surfactant to distribute)</li></ul>',
+contraindications:'<ul><li>No absolute contraindications when indicated for RDS</li></ul>',
+nursing:'<ul><li>Respiratory assessment including ABGs, respiratory rate/rhythm, and skin color before AND after</li><li>Suction before but NOT for 1 hr after administration</li><li>Monitor continuous pulse oximetry</li><li>Assess ET tube placement</li><li>Monitor for bradycardia and desaturation during administration</li><li>May need to reduce ventilator settings after surfactant takes effect (improved compliance)</li></ul>',
+interactions:'<ul><li>No significant drug interactions</li></ul>',
+education:'<ul><li>Explain to parents that this medication replaces a substance the baby lungs are too premature to make</li><li>The baby needs to be on a breathing machine to receive it</li></ul>',
+evaluation:'<ul><li>Improved oxygenation (SpO2, ABGs)</li><li>Decreased work of breathing</li><li>Improved breath sounds</li><li>Improved chest x-ray findings</li></ul>'
+};
+
+DRUGS['nas_meds']={
+title:'NAS Medications (Morphine/Phenobarbital)',
+subtitle:'Neonatal Abstinence Syndrome Management',
+refs:[{icon:'📘',short:'ATI Nursing Care of Children Ed.11 — Ch.27'}],
+action:'<ul><li><strong>Morphine sulfate:</strong> opioid agonist that manages withdrawal symptoms by providing controlled opioid replacement</li><li><strong>Phenobarbital:</strong> anticonvulsant/sedative that decreases CNS irritability and controls seizures</li></ul>',
+use:'<ul><li>Morphine: management of opioid withdrawal (heroin, methadone)</li><li>Phenobarbital: management of alcohol or polysubstance withdrawal; controls seizures in NAS</li></ul>',
+complications:'<ul><li>Morphine: respiratory depression, sedation, constipation, feeding difficulties</li><li>Phenobarbital: excessive sedation, respiratory depression, feeding difficulties</li></ul>',
+admin:'<ul><li>Dosing guided by Neonatal Abstinence Scoring System (Finnegan score) — assess every 3-4 hr</li><li>Morphine: oral solution; weaning protocol based on NAS scores</li><li>Phenobarbital: oral or IM; loading dose may be given</li><li>Gradual taper once NAS scores consistently low</li></ul>',
+contraindications:'<ul><li>Use with caution in neonates with respiratory compromise</li></ul>',
+nursing:'<ul><li>Assess NAS scores consistently using standardized scoring tool (every 3-4 hr)</li><li>Reduce environmental stimuli: dim lights, low noise, minimize handling</li><li>Swaddle with legs flexed</li><li>Offer non-nutritive sucking (pacifier)</li><li>Small frequent feedings (high-calorie formula may be needed due to increased metabolic demands)</li><li>Monitor I&O, daily weights, skin turgor, fontanels</li><li>Assess respiratory effort and sedation level</li></ul>',
+interactions:'<ul><li>CNS depressants: additive sedation</li></ul>',
+education:'<ul><li>Explain that withdrawal is managed gradually — baby is not being given drugs to get high</li><li>Parents can participate in comfort measures (swaddling, holding, skin-to-skin)</li><li>Baby may be irritable, have a high-pitched cry, and feed poorly — these are withdrawal symptoms</li><li>Discharge may be delayed until withdrawal is managed and baby is feeding well</li></ul>',
+evaluation:'<ul><li>NAS scores decreasing and consistently low</li><li>Adequate feeding and weight gain</li><li>No seizure activity</li><li>Adequate respiratory effort</li></ul>'
+};
+
+DRUGS['ors']={
+title:'Oral Rehydration Solution (ORS)',
+subtitle:'Electrolyte Replacement · Pediatric Dehydration',
+refs:[{icon:'📘',short:'ATI Nursing Care of Children Ed.11 — Ch.22'}],
+action:'<ul><li>Provides glucose and electrolytes (sodium, potassium, chloride) to replace losses from diarrhea/vomiting</li><li>Glucose-coupled sodium absorption enhances water absorption in the small intestine</li></ul>',
+use:'<ul><li>First-line treatment for mild-to-moderate dehydration from gastroenteritis in children</li><li>Replacement of ongoing fluid losses from diarrhea</li></ul>',
+complications:'<ul><li>Vomiting if given too rapidly</li><li>Hypernatremia if mixed incorrectly</li></ul>',
+admin:'<ul><li><strong>Initial replacement:</strong> 75-90 mEq sodium/L at 40-50 mL/kg over 4 hr</li><li><strong>Maintenance:</strong> ORS with 40-60 mEq sodium/L; limit to 150 mL/kg/day</li><li><strong>Ongoing losses:</strong> replace each diarrheal stool with 10 mL/kg ORS</li><li>Give small frequent sips or by syringe/spoon if child is vomiting</li><li>Alternate ORS with breast milk, formula, or water</li></ul>',
+contraindications:'<ul><li>Severe dehydration (requires IV fluid resuscitation)</li><li>Shock, altered consciousness</li><li>Intractable vomiting</li></ul>',
+nursing:'<ul><li>Assess dehydration severity before choosing oral vs IV rehydration</li><li>Weigh child daily at same time</li><li>Monitor I&O (urine output and stool)</li><li>Assess skin turgor, mucous membranes, fontanels (infants), tears</li></ul>',
+interactions:'<ul><li>No significant drug interactions</li></ul>',
+education:'<ul><li><strong>AVOID:</strong> fruit juices, carbonated sodas, gelatin (high carb/low electrolytes/high osmolality), caffeine (diuretic), chicken/beef broth (too much sodium)</li><li>Use commercially prepared ORS (Pedialyte) — do not make homemade solutions</li><li>Continue breastfeeding or formula during rehydration</li><li>Older children may resume regular diet once rehydrated</li></ul>',
+evaluation:'<ul><li>Improved skin turgor and moist mucous membranes</li><li>Adequate urine output restored</li><li>Weight returning to baseline</li><li>Child tolerating oral intake</li></ul>'
+};
+
+DRUGS['metronidazole']={
+title:'Metronidazole (Flagyl)',
+subtitle:'Antibiotic/Antiprotozoal · C. diff & Giardia',
+refs:[{icon:'📘',short:'ATI Nursing Care of Children Ed.11 — Ch.22'}],
+action:'<ul><li>Disrupts DNA synthesis in susceptible organisms</li><li>Effective against anaerobic bacteria and protozoa</li></ul>',
+use:'<ul><li>Treatment of C. difficile colitis</li><li>Treatment of Giardia lamblia infection</li><li>Also used for: bacterial vaginosis, H. pylori, trichomoniasis</li></ul>',
+complications:'<ul><li>GI upset: N/V, metallic taste, anorexia</li><li>Darkened urine (harmless)</li><li>Peripheral neuropathy with prolonged use</li><li>Seizures (rare, at high doses)</li></ul>',
+admin:'<ul><li>Oral or IV depending on severity</li><li>Take with food to reduce GI upset</li></ul>',
+contraindications:'<ul><li>First trimester pregnancy</li><li>Concurrent alcohol use</li></ul>',
+nursing:'<ul><li>Monitor for GI upset</li><li>Assess for peripheral neuropathy (numbness/tingling)</li><li>Monitor for allergic reaction</li></ul>',
+interactions:'<ul><li><strong>Alcohol:</strong> causes severe disulfiram-like reaction (N/V, flushing, headache, tachycardia) — avoid alcohol during treatment and 48 hr after</li><li>Warfarin: increased anticoagulant effect</li><li>Lithium: increased lithium toxicity</li></ul>',
+education:'<ul><li><strong>NO alcohol</strong> during treatment and for 48 hr after last dose (severe reaction)</li><li>Take entire prescription as directed</li><li>Darkened urine is expected and harmless</li><li>Report numbness or tingling in extremities</li><li>Metallic taste is common — will resolve after treatment</li></ul>',
+evaluation:'<ul><li>Resolution of diarrhea/infection</li><li>No significant adverse effects</li><li>Negative stool culture on follow-up</li></ul>'
+};
+
+DRUGS['permethrin']={
+title:'Permethrin',
+subtitle:'Pediculicide/Scabicide · Lice & Scabies',
+refs:[{icon:'📘',short:'ATI Nursing Care of Children Ed.11 — Ch.30'}],
+action:'<ul><li>Neurotoxic to lice and scabies mites</li><li>Disrupts sodium transport across nerve cell membranes causing paralysis and death of parasites</li></ul>',
+use:'<ul><li><strong>1% cream rinse:</strong> head lice (pediculosis capitis) — first-line treatment</li><li><strong>5% cream:</strong> scabies — applied from neck down</li></ul>',
+complications:'<ul><li>Local skin irritation, pruritus, burning, stinging</li><li>Itching may persist 1-2 weeks after successful treatment (does not mean treatment failure)</li></ul>',
+admin:'<ul><li><strong>Lice (1%):</strong> apply to damp (not wet) hair after shampooing; leave on 10 min; rinse; use nit comb to remove nits; repeat in 7-10 days</li><li><strong>Scabies (5%):</strong> apply thin layer from neck to toes; leave on 8-14 hr; wash off; treat ALL household members simultaneously</li></ul>',
+contraindications:'<ul><li>Hypersensitivity to pyrethrins or chrysanthemums</li><li>Infants &lt;2 months (scabies cream)</li></ul>',
+nursing:'<ul><li>Inspect hair/skin before and after treatment</li><li>Use nit comb after treatment for lice</li><li>Treat all household contacts for scabies</li><li>Educate about environmental decontamination</li></ul>',
+interactions:'<ul><li>No significant drug interactions</li></ul>',
+education:'<ul><li><strong>Lice:</strong> machine wash all clothing/linens in hot water and dry on high heat; seal non-washable items in plastic bag for 14 days; vacuum furniture and floors; do not share combs, brushes, hats; check all family members</li><li><strong>Scabies:</strong> all household members treated at same time; wash all linens/clothing in hot water; itching may persist 2 weeks — this is a reaction to dead mites, not treatment failure</li></ul>',
+evaluation:'<ul><li>No viable lice or nits on reexamination</li><li>Scabies burrows healing</li><li>No reinfestation</li></ul>'
+};
+
+DRUGS['silvadene']={
+title:'Silver Sulfadiazine (Silvadene)',
+subtitle:'Topical Antimicrobial · Burn Treatment',
+refs:[{icon:'📘',short:'ATI Nursing Care of Children Ed.11 — Ch.32'}],
+action:'<ul><li>Broad-spectrum antimicrobial that acts on bacterial cell membranes</li><li>Effective against gram-positive, gram-negative bacteria and some yeasts</li></ul>',
+use:'<ul><li>Prevention and treatment of wound infection in burn injuries</li><li>Most commonly used topical antimicrobial for burns</li></ul>',
+complications:'<ul><li><strong>Transient leukopenia</strong> (monitor WBC — usually resolves spontaneously)</li><li>Burning, stinging on application</li><li>Skin discoloration (grayish)</li></ul>',
+admin:'<ul><li>Apply 1/16-inch layer to cleansed burn wound using sterile gloves</li><li>Reapply as needed (usually twice daily or when removed by activity)</li><li>Cover with light dressing or leave open per provider preference</li></ul>',
+contraindications:'<ul><li><strong>Sulfa allergy</strong></li><li>Premature infants or neonates &lt;2 months (kernicterus risk)</li><li>Pregnancy near term (G6PD deficiency considerations)</li></ul>',
+nursing:'<ul><li>Monitor WBC (leukopenia typically occurs 2-3 days after starting, resolves)</li><li>Use aseptic technique for wound care</li><li>Remove old cream, debride as prescribed, apply fresh layer</li><li>Monitor wound for healing and signs of infection</li><li>Medicate for pain BEFORE wound care</li></ul>',
+interactions:'<ul><li>Enzymatic debriding agents: silver may inactivate them</li></ul>',
+education:'<ul><li>Some burning/stinging is expected on application</li><li>Keep follow-up appointments for wound monitoring</li></ul>',
+evaluation:'<ul><li>No wound infection</li><li>Wound healing progressing</li><li>WBC returns to normal</li></ul>'
+};
+
+DRUGS['isotretinoin']={
+title:'Isotretinoin (Accutane)',
+subtitle:'Retinoid · Severe Nodulocystic Acne',
+refs:[{icon:'📘',short:'ATI Nursing Care of Children Ed.11 — Ch.31'}],
+action:'<ul><li>Reduces sebaceous gland size and sebum production</li><li>Normalizes follicular keratinization</li><li>Decreases Propionibacterium acnes population</li></ul>',
+use:'<ul><li>Severe nodulocystic acne unresponsive to conventional therapy</li><li>Typically a 15-20 week course</li></ul>',
+complications:'<ul><li><strong>HIGHLY TERATOGENIC</strong> — causes severe birth defects (craniofacial, cardiac, CNS)</li><li>Dry skin, lips, eyes, and mucous membranes (most common)</li><li>Photosensitivity</li><li>Elevated liver enzymes and triglycerides</li><li>Depression, suicidal ideation (monitor closely)</li><li>Musculoskeletal pain</li><li>Pseudotumor cerebri (especially if combined with tetracyclines)</li></ul>',
+admin:'<ul><li>0.5-1 mg/kg/day PO in 2 divided doses for 15-20 weeks</li><li>Take with food (fatty meal enhances absorption)</li><li><strong>iPLEDGE program:</strong> mandatory registration for prescribers, pharmacies, and patients</li></ul>',
+contraindications:'<ul><li><strong>PREGNANCY</strong> (Category X — absolutely contraindicated)</li><li>Breastfeeding</li><li>Hypersensitivity to retinoids or parabens</li><li>Hypervitaminosis A</li></ul>',
+nursing:'<ul><li><strong>Two negative pregnancy tests</strong> before starting</li><li><strong>Two forms of contraception</strong> during therapy and for 1 month after</li><li><strong>Monthly pregnancy tests</strong> throughout treatment</li><li>Monitor liver function tests and lipid panel (triglycerides, cholesterol) at baseline and periodically</li><li>Monitor CBC</li><li>Screen for depression and suicidal ideation at each visit</li><li>iPLEDGE compliance verification monthly</li></ul>',
+interactions:'<ul><li>Tetracyclines: increased risk of pseudotumor cerebri — avoid concurrent use</li><li>Vitamin A supplements: additive toxicity — avoid</li><li>Hormonal contraceptives: microdosed progestins may be less effective</li></ul>',
+education:'<ul><li><strong>MUST use 2 forms of contraception</strong> — begin 1 month before, during, and 1 month after treatment</li><li>Do NOT donate blood during treatment or for 1 month after (teratogenic risk to recipient)</li><li>Use sunscreen and protective clothing (photosensitivity)</li><li>Use lip balm, moisturizer, and artificial tears for dryness</li><li>Do NOT take vitamin A supplements</li><li>Report: depression, mood changes, suicidal thoughts, severe headache with vision changes, abdominal pain</li><li>Acne may worsen initially before improving</li></ul>',
+evaluation:'<ul><li>Significant improvement in nodulocystic acne</li><li>No pregnancy during treatment</li><li>Liver function and lipids remain within acceptable range</li><li>No depression or suicidal ideation</li></ul>'
+};
+
+DRUGS['griseofulvin']={
+title:'Griseofulvin',
+subtitle:'Antifungal · Tinea Capitis Treatment',
+refs:[{icon:'📘',short:'ATI Nursing Care of Children Ed.11 — Ch.30'}],
+action:'<ul><li>Inhibits fungal cell mitosis by disrupting the mitotic spindle</li><li>Deposits in keratin precursor cells making them resistant to fungal invasion</li></ul>',
+use:'<ul><li>Treatment of tinea capitis (scalp ringworm) — oral antifungal required because topical agents do not penetrate the hair follicle</li><li>Also effective for tinea corporis, tinea pedis, tinea unguium if severe</li></ul>',
+complications:'<ul><li>Headache (most common)</li><li>GI upset: N/V, diarrhea</li><li>Hepatotoxicity (monitor liver function)</li><li>Photosensitivity</li><li>Leukopenia</li></ul>',
+admin:'<ul><li>Oral: 10-20 mg/kg/day for 6-8 weeks (or until cultures negative)</li><li><strong>Give with fatty foods</strong> to enhance absorption (milk, ice cream, peanut butter)</li><li>Microsize formulation requires higher doses than ultramicrosize</li></ul>',
+contraindications:'<ul><li>Liver disease, porphyria</li><li>Pregnancy (teratogenic)</li><li>Hypersensitivity to penicillin (cross-sensitivity possible)</li></ul>',
+nursing:'<ul><li>Monitor liver function tests periodically</li><li>Monitor CBC (leukopenia)</li><li>Assess lesions for improvement</li><li>Treatment may take 6-8 weeks — ensure compliance</li></ul>',
+interactions:'<ul><li>Warfarin: decreased anticoagulant effect</li><li>Oral contraceptives: decreased effectiveness — use backup contraception</li><li>Alcohol: increased toxicity</li><li>Barbiturates: decreased griseofulvin levels</li></ul>',
+education:'<ul><li>Take with fatty food for best absorption</li><li>Complete entire course even if symptoms improve</li><li>Use sun protection (photosensitivity)</li><li>Do not share combs, brushes, hats, or pillows</li><li>Report signs of liver problems: jaundice, dark urine, clay-colored stools</li></ul>',
+evaluation:'<ul><li>Lesions clearing/resolved</li><li>Negative fungal culture</li><li>Liver function remains normal</li><li>No significant adverse effects</li></ul>'
+};
+
 function openDrug(id){
   const d=DRUGS[id]; if(!d){alert('This drug has not been populated yet.');return}
   document.getElementById('modalTitle').textContent=d.title;
@@ -801,6 +1280,7 @@ function openDrug(id){
   document.getElementById('modalBody').innerHTML=grid;
   document.getElementById('modalOverlay').classList.add('show');
   document.body.style.overflow='hidden';
+  if(pendingHighlight){setTimeout(()=>{highlightInModal(pendingHighlight);pendingHighlight=''},100)}
   // highlight sidebar
   document.querySelectorAll('.nav-drug').forEach(n=>n.classList.remove('active'));
   document.querySelectorAll('.nav-drug').forEach(n=>{if(n.textContent.trim()===d.title.split('(')[0].trim()||n.onclick.toString().includes(id))n.classList.add('active')});

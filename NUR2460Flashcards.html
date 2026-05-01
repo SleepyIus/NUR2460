@@ -132,6 +132,49 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',system-ui
 .kbd{background:var(--surface2);border:1px solid var(--border);padding:2px 6px;border-radius:3px;font-family:monospace;font-size:10px}
 
 @media(max-width:500px){.flashcard{padding:24px 20px;min-height:240px}.card-question{font-size:15px}.top-title{font-size:20px}.action-btn{padding:10px 24px;font-size:12px}}
+/* Mode toggle */
+.mode-toggle{display:flex;gap:0;border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:20px}
+.mode-btn{flex:1;background:0 0;border:none;color:var(--text3);font-family:inherit;font-size:12px;font-weight:600;padding:8px 16px;cursor:pointer;transition:all .15s;text-align:center}
+.mode-btn:not(:last-child){border-right:1px solid var(--border)}
+.mode-btn.active{background:var(--accent);color:#fff}
+.mode-btn:hover:not(.active){color:var(--text);background:var(--surface2)}
+
+/* Grid view */
+.grid-view{display:none}
+.grid-view.active{display:block}
+.study-view.hidden{display:none}
+
+.grid-filter{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
+.grid-filter-label{font-size:11px;color:var(--text3);font-weight:600}
+.grid-filter select{background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:inherit;font-size:12px;padding:6px 10px;border-radius:6px;cursor:pointer}
+
+.grid-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin-bottom:40px}
+.grid-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px 18px;cursor:pointer;transition:all .2s;position:relative;min-height:140px}
+.grid-card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 4px 20px rgba(0,0,0,.15)}
+.grid-card.flipped{background:var(--surface2)}
+.grid-card-tag{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+.grid-card-q{font-size:13px;font-weight:500;color:var(--text);line-height:1.5}
+.grid-card-a{display:none;font-size:12px;color:var(--text2);line-height:1.55;border-top:1px dashed var(--border);padding-top:12px;margin-top:12px}
+.grid-card.flipped .grid-card-q{color:var(--text3);font-size:11px;margin-bottom:4px}
+.grid-card.flipped .grid-card-a{display:block}
+.grid-card-a strong{color:var(--text);font-weight:600}
+.grid-card-a ul{margin:4px 0 0 14px;list-style:disc}
+.grid-card-a li{margin:2px 0;font-size:11px}
+.grid-card-num{position:absolute;top:10px;right:12px;font-size:9px;color:var(--text3);font-weight:600}
+.grid-exam-label{font-family:'DM Serif Display',serif;font-size:18px;color:var(--text);margin:24px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.grid-exam-label:first-child{margin-top:0}
+.grid-topic-label{font-size:12px;font-weight:700;color:var(--accent);letter-spacing:.05em;margin:16px 0 8px;text-transform:uppercase}
+.grid-count{font-size:12px;color:var(--text3);margin-bottom:16px}
+
+@media(max-width:500px){.grid-cards{grid-template-columns:1fr}.grid-card{min-height:120px}}
+/* Source tags on cards */
+.src-tag{display:inline-block;font-size:8px;font-weight:700;letter-spacing:.08em;padding:2px 6px;border-radius:3px;text-transform:uppercase;margin-left:6px;vertical-align:middle}
+.src-tag-ati{background:rgba(59,130,246,.15);color:#5b9bf5;border:1px solid rgba(59,130,246,.25)}
+.src-tag-perry{background:rgba(34,197,94,.15);color:#3db87a;border:1px solid rgba(34,197,94,.25)}
+.src-tag-both{background:rgba(168,85,247,.15);color:#a78bfa;border:1px solid rgba(168,85,247,.25)}
+.grid-card-src{position:absolute;bottom:10px;right:12px}
+
+
 </style>
 </head>
 <body>
@@ -157,7 +200,7 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',system-ui
       <button class="top-btn" id="shuffleBtn" onclick="toggleShuffle()" style="flex:1;text-align:center">🔀 Shuffle</button>
       <button class="top-btn" id="starFilter" onclick="toggleStarFilter()" style="flex:1;text-align:center">⭐ Starred</button>
     </div>
-    <button class="sb-start" onclick="startRound()">Start Studying</button>
+    <button class="sb-start" onclick="switchMode('study');startRound()">Start Studying</button>
   </div>
 </aside>
 
@@ -169,6 +212,28 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',system-ui
   <div></div>
 </div>
 
+<div class="mode-toggle">
+  <button class="mode-btn active" id="gridModeBtn" onclick="switchMode('grid')">📋 Browse All</button>
+  <button class="mode-btn" id="studyModeBtn" onclick="switchMode('study')">🎯 Study Mode</button>
+</div>
+
+<div class="grid-view active" id="gridView">
+  <div class="grid-filter">
+    <span class="grid-filter-label">Filter:</span>
+    <select id="gridExamFilter" onchange="renderGrid()">
+      <option value="all">All Exams</option>
+      <option value="Exam 1">Exam 1</option>
+      <option value="Exam 2">Exam 2</option>
+    </select>
+    <select id="gridTopicFilter" onchange="renderGrid()">
+      <option value="all">All Topics</option>
+    </select>
+  </div>
+  <div class="grid-count" id="gridCount"></div>
+  <div id="gridContainer"></div>
+</div>
+
+<div class="study-view hidden" id="studyView">
 <div class="progress-bar">
   <div class="progress-info"><span id="cardPos">Card 1 of 0</span><span id="pctDone">0%</span></div>
   <div class="progress-track"><div class="progress-right" id="progRight" style="width:0"></div><div class="progress-wrong" id="progWrong" style="width:0"></div></div>
@@ -210,6 +275,7 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',system-ui
 <div class="kbd-hints">
   <kbd class="kbd">Space</kbd> reveal · <kbd class="kbd">←</kbd> wrong · <kbd class="kbd">→</kbd> got it · <kbd class="kbd">S</kbd> star
 </div>
+</div>
 
 </div>
 
@@ -224,70 +290,171 @@ function toggleTheme(){
 // ═══ CARD DATA ═══
 const CARDS=[
 // ── PART 1: ANTEPARTUM ──
-{q:"What is Nägele's rule for calculating estimated date of delivery?",a:"<strong>First day of LMP − 3 months + 7 days + 1 year.</strong> Example: LMP Jan 15 → EDD Oct 22.",t:"Antepartum",p:1},
-{q:"What are the three presumptive signs of pregnancy?",a:"<ul><li>Amenorrhea</li><li>Nausea/vomiting (morning sickness)</li><li>Breast tenderness and changes</li></ul>Also: fatigue, urinary frequency, quickening (fetal movement felt by mother).",t:"Antepartum",p:1},
-{q:"What is the probable sign of pregnancy that is confirmed by lab test?",a:"<strong>Positive hCG</strong> (human chorionic gonadotropin) in blood or urine. Doubles every 48-72 hr in early pregnancy. hCG is the basis for pregnancy tests.",t:"Antepartum",p:1},
-{q:"What are the positive (diagnostic) signs of pregnancy?",a:"<ul><li>Fetal heartbeat detected by Doppler or ultrasound</li><li>Fetal movement felt by examiner</li><li>Visualization of fetus by ultrasound</li></ul>These <strong>cannot</strong> be attributed to any other condition.",t:"Antepartum",p:1},
-{q:"What does GTPAL stand for?",a:"<strong>G</strong>=Gravida (total pregnancies), <strong>T</strong>=Term births (≥37 wk), <strong>P</strong>=Preterm births (20-36 wk), <strong>A</strong>=Abortions/miscarriages (<20 wk), <strong>L</strong>=Living children.",t:"Antepartum",p:1},
-{q:"What is the recommended weight gain during pregnancy for a client with normal BMI?",a:"<strong>25-35 lb (11.3-15.9 kg).</strong> Underweight: 28-40 lb. Overweight: 15-25 lb. 1st trimester: 2-4 lb total. 2nd/3rd: ~1 lb/week.",t:"Antepartum",p:1},
-{q:"How many additional calories per day are recommended in the 2nd and 3rd trimesters?",a:"<strong>2nd trimester: +340 kcal/day</strong><br><strong>3rd trimester: +452 kcal/day</strong><br>No additional calories needed in 1st trimester.",t:"Antepartum",p:1},
-{q:"What is the recommended folic acid dose during pregnancy, and what does it prevent?",a:"<strong>600 mcg/day</strong> during pregnancy (400 mcg preconception). Prevents <strong>neural tube defects</strong> (spina bifida, anencephaly). Most effective when started before conception.",t:"Antepartum",p:1},
-{q:"Iron supplements should be taken with what? And avoided with what?",a:"<strong>Take WITH:</strong> vitamin C (orange juice) to enhance absorption.<br><strong>AVOID WITH:</strong> milk, caffeine, calcium, and antacids — these all interfere with absorption.<br>AE: constipation, dark stools.",t:"Antepartum",p:1},
-{q:"What is a reactive NST?",a:"FHR accelerates <strong>≥15/min above baseline for ≥15 seconds, occurring ≥2 times in 20 minutes.</strong><br>Before 32 weeks: ≥10/min for ≥10 seconds.<br>Reactive = reassuring = normal.",t:"Antepartum",p:1},
-{q:"What are the 5 variables of a Biophysical Profile (BPP)?",a:"<ul><li>FHR (NST) — reactive or nonreactive</li><li>Fetal breathing movements (≥1 episode >30 sec)</li><li>Gross body movements (≥3 in 30 min)</li><li>Fetal tone (extension with return to flexion)</li><li>Amniotic fluid volume (≥1 pocket ≥2 cm)</li></ul>Each scored 0 or 2. <strong>8-10 normal, 4-6 suspect, <4 abnormal.</strong>",t:"Antepartum",p:1},
-{q:"What is the significance of a positive CST?",a:"Persistent <strong>late decelerations with ≥50% of contractions</strong> = positive (abnormal). Suggests <strong>uteroplacental insufficiency.</strong> Provider may determine to induce labor or perform cesarean.",t:"Antepartum",p:1},
-{q:"What is supine hypotensive syndrome and how is it prevented?",a:"Compression of the <strong>inferior vena cava</strong> by the gravid uterus when supine, reducing venous return and cardiac output. Causes hypotension, dizziness, pallor.<br><strong>Prevention:</strong> left lateral position or wedge under right hip.",t:"Antepartum",p:1},
-{q:"Nitrazine paper turns deep blue when testing for what? What pH range?",a:"<strong>Amniotic fluid</strong> (alkaline, pH 6.5-7.5). Deep blue = positive for ROM.<br>Urine is slightly acidic — nitrazine paper remains yellow.",t:"Antepartum",p:1},
-{q:"What does elevated AFP in maternal serum or amniotic fluid suggest?",a:"<strong>High AFP:</strong> neural tube defects (spina bifida, anencephaly, omphalocele) or normal multifetal pregnancy.<br><strong>Low AFP:</strong> chromosomal disorders (Down syndrome) or hydatidiform mole.",t:"Antepartum",p:1},
+{q:"What is Nägele's rule for calculating estimated date of delivery?",a:"<strong>First day of LMP − 3 months + 7 days + 1 year.</strong> Example: LMP Jan 15 → EDD Oct 22.",t:"Antepartum",p:1,s:"both"},
+{q:"What are the three presumptive signs of pregnancy?",a:"<ul><li>Amenorrhea</li><li>Nausea/vomiting (morning sickness)</li><li>Breast tenderness and changes</li></ul>Also: fatigue, urinary frequency, quickening (fetal movement felt by mother).",t:"Antepartum",p:1,s:"ati"},
+{q:"What is the probable sign of pregnancy that is confirmed by lab test?",a:"<strong>Positive hCG</strong> (human chorionic gonadotropin) in blood or urine. Doubles every 48-72 hr in early pregnancy. hCG is the basis for pregnancy tests.",t:"Antepartum",p:1,s:"ati"},
+{q:"What are the positive (diagnostic) signs of pregnancy?",a:"<ul><li>Fetal heartbeat detected by Doppler or ultrasound</li><li>Fetal movement felt by examiner</li><li>Visualization of fetus by ultrasound</li></ul>These <strong>cannot</strong> be attributed to any other condition.",t:"Antepartum",p:1,s:"ati"},
+{q:"What does GTPAL stand for?",a:"<strong>G</strong>=Gravida (total pregnancies), <strong>T</strong>=Term births (≥37 wk), <strong>P</strong>=Preterm births (20-36 wk), <strong>A</strong>=Abortions/miscarriages (<20 wk), <strong>L</strong>=Living children.",t:"Antepartum",p:1,s:"both"},
+{q:"What is the recommended weight gain during pregnancy for a client with normal BMI?",a:"<strong>25-35 lb (11.3-15.9 kg).</strong> Underweight: 28-40 lb. Overweight: 15-25 lb. 1st trimester: 2-4 lb total. 2nd/3rd: ~1 lb/week.",t:"Antepartum",p:1,s:"ati"},
+{q:"How many additional calories per day are recommended in the 2nd and 3rd trimesters?",a:"<strong>2nd trimester: +340 kcal/day</strong><br><strong>3rd trimester: +452 kcal/day</strong><br>No additional calories needed in 1st trimester.",t:"Antepartum",p:1,s:"ati"},
+{q:"What is the recommended folic acid dose during pregnancy, and what does it prevent?",a:"<strong>600 mcg/day</strong> during pregnancy (400 mcg preconception). Prevents <strong>neural tube defects</strong> (spina bifida, anencephaly). Most effective when started before conception.",t:"Antepartum",p:1,s:"ati"},
+{q:"Iron supplements should be taken with what? And avoided with what?",a:"<strong>Take WITH:</strong> vitamin C (orange juice) to enhance absorption.<br><strong>AVOID WITH:</strong> milk, caffeine, calcium, and antacids — these all interfere with absorption.<br>AE: constipation, dark stools.",t:"Antepartum",p:1,s:"ati"},
+{q:"What is a reactive NST?",a:"FHR accelerates <strong>≥15/min above baseline for ≥15 seconds, occurring ≥2 times in 20 minutes.</strong><br>Before 32 weeks: ≥10/min for ≥10 seconds.<br>Reactive = reassuring = normal.",t:"Antepartum",p:1,s:"ati"},
+{q:"What are the 5 variables of a Biophysical Profile (BPP)?",a:"<ul><li>FHR (NST) — reactive or nonreactive</li><li>Fetal breathing movements (≥1 episode >30 sec)</li><li>Gross body movements (≥3 in 30 min)</li><li>Fetal tone (extension with return to flexion)</li><li>Amniotic fluid volume (≥1 pocket ≥2 cm)</li></ul>Each scored 0 or 2. <strong>8-10 normal, 4-6 suspect, <4 abnormal.</strong>",t:"Antepartum",p:1,s:"ati"},
+{q:"What is the significance of a positive CST?",a:"Persistent <strong>late decelerations with ≥50% of contractions</strong> = positive (abnormal). Suggests <strong>uteroplacental insufficiency.</strong> Provider may determine to induce labor or perform cesarean.",t:"Antepartum",p:1,s:"ati"},
+{q:"What is supine hypotensive syndrome and how is it prevented?",a:"Compression of the <strong>inferior vena cava</strong> by the gravid uterus when supine, reducing venous return and cardiac output. Causes hypotension, dizziness, pallor.<br><strong>Prevention:</strong> left lateral position or wedge under right hip.",t:"Antepartum",p:1,s:"ati"},
+{q:"Nitrazine paper turns deep blue when testing for what? What pH range?",a:"<strong>Amniotic fluid</strong> (alkaline, pH 6.5-7.5). Deep blue = positive for ROM.<br>Urine is slightly acidic — nitrazine paper remains yellow.",t:"Antepartum",p:1,s:"ati"},
+{q:"What does elevated AFP in maternal serum or amniotic fluid suggest?",a:"<strong>High AFP:</strong> neural tube defects (spina bifida, anencephaly, omphalocele) or normal multifetal pregnancy.<br><strong>Low AFP:</strong> chromosomal disorders (Down syndrome) or hydatidiform mole.",t:"Antepartum",p:1,s:"ati"},
 
 // ── PART 2: LABOR & DELIVERY ──
-{q:"What are the key differences between true and false labor contractions?",a:"<strong>True:</strong> regular, increase in frequency/duration/intensity, felt in lower back radiating to abdomen, increase with walking, progressive cervical change.<br><strong>False:</strong> irregular, decrease with walking/rest/hydration, felt above umbilicus, no cervical change.",t:"Labor & Delivery",p:2},
-{q:"What are the Five Ps of labor?",a:"<ul><li><strong>Passenger</strong> — fetus and placenta</li><li><strong>Passageway</strong> — birth canal</li><li><strong>Powers</strong> — contractions</li><li><strong>Position</strong> — maternal position</li><li><strong>Psychological response</strong> — stress/anxiety can impair progress</li></ul>",t:"Labor & Delivery",p:2},
-{q:"What are the 7 cardinal movements of labor (mechanism of labor)?",a:"<ol><li>Engagement</li><li>Descent</li><li>Flexion</li><li>Internal rotation</li><li>Extension</li><li>External rotation (restitution)</li><li>Expulsion</li></ol>",t:"Labor & Delivery",p:2},
-{q:"What are the contraction characteristics during transition phase?",a:"<strong>Transition (8-10 cm):</strong> contractions every 2-3 min, duration 45-90 sec, strong to very strong intensity.<br>Client is tired, restless, irritable, states 'cannot continue,' may have N/V, increased rectal pressure, urge to push. <strong>Most difficult part of labor.</strong>",t:"Labor & Delivery",p:2},
-{q:"What does FHR variability tell you? What is the normal range?",a:"Variability reflects intact fetal CNS and adequate oxygenation.<br><strong>Absent:</strong> undetectable (nonreassuring)<br><strong>Minimal:</strong> ≤5/min<br><strong>Moderate:</strong> 6-25/min (<strong>normal/reassuring</strong>)<br><strong>Marked:</strong> >25/min",t:"Labor & Delivery",p:2},
-{q:"What causes early decelerations? Are they reassuring?",a:"Caused by <strong>fetal head compression</strong> during contractions. They mirror contractions (onset to onset, nadir at peak). Uniform shape.<br><strong>Benign — no intervention required.</strong>",t:"Labor & Delivery",p:2},
-{q:"What causes late decelerations? What do they indicate?",a:"Caused by <strong>uteroplacental insufficiency.</strong> Onset AFTER contraction begins, nadir AFTER peak, recovery AFTER contraction ends.<br><strong>Nonreassuring — requires immediate intervention:</strong> stop oxytocin, left lateral, O2 10L NRB, IV fluids, notify provider.",t:"Labor & Delivery",p:2},
-{q:"What causes variable decelerations?",a:"Caused by <strong>umbilical cord compression.</strong> Abrupt onset, variable shape and timing relative to contractions. Can look like a V, W, or U shape.<br><strong>Nonreassuring if recurrent or severe.</strong> Reposition client, amnioinfusion may be needed.",t:"Labor & Delivery",p:2},
-{q:"What is Category III fetal heart rate tracing?",a:"<strong>Abnormal — requires immediate intervention.</strong><br>Either: <strong>sinusoidal pattern</strong> OR absent baseline variability with any of: recurrent late decels, recurrent variable decels, or bradycardia.",t:"Labor & Delivery",p:2},
-{q:"What are the four Leopold maneuvers and what does each assess?",a:"<ul><li><strong>1st:</strong> palpate fundus — identify head vs breech (lie, presenting part)</li><li><strong>2nd:</strong> palpate sides — locate fetal back vs small parts</li><li><strong>3rd:</strong> grasp lower segment — identify presenting part over inlet and descent</li><li><strong>4th:</strong> facing feet, palpate cephalic prominence — determine attitude (flexion vs extension)</li></ul>",t:"Labor & Delivery",p:2},
-{q:"When can an epidural be administered during labor?",a:"When client is in <strong>active labor, dilated to at least 4 cm.</strong><br>Give <strong>IV fluid bolus</strong> before placement. Position sitting or side-lying with curved back. Left-lateral after insertion to prevent supine hypotension.",t:"Labor & Delivery",p:2},
-{q:"What are the degrees of perineal laceration?",a:"<ul><li><strong>1st:</strong> skin only, no muscle</li><li><strong>2nd:</strong> skin + muscles, NOT anal sphincter</li><li><strong>3rd:</strong> skin + muscles + external anal sphincter</li><li><strong>4th:</strong> skin + muscles + anal sphincter + anterior rectal wall</li></ul>",t:"Labor & Delivery",p:2},
-{q:"What is the FIRST action after rupture of membranes?",a:"<strong>Check FHR</strong> for decelerations to rule out umbilical cord prolapse.<br>Then: assess color, clarity, odor, and amount of amniotic fluid. Green/meconium = fetal distress. Foul odor = infection. Temp q2hr after ROM.",t:"Labor & Delivery",p:2},
+{q:"What are the key differences between true and false labor contractions?",a:"<strong>True:</strong> regular, increase in frequency/duration/intensity, felt in lower back radiating to abdomen, increase with walking, progressive cervical change.<br><strong>False:</strong> irregular, decrease with walking/rest/hydration, felt above umbilicus, no cervical change.",t:"Labor & Delivery",p:2,s:"both"},
+{q:"What are the Five Ps of labor?",a:"<ul><li><strong>Passenger</strong> — fetus and placenta</li><li><strong>Passageway</strong> — birth canal</li><li><strong>Powers</strong> — contractions</li><li><strong>Position</strong> — maternal position</li><li><strong>Psychological response</strong> — stress/anxiety can impair progress</li></ul>",t:"Labor & Delivery",p:2,s:"both"},
+{q:"What are the 7 cardinal movements of labor (mechanism of labor)?",a:"<ol><li>Engagement</li><li>Descent</li><li>Flexion</li><li>Internal rotation</li><li>Extension</li><li>External rotation (restitution)</li><li>Expulsion</li></ol>",t:"Labor & Delivery",p:2,s:"both"},
+{q:"What are the contraction characteristics during transition phase?",a:"<strong>Transition (8-10 cm):</strong> contractions every 2-3 min, duration 45-90 sec, strong to very strong intensity.<br>Client is tired, restless, irritable, states 'cannot continue,' may have N/V, increased rectal pressure, urge to push. <strong>Most difficult part of labor.</strong>",t:"Labor & Delivery",p:2,s:"ati"},
+{q:"What does FHR variability tell you? What is the normal range?",a:"Variability reflects intact fetal CNS and adequate oxygenation.<br><strong>Absent:</strong> undetectable (nonreassuring)<br><strong>Minimal:</strong> ≤5/min<br><strong>Moderate:</strong> 6-25/min (<strong>normal/reassuring</strong>)<br><strong>Marked:</strong> >25/min",t:"Labor & Delivery",p:2,s:"ati"},
+{q:"What causes early decelerations? Are they reassuring?",a:"Caused by <strong>fetal head compression</strong> during contractions. They mirror contractions (onset to onset, nadir at peak). Uniform shape.<br><strong>Benign — no intervention required.</strong>",t:"Labor & Delivery",p:2,s:"ati"},
+{q:"What causes late decelerations? What do they indicate?",a:"Caused by <strong>uteroplacental insufficiency.</strong> Onset AFTER contraction begins, nadir AFTER peak, recovery AFTER contraction ends.<br><strong>Nonreassuring — requires immediate intervention:</strong> stop oxytocin, left lateral, O2 10L NRB, IV fluids, notify provider.",t:"Labor & Delivery",p:2,s:"ati"},
+{q:"What causes variable decelerations?",a:"Caused by <strong>umbilical cord compression.</strong> Abrupt onset, variable shape and timing relative to contractions. Can look like a V, W, or U shape.<br><strong>Nonreassuring if recurrent or severe.</strong> Reposition client, amnioinfusion may be needed.",t:"Labor & Delivery",p:2,s:"ati"},
+{q:"What is Category III fetal heart rate tracing?",a:"<strong>Abnormal — requires immediate intervention.</strong><br>Either: <strong>sinusoidal pattern</strong> OR absent baseline variability with any of: recurrent late decels, recurrent variable decels, or bradycardia.",t:"Labor & Delivery",p:2,s:"both"},
+{q:"What are the four Leopold maneuvers and what does each assess?",a:"<ul><li><strong>1st:</strong> palpate fundus — identify head vs breech (lie, presenting part)</li><li><strong>2nd:</strong> palpate sides — locate fetal back vs small parts</li><li><strong>3rd:</strong> grasp lower segment — identify presenting part over inlet and descent</li><li><strong>4th:</strong> facing feet, palpate cephalic prominence — determine attitude (flexion vs extension)</li></ul>",t:"Labor & Delivery",p:2,s:"both"},
+{q:"When can an epidural be administered during labor?",a:"When client is in <strong>active labor, dilated to at least 4 cm.</strong><br>Give <strong>IV fluid bolus</strong> before placement. Position sitting or side-lying with curved back. Left-lateral after insertion to prevent supine hypotension.",t:"Labor & Delivery",p:2,s:"ati"},
+{q:"What are the degrees of perineal laceration?",a:"<ul><li><strong>1st:</strong> skin only, no muscle</li><li><strong>2nd:</strong> skin + muscles, NOT anal sphincter</li><li><strong>3rd:</strong> skin + muscles + external anal sphincter</li><li><strong>4th:</strong> skin + muscles + anal sphincter + anterior rectal wall</li></ul>",t:"Labor & Delivery",p:2,s:"ati"},
+{q:"What is the FIRST action after rupture of membranes?",a:"<strong>Check FHR</strong> for decelerations to rule out umbilical cord prolapse.<br>Then: assess color, clarity, odor, and amount of amniotic fluid. Green/meconium = fetal distress. Foul odor = infection. Temp q2hr after ROM.",t:"Labor & Delivery",p:2,s:"ati"},
 
 // ── PART 3: NEWBORN ──
-{q:"What is the Apgar scoring system?",a:"Assessed at <strong>1 and 5 minutes.</strong> Five components (0-2 each):<br><strong>H</strong>eart rate, <strong>R</strong>espiratory effort, <strong>M</strong>uscle tone, <strong>R</strong>eflex irritability, <strong>C</strong>olor.<br>7-10: normal. 4-6: moderate difficulty. 0-3: severe distress.",t:"Newborn",p:3},
-{q:"What is the normal newborn heart rate and how is it assessed?",a:"<strong>110-160/min.</strong> Assess <strong>apical pulse for 1 full minute</strong> with pediatric stethoscope at 4th-5th intercostal space, left midclavicular line. Preferably when sleeping. Report murmurs.",t:"Newborn",p:3},
-{q:"In what order should newborn vital signs be assessed?",a:"<strong>Respirations FIRST</strong> (before newborn becomes agitated), then heart rate, blood pressure, then temperature.<br>Resp: 30-60/min. HR: 110-160. BP: 60-80/40-50. Temp: 36.5-37.5°C.",t:"Newborn",p:3},
-{q:"What is the difference between caput succedaneum and cephalohematoma?",a:"<strong>Caput:</strong> soft tissue swelling, <strong>CROSSES suture lines,</strong> resolves 3-4 days, no treatment.<br><strong>Cephalohematoma:</strong> blood between periosteum and skull, <strong>does NOT cross suture lines,</strong> appears day 1-2, resolves 2-8 weeks.",t:"Newborn",p:3},
-{q:"What are the four mechanisms of heat loss in the newborn?",a:"<ul><li><strong>Conduction:</strong> direct contact with cool surface</li><li><strong>Convection:</strong> heat loss to cool air currents</li><li><strong>Evaporation:</strong> wet skin converts liquid to vapor</li><li><strong>Radiation:</strong> heat loss to nearby cool surface (not touching)</li></ul>Best prevention: <strong>skin-to-skin contact</strong> and dry immediately.",t:"Newborn",p:3},
-{q:"When suctioning a newborn, what comes first — mouth or nose?",a:"<strong>Mouth FIRST, then nose.</strong> Suctioning the nose first can stimulate a gasp that aspirates secretions from the mouth into the lungs.",t:"Newborn",p:3},
-{q:"What are the three mandatory prophylactic medications given to newborns?",a:"<ul><li><strong>Erythromycin eye ointment 0.5%</strong> — prevents ophthalmia neonatorum</li><li><strong>Vitamin K (phytonadione) 0.5-1 mg IM</strong> — prevents hemorrhagic disease</li><li><strong>Hepatitis B vaccine</strong> — first dose at birth</li></ul><strong>Do NOT give Vit K and Hep B in the same thigh.</strong>",t:"Newborn",p:3},
-{q:"Why is vitamin K given to newborns?",a:"Newborn gut is <strong>sterile</strong> — vitamin K is not produced until bacteria colonize the intestines (~day 7) after feeding begins. Without it, newborn is at risk for <strong>hemorrhagic disease</strong> (vitamin K deficiency bleeding).",t:"Newborn",p:3},
-{q:"What are normal newborn elimination expectations?",a:"<strong>Urine:</strong> within 24 hr of birth; 6-8 wet diapers/day after day 4. Uric acid crystals (rust color) normal for first days.<br><strong>Meconium:</strong> within 24-48 hr. Then 3-4 stools/day. Breastfed: yellow, seedy. Formula-fed: darker, firmer.",t:"Newborn",p:3},
-{q:"What does the Moro reflex look like, and when does it disappear?",a:"Let head/trunk fall backward 30°. Newborn symmetrically extends and abducts arms, fingers form a <strong>'C'</strong>.<br>Complete response until <strong>8 weeks,</strong> body jerk until 8-18 weeks, absent by <strong>6 months.</strong> Asymmetric response suggests birth injury.",t:"Newborn",p:3},
+{q:"What is the Apgar scoring system?",a:"Assessed at <strong>1 and 5 minutes.</strong> Five components (0-2 each):<br><strong>H</strong>eart rate, <strong>R</strong>espiratory effort, <strong>M</strong>uscle tone, <strong>R</strong>eflex irritability, <strong>C</strong>olor.<br>7-10: normal. 4-6: moderate difficulty. 0-3: severe distress.",t:"Newborn",p:3,s:"both"},
+{q:"What is the normal newborn heart rate and how is it assessed?",a:"<strong>110-160/min.</strong> Assess <strong>apical pulse for 1 full minute</strong> with pediatric stethoscope at 4th-5th intercostal space, left midclavicular line. Preferably when sleeping. Report murmurs.",t:"Newborn",p:3,s:"ati"},
+{q:"In what order should newborn vital signs be assessed?",a:"<strong>Respirations FIRST</strong> (before newborn becomes agitated), then heart rate, blood pressure, then temperature.<br>Resp: 30-60/min. HR: 110-160. BP: 60-80/40-50. Temp: 36.5-37.5°C.",t:"Newborn",p:3,s:"ati"},
+{q:"What is the difference between caput succedaneum and cephalohematoma?",a:"<strong>Caput:</strong> soft tissue swelling, <strong>CROSSES suture lines,</strong> resolves 3-4 days, no treatment.<br><strong>Cephalohematoma:</strong> blood between periosteum and skull, <strong>does NOT cross suture lines,</strong> appears day 1-2, resolves 2-8 weeks.",t:"Newborn",p:3,s:"both"},
+{q:"What are the four mechanisms of heat loss in the newborn?",a:"<ul><li><strong>Conduction:</strong> direct contact with cool surface</li><li><strong>Convection:</strong> heat loss to cool air currents</li><li><strong>Evaporation:</strong> wet skin converts liquid to vapor</li><li><strong>Radiation:</strong> heat loss to nearby cool surface (not touching)</li></ul>Best prevention: <strong>skin-to-skin contact</strong> and dry immediately.",t:"Newborn",p:3,s:"both"},
+{q:"When suctioning a newborn, what comes first — mouth or nose?",a:"<strong>Mouth FIRST, then nose.</strong> Suctioning the nose first can stimulate a gasp that aspirates secretions from the mouth into the lungs.",t:"Newborn",p:3,s:"ati"},
+{q:"What are the three mandatory prophylactic medications given to newborns?",a:"<ul><li><strong>Erythromycin eye ointment 0.5%</strong> — prevents ophthalmia neonatorum</li><li><strong>Vitamin K (phytonadione) 0.5-1 mg IM</strong> — prevents hemorrhagic disease</li><li><strong>Hepatitis B vaccine</strong> — first dose at birth</li></ul><strong>Do NOT give Vit K and Hep B in the same thigh.</strong>",t:"Newborn",p:3,s:"ati"},
+{q:"Why is vitamin K given to newborns?",a:"Newborn gut is <strong>sterile</strong> — vitamin K is not produced until bacteria colonize the intestines (~day 7) after feeding begins. Without it, newborn is at risk for <strong>hemorrhagic disease</strong> (vitamin K deficiency bleeding).",t:"Newborn",p:3,s:"ati"},
+{q:"What are normal newborn elimination expectations?",a:"<strong>Urine:</strong> within 24 hr of birth; 6-8 wet diapers/day after day 4. Uric acid crystals (rust color) normal for first days.<br><strong>Meconium:</strong> within 24-48 hr. Then 3-4 stools/day. Breastfed: yellow, seedy. Formula-fed: darker, firmer.",t:"Newborn",p:3,s:"ati"},
+{q:"What does the Moro reflex look like, and when does it disappear?",a:"Let head/trunk fall backward 30°. Newborn symmetrically extends and abducts arms, fingers form a <strong>'C'</strong>.<br>Complete response until <strong>8 weeks,</strong> body jerk until 8-18 weeks, absent by <strong>6 months.</strong> Asymmetric response suggests birth injury.",t:"Newborn",p:3,s:"ati"},
 
 // ── PART 4: POSTPARTUM ──
-{q:"What is BUBBLE-E assessment?",a:"<strong>B</strong>=Breasts, <strong>U</strong>=Uterus (fundal height, placement, consistency), <strong>B</strong>=Bowel, <strong>B</strong>=Bladder, <strong>L</strong>=Lochia (COCA: Color, Odor, Consistency, Amount), <strong>E</strong>=Episiotomy (edema, ecchymosis, approximation). Plus VS and pain.",t:"Postpartum",p:4},
-{q:"Describe the uterine involution timeline.",a:"<strong>End of 3rd stage:</strong> 2 cm below umbilicus.<br><strong>1 hr postpartum:</strong> rises to umbilicus.<br><strong>Every 24 hr:</strong> descends ~1 cm (1 fingerbreadth/day).<br><strong>Day 6:</strong> halfway between symphysis and umbilicus.<br><strong>2 weeks:</strong> within true pelvis, not palpable.",t:"Postpartum",p:4},
-{q:"What are the three stages of lochia and their timing?",a:"<ul><li><strong>Rubra:</strong> dark red, days 1-3</li><li><strong>Serosa:</strong> pinkish brown, days 4-10</li><li><strong>Alba:</strong> yellowish white, day 10 to 8 weeks</li></ul>Foul odor = infection. Return to red after serosa = retained fragments. Pad saturated in 15 min = excessive.",t:"Postpartum",p:4},
-{q:"What does a boggy uterus indicate and what should the nurse do?",a:"Indicates <strong>uterine atony</strong> — the most common cause of postpartum hemorrhage.<br><strong>Actions:</strong> massage fundus in circular motion → if does not firm, continue massage + notify provider → administer oxytocin → methergine (if not hypertensive) → carboprost → misoprostol.",t:"Postpartum",p:4},
-{q:"What causes lateral displacement of the fundus?",a:"A <strong>full bladder.</strong> The distended bladder pushes the uterus to one side, which can prevent it from contracting properly and lead to atony/hemorrhage.<br><strong>Intervention:</strong> encourage voiding or catheterize.",t:"Postpartum",p:4},
-{q:"What are Rubin's phases of maternal role attainment?",a:"<ul><li><strong>Taking-in</strong> (first 24-48 hr): focus on self, dependent, talkative, reviews birth</li><li><strong>Taking-hold</strong> (day 2-3, lasts weeks): focus on baby care, wants to learn, may have 'baby blues'</li><li><strong>Letting-go:</strong> focus on family unit, resumes other roles</li></ul>",t:"Postpartum",p:4},
-{q:"Name 4 danger signs to report after discharge.",a:"<ul><li>Fever >38°C (100.4°F) after 24 hr</li><li>Increased/foul-smelling lochia or return to bright red</li><li>Calf pain, redness, warmth, swelling (thromboembolism)</li><li>Signs of depression: apathy, inability to care for self/infant, thoughts of harm</li></ul>Also: breast infection signs, wound/incision problems, urinary symptoms.",t:"Postpartum",p:4},
-{q:"When should perineal ice packs be switched to heat therapy?",a:"<strong>Ice/cold packs for the first 24 hours</strong> (reduce edema, anesthetic effect).<br><strong>After 24 hours:</strong> switch to heat therapy — hot packs, moist heat, sitz baths (at least 20 min, twice daily) to increase circulation and promote healing.",t:"Postpartum",p:4},
+{q:"What is BUBBLE-E assessment?",a:"<strong>B</strong>=Breasts, <strong>U</strong>=Uterus (fundal height, placement, consistency), <strong>B</strong>=Bowel, <strong>B</strong>=Bladder, <strong>L</strong>=Lochia (COCA: Color, Odor, Consistency, Amount), <strong>E</strong>=Episiotomy (edema, ecchymosis, approximation). Plus VS and pain.",t:"Postpartum",p:4,s:"both"},
+{q:"Describe the uterine involution timeline.",a:"<strong>End of 3rd stage:</strong> 2 cm below umbilicus.<br><strong>1 hr postpartum:</strong> rises to umbilicus.<br><strong>Every 24 hr:</strong> descends ~1 cm (1 fingerbreadth/day).<br><strong>Day 6:</strong> halfway between symphysis and umbilicus.<br><strong>2 weeks:</strong> within true pelvis, not palpable.",t:"Postpartum",p:4,s:"ati"},
+{q:"What are the three stages of lochia and their timing?",a:"<ul><li><strong>Rubra:</strong> dark red, days 1-3</li><li><strong>Serosa:</strong> pinkish brown, days 4-10</li><li><strong>Alba:</strong> yellowish white, day 10 to 8 weeks</li></ul>Foul odor = infection. Return to red after serosa = retained fragments. Pad saturated in 15 min = excessive.",t:"Postpartum",p:4,s:"ati"},
+{q:"What does a boggy uterus indicate and what should the nurse do?",a:"Indicates <strong>uterine atony</strong> — the most common cause of postpartum hemorrhage.<br><strong>Actions:</strong> massage fundus in circular motion → if does not firm, continue massage + notify provider → administer oxytocin → methergine (if not hypertensive) → carboprost → misoprostol.",t:"Postpartum",p:4,s:"ati"},
+{q:"What causes lateral displacement of the fundus?",a:"A <strong>full bladder.</strong> The distended bladder pushes the uterus to one side, which can prevent it from contracting properly and lead to atony/hemorrhage.<br><strong>Intervention:</strong> encourage voiding or catheterize.",t:"Postpartum",p:4,s:"ati"},
+{q:"What are Rubin's phases of maternal role attainment?",a:"<ul><li><strong>Taking-in</strong> (first 24-48 hr): focus on self, dependent, talkative, reviews birth</li><li><strong>Taking-hold</strong> (day 2-3, lasts weeks): focus on baby care, wants to learn, may have 'baby blues'</li><li><strong>Letting-go:</strong> focus on family unit, resumes other roles</li></ul>",t:"Postpartum",p:4,s:"both"},
+{q:"Name 4 danger signs to report after discharge.",a:"<ul><li>Fever >38°C (100.4°F) after 24 hr</li><li>Increased/foul-smelling lochia or return to bright red</li><li>Calf pain, redness, warmth, swelling (thromboembolism)</li><li>Signs of depression: apathy, inability to care for self/infant, thoughts of harm</li></ul>Also: breast infection signs, wound/incision problems, urinary symptoms.",t:"Postpartum",p:4,s:"ati"},
+{q:"When should perineal ice packs be switched to heat therapy?",a:"<strong>Ice/cold packs for the first 24 hours</strong> (reduce edema, anesthetic effect).<br><strong>After 24 hours:</strong> switch to heat therapy — hot packs, moist heat, sitz baths (at least 20 min, twice daily) to increase circulation and promote healing.",t:"Postpartum",p:4,s:"ati"},
 
 // ── PHARMACOLOGY ──
-{q:"What is the antidote for magnesium sulfate toxicity?",a:"<strong>Calcium gluconate</strong> (1 g = 10 mL of 10% solution). Administer IV push over 3-5 min.<br><strong>Must be at bedside at ALL times</strong> during MgSO4 infusion.",t:"Pharmacology",p:5},
-{q:"What are the signs of magnesium sulfate toxicity?",a:"<ul><li>Respirations <strong><12/min</strong></li><li><strong>Absent DTRs</strong> (precedes respiratory depression)</li><li>Urine output <strong><25 mL/hr</strong></li><li>Mg level <strong>≥10 mEq/L</strong></li><li>Pulmonary edema, altered LOC, severe hypotension</li></ul><strong>STOP infusion immediately</strong> and give calcium gluconate.",t:"Pharmacology",p:5},
-{q:"Why is methylergonovine (Methergine) contraindicated in hypertension?",a:"Methergine is an <strong>ergot alkaloid that causes vasoconstriction,</strong> which raises blood pressure. In hypertensive or preeclamptic clients, it can cause <strong>hypertensive crisis</strong> (severe headache, N/V, dangerously elevated BP, stroke).<br><strong>CHECK BP BEFORE EVERY DOSE.</strong>",t:"Pharmacology",p:5},
-{q:"What is the PPH medication escalation protocol?",a:"<strong>1st:</strong> Oxytocin (Pitocin) + fundal massage<br><strong>2nd:</strong> Methylergonovine (Methergine) — NOT if hypertensive<br><strong>3rd:</strong> Carboprost (Hemabate) — NOT if asthma<br><strong>4th:</strong> Misoprostol (Cytotec)",t:"Pharmacology",p:5},
-{q:"What must be given before epidural placement and why?",a:"<strong>IV fluid bolus (500-1000 mL)</strong> to prevent the most common complication: <strong>maternal hypotension</strong> from sympathetic blockade.<br>Also: client must be at least 4 cm dilated and in active labor.",t:"Pharmacology",p:5},
-{q:"Carboprost (Hemabate) is contraindicated in what condition?",a:"<strong>Asthma.</strong> Carboprost is a prostaglandin that can cause severe <strong>bronchospasm.</strong> This is the most tested contraindication for carboprost.<br>Also contraindicated: active cardiac, pulmonary, renal, or hepatic disease.",t:"Pharmacology",p:5},
-{q:"What is the most important nursing action before giving naloxone to a neonate?",a:"Ensure the respiratory depression is <strong>opioid-related</strong> (not from other causes). Naloxone only reverses opioid effects.<br>Also: monitor for <strong>re-narcotization</strong> — naloxone may wear off before the opioid (duration 30-90 min).",t:"Pharmacology",p:5},
-{q:"Why should terbutaline be withheld if maternal HR >120?",a:"Terbutaline is a <strong>beta2 agonist</strong> that causes tachycardia as an adverse effect. HR >120, chest pain, or cardiac arrhythmias indicate intolerable effects.<br><strong>Withhold and contact provider immediately.</strong>",t:"Pharmacology",p:5},
-{q:"When is betamethasone administered and what does it do?",a:"<strong>12 mg IM × 2 doses, 24 hr apart</strong> to clients at <strong>24-34 weeks gestation.</strong><br>Stimulates fetal lungs to produce <strong>surfactant,</strong> reducing risk of respiratory distress syndrome. Must be given at least 24 hr before delivery.",t:"Pharmacology",p:5},
-{q:"Why can't vitamin K and hepatitis B vaccine be given in the same thigh?",a:"To <strong>allow accurate assessment of injection site reactions</strong> — if both are in the same thigh and a reaction occurs, you cannot determine which medication caused it. Use <strong>opposite vastus lateralis muscles.</strong>",t:"Pharmacology",p:5},
+{q:"What is the antidote for magnesium sulfate toxicity?",a:"<strong>Calcium gluconate</strong> (1 g = 10 mL of 10% solution). Administer IV push over 3-5 min.<br><strong>Must be at bedside at ALL times</strong> during MgSO4 infusion.",t:"Pharmacology",p:5,s:"ati"},
+{q:"What are the signs of magnesium sulfate toxicity?",a:"<ul><li>Respirations <strong><12/min</strong></li><li><strong>Absent DTRs</strong> (precedes respiratory depression)</li><li>Urine output <strong><25 mL/hr</strong></li><li>Mg level <strong>≥10 mEq/L</strong></li><li>Pulmonary edema, altered LOC, severe hypotension</li></ul><strong>STOP infusion immediately</strong> and give calcium gluconate.",t:"Pharmacology",p:5,s:"ati"},
+{q:"Why is methylergonovine (Methergine) contraindicated in hypertension?",a:"Methergine is an <strong>ergot alkaloid that causes vasoconstriction,</strong> which raises blood pressure. In hypertensive or preeclamptic clients, it can cause <strong>hypertensive crisis</strong> (severe headache, N/V, dangerously elevated BP, stroke).<br><strong>CHECK BP BEFORE EVERY DOSE.</strong>",t:"Pharmacology",p:5,s:"ati"},
+{q:"What is the PPH medication escalation protocol?",a:"<strong>1st:</strong> Oxytocin (Pitocin) + fundal massage<br><strong>2nd:</strong> Methylergonovine (Methergine) — NOT if hypertensive<br><strong>3rd:</strong> Carboprost (Hemabate) — NOT if asthma<br><strong>4th:</strong> Misoprostol (Cytotec)",t:"Pharmacology",p:5,s:"ati"},
+{q:"What must be given before epidural placement and why?",a:"<strong>IV fluid bolus (500-1000 mL)</strong> to prevent the most common complication: <strong>maternal hypotension</strong> from sympathetic blockade.<br>Also: client must be at least 4 cm dilated and in active labor.",t:"Pharmacology",p:5,s:"ati"},
+{q:"Carboprost (Hemabate) is contraindicated in what condition?",a:"<strong>Asthma.</strong> Carboprost is a prostaglandin that can cause severe <strong>bronchospasm.</strong> This is the most tested contraindication for carboprost.<br>Also contraindicated: active cardiac, pulmonary, renal, or hepatic disease.",t:"Pharmacology",p:5,s:"ati"},
+{q:"What is the most important nursing action before giving naloxone to a neonate?",a:"Ensure the respiratory depression is <strong>opioid-related</strong> (not from other causes). Naloxone only reverses opioid effects.<br>Also: monitor for <strong>re-narcotization</strong> — naloxone may wear off before the opioid (duration 30-90 min).",t:"Pharmacology",p:5,s:"ati"},
+{q:"Why should terbutaline be withheld if maternal HR >120?",a:"Terbutaline is a <strong>beta2 agonist</strong> that causes tachycardia as an adverse effect. HR >120, chest pain, or cardiac arrhythmias indicate intolerable effects.<br><strong>Withhold and contact provider immediately.</strong>",t:"Pharmacology",p:5,s:"ati"},
+{q:"When is betamethasone administered and what does it do?",a:"<strong>12 mg IM × 2 doses, 24 hr apart</strong> to clients at <strong>24-34 weeks gestation.</strong><br>Stimulates fetal lungs to produce <strong>surfactant,</strong> reducing risk of respiratory distress syndrome. Must be given at least 24 hr before delivery.",t:"Pharmacology",p:5,s:"ati"},
+{q:"Why can't vitamin K and hepatitis B vaccine be given in the same thigh?",a:"To <strong>allow accurate assessment of injection site reactions</strong> — if both are in the same thigh and a reaction occurs, you cannot determine which medication caused it. Use <strong>opposite vastus lateralis muscles.</strong>",t:"Pharmacology",p:5,s:"ati"},
+// ═══ EXAM 2 FLASHCARDS ═══
+// --- High-Risk Pregnancy ---
+{q:"What is the hallmark sign of ectopic pregnancy with rupture?",a:"Sharp unilateral lower abdominal pain + referred shoulder pain (Kehr sign) from blood irritating the diaphragm + signs of hypovolemic shock",t:"HR Pregnancy",p:5,s:"both"},
+{q:"Placenta previa vs abruptio placentae — how does the bleeding differ?",a:"<strong>Previa:</strong> painless, bright red, sudden. <strong>Abruption:</strong> painful, dark red, may have concealed bleeding with rigid board-like abdomen and uterine tenderness.",t:"HR Pregnancy",p:5,s:"ati"},
+{q:"HELLP Syndrome — what does it stand for and how is it diagnosed?",a:"H=Hemolysis, EL=Elevated Liver enzymes, LP=Low Platelets (<100,000). Diagnosed by LABS only — NOT clinical findings. Many women may NOT have signs of preeclampsia.",t:"HR Pregnancy",p:5,s:"ati"},
+{q:"What are the MgSO4 toxicity signs and antidote?",a:"Toxicity: absent DTRs, respirations <12/min, urine output <25-30 mL/hr, Mg level ≥10 mEq/L. <strong>Antidote: CALCIUM GLUCONATE</strong> — always keep at bedside.",t:"HR Pregnancy",p:5,s:"ati"},
+{q:"What are the GDM blood glucose targets (Perry)?",a:"Fasting: <95 mg/dL. 1-hr postprandial: <140 mg/dL. 2-hr postprandial: <120 mg/dL. GDM initially managed with diet and exercise; insulin if glucose persistently high.",t:"HR Pregnancy",p:5,s:"both"},
+{q:"What is fetal fibronectin and what does a positive result mean?",a:"Protein present between 24-34 wk 6 days indicates inflammation and increased risk for preterm labor within the next 2 weeks. fFN + cervical length = best predictor of preterm labor.",t:"HR Pregnancy",p:5,s:"ati"},
+{q:"How does dehydration cause preterm labor?",a:"Dehydration → pituitary releases ADH AND oxytocin → oxytocin stimulates uterine contractions → preterm labor. IV hydration is one of the first interventions.",t:"HR Pregnancy",p:5,s:"ati"},
+// --- HR L&D ---
+{q:"What is the Bishop score and what score indicates favorable induction?",a:"Evaluates cervical readiness: dilation, effacement, consistency, position, station. Score 0-3 each. <strong>Score ≥8 = favorable.</strong> Must be documented before induction.",t:"HR L&D",p:6,s:"ati"},
+{q:"Oxytocin timing rules — how long after cervical ripening agents?",a:"Wait <strong>≥4 hr after misoprostol</strong>. Wait <strong>≥6-12 hr after dinoprostone</strong> gel or insert removal. Starting too soon → tachysystole.",t:"HR L&D",p:6,s:"ati"},
+{q:"What are the signs of uterine tachysystole?",a:"Contractions >q2min, duration >90 sec, intensity >90 mmHg, resting tone >20 mmHg, no relaxation between contractions. <strong>STOP oxytocin</strong> → left lateral → O2 → IV fluids → terbutaline → notify provider.",t:"HR L&D",p:6,s:"ati"},
+{q:"Prolapsed cord — what is the FIRST nursing action?",a:"Insert sterile-gloved fingers into vagina and <strong>elevate presenting part off the cord</strong>. Stay in position until delivery. Reposition: <strong>knee-chest or Trendelenburg</strong>. Apply warm saline towel to visible cord.",t:"HR L&D",p:6,s:"ati"},
+{q:"Shoulder dystocia — first intervention and what to NEVER do?",a:"<strong>McRoberts maneuver:</strong> sharply flex maternal thighs against abdomen. Then suprapubic pressure. <strong>NEVER apply fundal pressure</strong> — can worsen impaction and cause uterine rupture.",t:"HR L&D",p:6,s:"both"},
+{q:"Hypotonic vs hypertonic contractions — can you give oxytocin?",a:"<strong>Hypotonic (weak):</strong> YES — oxytocin augmentation. <strong>Hypertonic (excessive, no relaxation):</strong> NO — rest, hydration, lateral position, analgesics. Oxytocin NEVER for hypertonic.",t:"HR L&D",p:6,s:"ati"},
+{q:"What condition MUST be present before amniotomy?",a:"Presenting part must be <strong>ENGAGED</strong> to prevent cord prolapse. Also: monitor FHR immediately before AND after AROM. Document time and fluid characteristics.",t:"HR L&D",p:6,s:"ati"},
+// --- Newborn & PP ---
+{q:"At what glucose level should interventions begin in a newborn?",a:"<strong><40-45 mg/dL.</strong> At-risk newborns: heel stick screening. Initiate early feedings within 1st hour. If unstable → IV glucose. Untreated → seizures, neurologic injury.",t:"NB Complications",p:6,s:"ati"},
+{q:"SGA vs LGA — compare key findings.",a:"<strong>SGA (<10th%):</strong> dry loose skin, wide-eyed alert (chronic hypoxia), sparse hair. <strong>LGA (>90th%):</strong> cushingoid face, sluggish, shoulder dystocia/Erb-Duchenne risk. <strong>BOTH:</strong> hypoglycemia and polycythemia.",t:"NB Complications",p:6,s:"both"},
+{q:"What is the surfactant suctioning rule?",a:"Suction <strong>BEFORE</strong> surfactant administration. Do <strong>NOT suction ET tube for 1 HOUR after</strong> — allows surfactant to distribute. Monitor pulse ox, ABGs, respiratory status.",t:"NB Complications",p:6,s:"ati"},
+{q:"Boggy uterus vs firm uterus with bleeding — what does each mean?",a:"<strong>Boggy + heavy bleeding = ATONY</strong> → fundal massage + uterotonics. <strong>Firm + bright red = LACERATIONS</strong> → notify provider for repair. <strong>Laterally displaced = FULL BLADDER</strong> → catheterize first.",t:"PP Disorders",p:6,s:"ati"},
+{q:"PPH medication escalation order?",a:"1st: <strong>Oxytocin.</strong> 2nd: <strong>Methergine</strong> (NOT if hypertensive). 3rd: <strong>Carboprost</strong> (NOT if asthma). 4th: <strong>Misoprostol</strong> (rectal/sublingual, no IV needed).",t:"PP Disorders",p:6,s:"ati"},
+{q:"Heparin antidote vs warfarin antidote?",a:"<strong>Heparin → Protamine sulfate.</strong> <strong>Warfarin → Vitamin K.</strong> Warfarin is TERATOGENIC (never in pregnancy) but safe while breastfeeding.",t:"PP Disorders",p:6,s:"ati"},
+{q:"Baby blues vs PPD — how to differentiate?",a:"<strong>Blues:</strong> mood swings/tearfulness, starts days 1-3, resolves <2 wk, affects 80%. <strong>PPD:</strong> intense sadness with impairment, lasts >2 wk, within 12 mo, 10-15%. Screen with Edinburgh scale.",t:"PP Disorders",p:6,s:"ati"},
+// --- GYN & Growth/Dev ---
+{q:"What are the ACHES warning signs?",a:"<strong>A</strong>=Abdominal pain. <strong>C</strong>=Chest pain/SOB. <strong>H</strong>=Headaches severe. <strong>E</strong>=Eye problems. <strong>S</strong>=Severe leg pain/swelling. Report immediately and discontinue hormonal contraception.",t:"Contraception",p:7,s:"ati"},
+{q:"Rank emergency contraception by effectiveness.",a:"Most effective: <strong>Copper IUD within 5 days.</strong> 2nd: <strong>Ulipristal (ella) within 120 hr.</strong> 3rd: <strong>Plan B within 72 hr.</strong> Copper IUD is overall most effective EC method.",t:"Contraception",p:7,s:"ati"},
+{q:"Breastfeeding — which contraceptives are safe?",a:"<strong>Safe:</strong> progestin-only (mini-pill, Depo, Nexplanon, hormonal IUD), copper IUD, barriers. <strong>AVOID:</strong> all estrogen-containing (COCs, patch, ring) — decreases milk supply.",t:"Contraception",p:7,s:"ati"},
+{q:"Name the Erikson developmental stages.",a:"<strong>Infant:</strong> Trust vs Mistrust. <strong>Toddler:</strong> Autonomy vs Shame. <strong>Preschool:</strong> Initiative vs Guilt. <strong>School-age:</strong> Industry vs Inferiority. <strong>Adolescent:</strong> Identity vs Role Confusion.",t:"Growth & Dev",p:7,s:"ati"},
+{q:"Weight milestones for infants?",a:"Birth weight <strong>doubles by 6 mo, triples by 12 mo, quadruples by 2.5 yr.</strong> Height at 2 yr ≈ half adult height. Anterior fontanel closes 12-18 mo, posterior 2-3 mo.",t:"Growth & Dev",p:7,s:"ati"},
+{q:"Toddler #1 cause of death vs adolescent?",a:"<strong>Toddler:</strong> DROWNING. <strong>Adolescent:</strong> MOTOR VEHICLE ACCIDENTS. Adolescent #3: suicide. No honey before 12 mo (botulism), no cow milk before 12 mo.",t:"Growth & Dev",p:7,s:"ati"},
+// --- Peds GI & Integ ---
+{q:"Pyloric stenosis — hallmark finding and metabolic imbalance?",a:"<strong>Projectile NONbilious vomiting</strong> + olive-shaped mass RUQ + visible peristaltic waves. <strong>Metabolic ALKALOSIS</strong> (HCl loss) with hypochloremia and hypokalemia. Correct electrolytes BEFORE surgery.",t:"Peds GI",p:8,s:"ati"},
+{q:"Intussusception — hallmark finding and treatment?",a:"<strong>CURRANT JELLY stools</strong> + sausage-shaped mass RUQ + infant draws knees to chest screaming. Treatment: <strong>air or barium enema</strong> (diagnostic AND therapeutic). 5-10% recurrence rate.",t:"Peds GI",p:8,s:"ati"},
+{q:"Hirschsprung — definitive diagnostic test?",a:"<strong>Rectal biopsy</strong> confirming absent ganglion cells. Failure to pass meconium within 24-48 hr. Use <strong>saline enemas ONLY</strong> — never tap water (water intoxication risk).",t:"Peds GI",p:8,s:"ati"},
+{q:"Appendicitis — what should the nurse NEVER do?",a:"<strong>NEVER apply heat or give laxatives/enemas</strong> (increases perforation risk). Pain: periumbilical → RLQ (McBurney point). N/V occurs AFTER pain onset. Keep NPO.",t:"Peds GI",p:8,s:"ati"},
+{q:"What is the Parkland formula for burns?",a:"<strong>4 mL × kg × %TBSA burned.</strong> Give HALF in first 8 hr <strong>FROM TIME OF INJURY</strong>. Remaining half over next 16 hr. Use <strong>Lund & Browder</strong> chart for children (NOT rule of nines).",t:"Peds Integ",p:8,s:"ati"},
+{q:"Best indicator of fluid resuscitation adequacy in burns?",a:"<strong>URINE OUTPUT</strong> — goal: 1 mL/kg/hr for children. Single most reliable indicator. Also monitor VS, daily weights, I&O, electrolytes.",t:"Peds Integ",p:8,s:"ati"},
+{q:"Candida diaper rash vs regular — how to distinguish?",a:"<strong>Candida:</strong> beefy red + satellite lesions + involves skin folds → nystatin cream. <strong>Regular:</strong> erythema sparing skin folds → barrier ointment (zinc oxide), frequent changes, air exposure.",t:"Peds Integ",p:8,s:"ati"},
+{q:"Isotretinoin — pregnancy prevention requirements?",a:"<strong>iPLEDGE:</strong> 2 negative pregnancy tests before starting. 2 forms of contraception during AND 1 month after. Monthly pregnancy tests. Do NOT donate blood during or 1 month after.",t:"Peds Integ",p:8,s:"ati"},
+{q:"Metronidazole (Flagyl) — critical interaction?",a:"<strong>NO ALCOHOL</strong> during treatment and 48 hr after — causes severe disulfiram-like reaction (N/V, flushing, headache, tachycardia). Expect: metallic taste and dark urine (both harmless).",t:"E2 Pharm",p:8,s:"ati"},
+{q:"Silver sulfadiazine — contraindication and expected lab change?",a:"<strong>Contraindicated: sulfa allergy.</strong> Expected: transient <strong>leukopenia</strong> (resolves spontaneously). Apply with sterile gloves. Medicate for pain BEFORE wound care.",t:"E2 Pharm",p:8,s:"ati"},
+// ═══ ENRICHMENT CARDS ═══
+
+// --- HR Pregnancy (additional) ---
+{q:"What is cervical insufficiency and when is cerclage placed?",a:"Painless cervical dilation and expulsion of products of conception. Diagnosed by ultrasound showing short cervix <strong><25 mm</strong> or cervical funneling. <strong>Cerclage:</strong> heavy suture placed submucosally at 12-14 weeks, removed at 36-38 weeks.",t:"HR Pregnancy",p:5,s:"ati"},
+{q:"What are the TORCH infections and why do they matter?",a:"<strong>T</strong>=Toxoplasmosis (cat litter, raw meat), <strong>O</strong>=Other (Hep B, syphilis, varicella, HIV), <strong>R</strong>=Rubella, <strong>C</strong>=CMV (most common congenital infection), <strong>H</strong>=Herpes. All can cause congenital anomalies, IUGR, or fetal death if contracted during pregnancy.",t:"HR Pregnancy",p:5,s:"ati"},
+{q:"Hyperemesis gravidarum — when does it become a diagnosis and what is first-line treatment?",a:"N/V prolonged <strong>past 16 weeks</strong> or causing weight loss, dehydration, ketonuria, and electrolyte imbalances. <strong>First-line:</strong> pyridoxine (B6) + doxylamine (ACOG recommendation). IV LR for hydration. Labs show elevated Hct (hemoconcentration).",t:"HR Pregnancy",p:5,s:"ati"},
+{q:"Preeclampsia vs severe preeclampsia — what are the BP thresholds?",a:"<strong>Preeclampsia:</strong> BP ≥140/90 on 2 occasions ≥4 hr apart + proteinuria ≥1+. <strong>Severe preeclampsia:</strong> BP ≥160/110 + proteinuria >3+ + oliguria + creatinine >1.1 + cerebral/visual disturbances + hyperreflexia with clonus + epigastric/RUQ pain + thrombocytopenia.",t:"HR Pregnancy",p:5,s:"ati"},
+{q:"What is placenta accreta and why is it dangerous?",a:"Abnormal adherence of placenta to myometrium — the placenta cannot separate after delivery. Occurs in up to <strong>25% of women with previa + prior cesarean</strong> (Perry). Often requires <strong>hysterectomy</strong> and carries high risk of massive hemorrhage.",t:"HR Pregnancy",p:5,s:"both"},
+
+// --- HR L&D (additional) ---
+{q:"VBAC — what are the selection criteria and absolute contraindication?",a:"<strong>Criteria:</strong> 1-2 prior low transverse cesareans, adequate pelvis, nonrecurring indication for prior cesarean, providers available for emergency cesarean. <strong>Absolute contraindication:</strong> previous <strong>classical VERTICAL uterine incision</strong> (high rupture risk).",t:"HR L&D",p:6,s:"ati"},
+{q:"Uterine rupture — what are the classic findings?",a:"Client reports <strong>\"ripping\" or \"tearing\"</strong> sensation → abdominal pain → <strong>cessation of contractions</strong> → fetal parts palpable through abdomen → loss of fetal station → nonreassuring FHR (bradycardia) → <strong>hypovolemic shock</strong>. Emergency cesarean → possible hysterectomy.",t:"HR L&D",p:6,s:"ati"},
+{q:"What is an amnioinfusion and when is it indicated?",a:"Normal saline or LR instilled into the amniotic cavity via transcervical catheter. <strong>Purpose:</strong> reduces severity of <strong>variable decelerations from cord compression</strong>. Indicated for oligohydramnios. Monitor for uterine overdistention.",t:"HR L&D",p:6,s:"ati"},
+{q:"Cesarean post-op — what combination indicates endometritis?",a:"<strong>Tender uterus + foul-smelling lochia</strong> = endometritis (most common postpartum infection). Also: fever >38°C after first 24 hr, chills, tachycardia, malaise. Obtain cultures and start antibiotics.",t:"HR L&D",p:6,s:"ati"},
+
+// --- NB Complications (additional) ---
+{q:"What are the complications of RDS oxygen therapy?",a:"<strong>Pneumothorax</strong>, pneumomediastinum, <strong>retinopathy of prematurity</strong> (from excess O2), <strong>bronchopulmonary dysplasia</strong> (BPD — stiff noncompliant lungs), infection, <strong>intraventricular hemorrhage</strong>. Birth weight alone is NOT an indicator of lung maturity.",t:"NB Complications",p:6,s:"ati"},
+{q:"What is NEC (necrotizing enterocolitis)?",a:"Inflammatory disease of GI mucosa due to <strong>ischemia</strong> → necrosis and perforation of bowel. Most common in <strong>preterm infants</strong>. Findings: abdominal distension, bloody stools, feeding intolerance, bilious vomiting. Can lead to short-gut syndrome.",t:"NB Complications",p:6,s:"ati"},
+{q:"Preterm newborn — what are the NICU discharge criteria?",a:"<strong>1.</strong> Can take oral feedings adequately. <strong>2.</strong> Can maintain body temperature independently. <strong>3.</strong> Weighs approximately <strong>2 kg (4.4 lb)</strong>. Main priority while in NICU: supporting cardiac and respiratory systems.",t:"NB Complications",p:6,s:"both"},
+{q:"What are the Erb-Duchenne paralysis findings?",a:"<strong>Brachial plexus injury</strong> from shoulder dystocia or difficult delivery. Affected arm hangs limply at side with <strong>internal rotation, forearm pronated, wrist flexed</strong> (\"waiter tip\" position). Usually unilateral. Most cases recover spontaneously.",t:"NB Complications",p:6,s:"both"},
+{q:"Fetal alcohol syndrome — what are the classic facial features?",a:"<strong>Smooth philtrum</strong> (groove between nose and upper lip), <strong>thin upper lip</strong>, <strong>short palpebral fissures</strong> (small eye openings). Also: microcephaly, growth restriction, CNS dysfunction, intellectual disability. <strong>No safe level of alcohol in pregnancy.</strong>",t:"NB Complications",p:6,s:"both"},
+
+// --- PP Disorders (additional) ---
+{q:"How do you prevent DVT postpartum?",a:"<strong>SCDs</strong> (sequential compression devices) until ambulatory. <strong>Early and frequent ambulation</strong>. Active/passive ROM if bed rest >8 hr. Fitted antiembolism stockings. Adequate hydration (2-3 L/day). Avoid crossing legs or prolonged sitting.",t:"PP Disorders",p:6,s:"ati"},
+{q:"Mastitis — should the client stop breastfeeding?",a:"<strong>NO — continue breastfeeding</strong> (emptying the breast prevents abscess formation). Apply <strong>warm compresses before</strong> feeding. Complete <strong>entire antibiotic course</strong>. Wear supportive bra. Usually unilateral. S. aureus most common cause. Can start as early as day 7 PP.",t:"PP Disorders",p:6,s:"ati"},
+{q:"Pulmonary embolism — what are the hallmark findings?",a:"<strong>Sudden</strong> apprehension, pleuritic chest pain, <strong>dyspnea</strong>, tachypnea, <strong>hemoptysis</strong> (coughing blood), cough. This is an <strong>EMERGENCY</strong>. Nursing: semi-Fowler with HOB elevated, O2 by mask, notify provider immediately. Thrombolytics may be needed.",t:"PP Disorders",p:6,s:"ati"},
+{q:"What is DIC and what is the most common obstetric cause?",a:"<strong>Disseminated intravascular coagulation</strong> — clotting and anticlotting occur simultaneously → risk for both hemorrhage AND microclots. Most common obstetric cause: <strong>abruptio placentae</strong>. Also: fetal demise, amniotic fluid embolism, severe preeclampsia, sepsis.",t:"PP Disorders",p:6,s:"ati"},
+
+// --- Contraception (additional) ---
+{q:"IUD — copper vs hormonal: compare duration and mechanism.",a:"<strong>Copper (ParaGard):</strong> non-hormonal, effective 10 yr, also used for emergency contraception within 5 days. <strong>Hormonal (Mirena):</strong> releases levonorgestrel, effective 3-7 yr, reduces menstrual flow, may cause amenorrhea. Both: check strings after each period.",t:"Contraception",p:7,s:"ati"},
+{q:"Vasectomy — is it immediately effective?",a:"<strong>NO.</strong> Not immediately effective — must use backup contraception until semen analysis confirms <strong>azoospermia</strong> (usually after ~20 ejaculations or 6 weeks). Permanent surgical sterilization — cutting the vas deferens.",t:"Contraception",p:7,s:"ati"},
+{q:"What is the cervical mucus (Billings) method and what is spinnbarkeit?",a:"Fertility awareness method where client analyzes cervical mucus. At ovulation, mucus becomes <strong>thin, stretchy, egg-white consistency</strong> — this stretchiness is the <strong>spinnbarkeit sign</strong>. Fertile period lasts until 4 days after mucus returns to thick consistency.",t:"Contraception",p:7,s:"both"},
+{q:"COCs are absolutely contraindicated in which population?",a:"<strong>Smokers over age 35</strong> — dramatically increased risk of MI, stroke, and thromboembolic events. Also contraindicated: hx of thromboembolism/stroke/heart disease, breast cancer, pregnancy, liver disease, migraines with aura.",t:"Contraception",p:7,s:"ati"},
+
+// --- Growth & Dev (additional) ---
+{q:"What are the normal infant motor milestones by month?",a:"<strong>4 mo:</strong> head control. <strong>5-6 mo:</strong> rolls over. <strong>8 mo:</strong> sits unsupported. <strong>10 mo:</strong> crawls, pulls to stand. <strong>12 mo:</strong> walks (cruising). <strong>Social smile:</strong> 2 mo. <strong>Separation anxiety:</strong> peaks 6-8 mo.",t:"Growth & Dev",p:7,s:"both"},
+{q:"Preschooler (3-6 yr) — what fears are normal and how should nurses prepare them?",a:"Fears of <strong>dark, monsters, being alone, and bodily harm</strong> (use Band-Aids!). Imaginary friends are <strong>NORMAL</strong>. Prepare for procedures with <strong>simple explanations immediately before</strong> — not too far in advance (magical thinking makes them catastrophize).",t:"Growth & Dev",p:7,s:"ati"},
+{q:"School-age (6-12 yr) — what is the key Erikson conflict?",a:"<strong>Industry vs Inferiority.</strong> Need mastery of new skills and sense of accomplishment. Peer relationships become increasingly important. Failure → feelings of inadequacy. <strong>Piaget:</strong> concrete operational — logical thinking, understands conservation, no longer egocentric.",t:"Growth & Dev",p:7,s:"ati"},
+{q:"Adolescent — what is the nursing approach for sensitive topics?",a:"Ensure <strong>confidentiality and privacy</strong>. Interview <strong>without parent present</strong> for sensitive topics. <strong>Nonjudgmental approach</strong>. Respect developing autonomy. Screen for depression, eating disorders, substance use, and suicidal ideation. #1 death = MVA.",t:"Growth & Dev",p:7,s:"ati"},
+{q:"No honey before 12 months — why?",a:"Risk of <strong>infant botulism</strong> (Clostridium botulinum spores). The immature infant GI tract cannot prevent germination of spores. Also: <strong>no cow milk before 12 months</strong> (inadequate iron, excess protein/sodium, can cause GI bleeding).",t:"Growth & Dev",p:7,s:"ati"},
+
+// --- Peds GI (additional) ---
+{q:"GERD in infants — key nursing interventions?",a:"Frequent small feedings. Burp after every 1-2 oz. Thicken formula with rice cereal (if prescribed). Keep <strong>upright 30° for 1 hr after feeding</strong>. <strong>Avoid car seat positioning</strong> after feeding (compresses abdomen). Meds: H2 blockers, PPIs.",t:"Peds GI",p:8,s:"ati"},
+{q:"Cleft lip vs cleft palate — when is each repaired?",a:"<strong>Cleft lip:</strong> typically repaired at <strong>2-3 months</strong>. <strong>Cleft palate:</strong> typically at <strong>6-12 months</strong>. Post-op CL: Logan bow to protect suture, elbow restraints, no prone. Post-op CP: <strong>no straws, pacifiers, or utensils in mouth</strong> — cup feeding only.",t:"Peds GI",p:8,s:"ati"},
+{q:"How do you assess dehydration severity in a child?",a:"<strong>Mild (3-5%):</strong> slightly dry mucous membranes, normal pulse. <strong>Moderate (6-9%):</strong> tachycardia, decreased tears, sunken fontanel, oliguria. <strong>Severe (≥10%):</strong> rapid thready pulse, sunken eyes, very poor turgor, anuria, altered LOC. Labs: elevated Hct, BUN, urine SG.",t:"Peds GI",p:8,s:"ati"},
+
+// --- Peds Integ (additional) ---
+{q:"Eczema (atopic dermatitis) — where does it appear in infants vs older children?",a:"<strong>Infants:</strong> face, scalp, extensor surfaces. <strong>Older children:</strong> flexor surfaces (antecubital and popliteal fossae), wrists, ankles. Key: apply <strong>emollients within 3 min of bathing</strong>. Cotton clothing only. Avoid wool/synthetics. Keep nails short.",t:"Peds Integ",p:8,s:"ati"},
+{q:"Scabies — how does it present and how is it treated?",a:"Caused by mite <strong>burrowing</strong> into skin. <strong>Intense itching worse at night.</strong> Gray-brown threadlike burrow tracks in web spaces of fingers, wrists, elbows. Treatment: <strong>permethrin 5% cream from neck down for 8-14 hr</strong>. Treat ALL household members simultaneously.",t:"Peds Integ",p:8,s:"ati"},
+{q:"Impetigo — what does it look like and how is it spread?",a:"Highly contagious bacterial infection (S. aureus or group A strep). <strong>Honey-colored crusted lesions</strong> around nose and mouth. Spread by <strong>direct contact</strong>. Treatment: topical mupirocin or systemic antibiotics if widespread. Keep child home from school.",t:"Peds Integ",p:8,s:"ati"},
+{q:"What are the fluid shift phases in burns?",a:"<strong>First 24-48 hr:</strong> capillary permeability increases → fluid shifts from intravascular to interstitial (third-spacing) → edema, hypovolemia, decreased urine output. <strong>After 48 hr:</strong> capillary integrity returns → fluid shifts BACK → risk of <strong>fluid overload and pulmonary edema</strong>.",t:"Peds Integ",p:8,s:"both"},
+
+// --- E2 Pharm (additional) ---
+{q:"Warfarin — what foods interact and what is the key rule?",a:"<strong>Vitamin K-rich foods</strong> (kale, spinach, broccoli, Brussels sprouts) decrease warfarin effect. Key rule: maintain <strong>CONSISTENT</strong> vitamin K intake — do NOT suddenly increase or decrease. Monitor PT/INR (therapeutic: 2.0-3.0). Antidote: vitamin K.",t:"E2 Pharm",p:8,s:"ati"},
+{q:"Sertraline (Zoloft) for PPD — what is the black box warning?",a:"<strong>Increased suicidal ideation</strong> in young adults — monitor closely first <strong>4-6 weeks</strong>. Takes 2-4 weeks for full effect. Do NOT stop abruptly (must taper). Safe for breastfeeding. Screen with Edinburgh Postnatal Depression Scale.",t:"E2 Pharm",p:8,s:"ati"},
+{q:"Depo-Provera — what are two unique concerns?",a:"<strong>1. Delayed fertility return</strong> — up to 12 months after discontinuation. <strong>2. Bone density loss</strong> with long-term use (>2 yr). Give 150 mg deep IM every 11-13 weeks. Weight gain common (~5 lb/yr). Safe for breastfeeding (no estrogen).",t:"E2 Pharm",p:8,s:"ati"},
+{q:"Griseofulvin — why must it be given with fatty food?",a:"<strong>Fatty foods enhance absorption</strong> of griseofulvin (give with milk, ice cream, peanut butter). Oral antifungal for <strong>tinea capitis</strong> (scalp ringworm) — topical agents cannot penetrate hair follicle. Treatment: 6-8 weeks. Monitor liver function. Photosensitivity.",t:"E2 Pharm",p:8,s:"ati"},
+{q:"Clomiphene (Clomid) — how does it work?",a:"Blocks estrogen receptors in hypothalamus → body perceives low estrogen → <strong>increases FSH/LH release</strong> → stimulates follicle development → ovulation. 50 mg PO daily × 5 days starting day 3 or 5 of cycle. Watch for <strong>OHSS</strong> and multiple gestation (5-10% twins).",t:"E2 Pharm",p:8,s:"ati"},
 ];
 
 // ═══ ENGINE ═══
@@ -371,7 +538,7 @@ function showCard(){
   const card=document.getElementById('flashcard');
   card.classList.remove('swiping-left','swiping-right');
   card.style.display='';
-  document.getElementById('cardTag').textContent=c.t;
+  document.getElementById('cardTag').innerHTML=c.t+getSrcTag(c.s);
   document.getElementById('cardQ').innerHTML=c.q;
   document.getElementById('cardA').innerHTML=c.a;
   document.getElementById('cardA').classList.remove('visible');
@@ -461,6 +628,117 @@ document.getElementById('flashcard').addEventListener('touchend',e=>{
 
 buildSidebar();
 startRound();
+
+
+// ═══ SOURCE TAGS ═══
+function getSrcTag(s){
+  if(s==='perry') return ' <span class="src-tag src-tag-perry">Perry</span>';
+  if(s==='both') return ' <span class="src-tag src-tag-both">ATI + Perry</span>';
+  return ' <span class="src-tag src-tag-ati">ATI</span>';
+}
+
+// ═══ GRID VIEW ═══
+function switchMode(mode){
+  const gridView=document.getElementById('gridView');
+  const studyView=document.getElementById('studyView');
+  const gridBtn=document.getElementById('gridModeBtn');
+  const studyBtn=document.getElementById('studyModeBtn');
+  if(mode==='grid'){
+    gridView.classList.add('active');
+    studyView.classList.add('hidden');
+    gridBtn.classList.add('active');
+    studyBtn.classList.remove('active');
+    renderGrid();
+  } else {
+    gridView.classList.remove('active');
+    studyView.classList.remove('hidden');
+    gridBtn.classList.remove('active');
+    studyBtn.classList.add('active');
+  }
+}
+
+function getExamForCard(card){
+  // Map part numbers to exams
+  if(card.p>=1 && card.p<=4) return 'Exam 1';
+  if(card.p===5 && (card.t==='Pharmacology')) return 'Exam 1';
+  return 'Exam 2';
+}
+
+function populateTopicFilter(){
+  const sel=document.getElementById('gridTopicFilter');
+  const topics=new Set();
+  CARDS.forEach(c=>topics.add(c.t));
+  const sorted=[...topics].sort();
+  sel.innerHTML='<option value="all">All Topics</option>';
+  sorted.forEach(t=>{
+    const opt=document.createElement('option');
+    opt.value=t;opt.textContent=t;
+    sel.appendChild(opt);
+  });
+}
+
+function renderGrid(){
+  const examFilter=document.getElementById('gridExamFilter').value;
+  const topicFilter=document.getElementById('gridTopicFilter').value;
+
+  let filtered=CARDS.filter(c=>{
+    if(examFilter!=='all' && getExamForCard(c)!==examFilter) return false;
+    if(topicFilter!=='all' && c.t!==topicFilter) return false;
+    return true;
+  });
+
+  const container=document.getElementById('gridContainer');
+  container.innerHTML='';
+
+  // Group by exam then topic
+  const examOrder=['Exam 1','Exam 2','Exam 3','Exam 4'];
+  const grouped={};
+  filtered.forEach((c,i)=>{
+    const exam=getExamForCard(c);
+    if(!grouped[exam]) grouped[exam]={};
+    if(!grouped[exam][c.t]) grouped[exam][c.t]=[];
+    grouped[exam][c.t].push({card:c,idx:i});
+  });
+
+  let totalShown=0;
+  examOrder.forEach(exam=>{
+    if(!grouped[exam]) return;
+    if(examFilter==='all'){
+      const el=document.createElement('div');
+      el.className='grid-exam-label';
+      el.textContent=exam;
+      container.appendChild(el);
+    }
+    const topics=Object.keys(grouped[exam]);
+    topics.forEach(topic=>{
+      const tl=document.createElement('div');
+      tl.className='grid-topic-label';
+      tl.textContent=topic+' ('+grouped[exam][topic].length+')';
+      container.appendChild(tl);
+
+      const grid=document.createElement('div');
+      grid.className='grid-cards';
+      grouped[exam][topic].forEach(({card,idx})=>{
+        totalShown++;
+        const div=document.createElement('div');
+        div.className='grid-card';
+        div.onclick=function(){this.classList.toggle('flipped')};
+        div.innerHTML='<div class="grid-card-num">#'+totalShown+'</div>'
+          +'<div class="grid-card-tag">'+card.t+getSrcTag(card.s)+'</div>'
+          +'<div class="grid-card-q">'+card.q+'</div>'
+          +'<div class="grid-card-a">'+card.a+'</div>'+'<div class="grid-card-src">'+getSrcTag(card.s)+'</div>';
+        grid.appendChild(div);
+      });
+      container.appendChild(grid);
+    });
+  });
+
+  document.getElementById('gridCount').textContent=totalShown+' cards';
+}
+
+// Initialize grid on load
+populateTopicFilter();
+renderGrid();
 </script>
 </body>
 </html>
