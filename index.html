@@ -416,6 +416,43 @@ footer a:hover { color: var(--accent); border-color: var(--accent); }
 .pw-btn:hover{opacity:.9;transform:translateY(-1px)}
 .pw-error{font-size:11px;color:var(--red);margin-top:8px;min-height:16px}
 @keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+
+/* Universal Search */
+.search-wrap{position:relative;margin:24px 0 32px}
+.search-input{width:100%;padding:14px 18px 14px 44px;background:var(--surface);border:1px solid var(--border);border-radius:12px;color:var(--text);font-family:inherit;font-size:16px;outline:none;transition:border-color .15s;box-sizing:border-box}
+.search-input:focus{border-color:var(--accent)}
+.search-input::placeholder{color:var(--text3)}
+.search-icon{position:absolute;left:16px;top:50%;transform:translateY(-50%);font-size:16px;color:var(--text3);pointer-events:none}
+.search-results{position:absolute;top:100%;left:0;right:0;background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,.15);max-height:360px;overflow-y:auto;z-index:100;display:none;margin-top:6px}
+.search-results.show{display:block}
+.sr-item{display:flex;align-items:center;gap:12px;padding:12px 16px;cursor:pointer;transition:background .1s;text-decoration:none;color:inherit;border-bottom:1px solid var(--border)}
+.sr-item:last-child{border-bottom:none}
+.sr-item:hover{background:var(--surface2)}
+.sr-type{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:4px;flex-shrink:0}
+.sr-type.topic{background:rgba(59,130,246,.15);color:#3b82f6}
+.sr-type.drug{background:rgba(232,82,122,.15);color:#e8527a}
+.sr-name{font-size:14px;font-weight:500;color:var(--text);flex:1}
+.sr-arrow{font-size:14px;color:var(--text3);flex-shrink:0}
+.sr-empty{padding:24px;text-align:center;color:var(--text3);font-size:13px;font-style:italic}
+
+/* Weak Spots Dashboard */
+.weak-spots{margin-bottom:8px}
+.ws-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.ws-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px 20px;transition:all .15s}
+.ws-card:hover{border-color:var(--accent);box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.ws-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.ws-card-title{font-size:13px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:8px}
+.ws-card-count{font-size:22px;font-weight:700;color:var(--accent)}
+.ws-card-subtitle{font-size:12px;color:var(--text3);margin-bottom:12px}
+.ws-items{display:flex;flex-wrap:wrap;gap:6px}
+.ws-item{display:inline-block;padding:5px 12px;background:var(--bg);border:1px solid var(--border);border-radius:6px;font-size:11px;color:var(--text2);text-decoration:none;font-weight:500;transition:all .15s;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ws-item:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+.ws-item.warn{border-color:rgba(245,158,11,.4);color:#f59e0b}
+.ws-item.warn:hover{background:#f59e0b;color:#fff;border-color:#f59e0b}
+.ws-item.danger{border-color:rgba(239,68,68,.3);color:#ef4444}
+.ws-item.danger:hover{background:#ef4444;color:#fff;border-color:#ef4444}
+.ws-empty{padding:20px;text-align:center;color:var(--text3);font-size:13px;font-style:italic}
+@media (max-width:600px){.ws-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -449,6 +486,19 @@ footer a:hover { color: var(--accent); border-color: var(--accent); }
     <h1>Family Nursing <em>Care</em></h1>
     <p class="desc">Obstetric, gynecologic, pediatric, and behavioral health content for the registered nurse providing family-centered care. ATI-aligned with Perry, Davis's Drug Guide, and Keltner supplemental enrichment.</p>
     <p style="font-size:13px;color:var(--text3);margin-top:8px;font-style:italic">Lock in!😴 - Sleepy Ius</p>
+  </div>
+
+
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input class="search-input" id="hubSearch" type="text" placeholder="Search topics, drugs, flashcards..." autocomplete="off" oninput="hubSearchHandler(this.value)">
+    <div class="search-results" id="hubResults"></div>
+  </div>
+
+
+  <div class="weak-spots" id="weakSpots" style="display:none">
+    <div class="section-label">📋 Focus Areas</div>
+    <div class="ws-grid" id="wsGrid"></div>
   </div>
 
   <div class="section-label">Study Tools</div>
@@ -581,7 +631,7 @@ function checkPw(){
 
 
 // ═══ PROGRESS SYNC ═══
-const SYNC_KEYS=['studyTheme','nur2460_progress','nur2460_pharm_progress','nur2460_fc_stars','nur2460_fc_mastery','nur2460_fc_accuracy'];
+const SYNC_KEYS=['studyTheme','nur2460_progress','nur2460_pharm_progress','nur2460_fc_stars','nur2460_fc_mastery','nur2460_fc_accuracy','nur2460_fc_schedule'];
 
 function getProgressStats(){
   let stats={studyTopics:0,pharmDrugs:0,fcStars:0,fcMastered:0,fcAccTotal:0};
@@ -683,6 +733,7 @@ function importProgress(){
     st.className='sync-status success';
     st.textContent='✓ Restored '+restored+' settings! Originally exported on '+new Date(data._exportDate).toLocaleDateString()+'. Refresh the page to see changes.';
     renderProgressSummary();
+    renderWeakSpots();
   }catch(e){
     st.className='sync-status error';
     st.textContent='Could not parse the progress code. Make sure you copied the entire text.';
@@ -699,6 +750,194 @@ function confirmReset(){
 
 // Render on load
 renderProgressSummary();
+
+// ── Universal Search ──────────────────────
+const SEARCH_INDEX = [{"type": "topic", "id": "adapt", "name": "Expected Physiological Changes During Pregnancy", "search": "expected physiological changes during pregnancy", "url": "NUR2460StudyTool.html?topic=adapt"}, {"type": "topic", "id": "prenatal_care", "name": "Prenatal Care", "search": "prenatal care", "url": "NUR2460StudyTool.html?topic=prenatal_care"}, {"type": "topic", "id": "nutrition_pregnancy", "name": "Nutrition During Pregnancy", "search": "nutrition during pregnancy", "url": "NUR2460StudyTool.html?topic=nutrition_pregnancy"}, {"type": "topic", "id": "fetal_assessment", "name": "Assessment of Fetal Well-Being", "search": "assessment of fetal well-being", "url": "NUR2460StudyTool.html?topic=fetal_assessment"}, {"type": "topic", "id": "labor_stages", "name": "Labor and Delivery Processes", "search": "labor and delivery processes", "url": "NUR2460StudyTool.html?topic=labor_stages"}, {"type": "topic", "id": "fetal_monitor_pain", "name": "Pain Management & Fetal Assessment During Labor", "search": "pain management & fetal assessment during labor", "url": "NUR2460StudyTool.html?topic=fetal_monitor_pain"}, {"type": "topic", "id": "nursing_birth", "name": "Nursing Care During Stages of Labor", "search": "nursing care during stages of labor", "url": "NUR2460StudyTool.html?topic=nursing_birth"}, {"type": "topic", "id": "newborn_assess", "name": "Newborn Assessment", "search": "newborn assessment", "url": "NUR2460StudyTool.html?topic=newborn_assess"}, {"type": "topic", "id": "newborn_care", "name": "Nursing Care of Newborns & Newborn Nutrition", "search": "nursing care of newborns & newborn nutrition", "url": "NUR2460StudyTool.html?topic=newborn_care"}, {"type": "topic", "id": "pp_physical", "name": "Postpartum Physiological Adaptations", "search": "postpartum physiological adaptations", "url": "NUR2460StudyTool.html?topic=pp_physical"}, {"type": "topic", "id": "pp_psychosocial", "name": "Baby-Friendly Care & Discharge Teaching", "search": "baby-friendly care & discharge teaching", "url": "NUR2460StudyTool.html?topic=pp_psychosocial"}, {"type": "topic", "id": "bleeding_preg", "name": "Bleeding During Pregnancy", "search": "bleeding during pregnancy", "url": "NUR2460StudyTool.html?topic=bleeding_preg"}, {"type": "topic", "id": "infections_preg", "name": "Maternal Infections", "search": "maternal infections", "url": "NUR2460StudyTool.html?topic=infections_preg"}, {"type": "topic", "id": "medical_conditions", "name": "Cervical Insufficiency, HG, Anemia, GDM, Gestational HTN", "search": "cervical insufficiency, hg, anemia, gdm, gestational htn", "url": "NUR2460StudyTool.html?topic=medical_conditions"}, {"type": "topic", "id": "preterm_prom", "name": "Early Onset of Labor", "search": "early onset of labor", "url": "NUR2460StudyTool.html?topic=preterm_prom"}, {"type": "topic", "id": "therapeutic_proc", "name": "Therapeutic Procedures to Assist with Labor and Delivery", "search": "therapeutic procedures to assist with labor and delivery", "url": "NUR2460StudyTool.html?topic=therapeutic_proc"}, {"type": "topic", "id": "labor_comp", "name": "Complications Related to the Labor Process", "search": "complications related to the labor process", "url": "NUR2460StudyTool.html?topic=labor_comp"}, {"type": "topic", "id": "newborn_comp", "name": "Assessment and Management of Newborn Complications", "search": "assessment and management of newborn complications", "url": "NUR2460StudyTool.html?topic=newborn_comp"}, {"type": "topic", "id": "pp_disorders", "name": "PP Hemorrhage, DVT/PE, Infections, Depression", "search": "pp hemorrhage, dvt/pe, infections, depression", "url": "NUR2460StudyTool.html?topic=pp_disorders"}, {"type": "topic", "id": "contraception", "name": "Family Planning Methods", "search": "family planning methods", "url": "NUR2460StudyTool.html?topic=contraception"}, {"type": "topic", "id": "growth_dev", "name": "Health Promotion: Infant through Adolescent", "search": "health promotion: infant through adolescent", "url": "NUR2460StudyTool.html?topic=growth_dev"}, {"type": "topic", "id": "peds_gi", "name": "Infectious, Structural & Inflammatory GI", "search": "infectious, structural & inflammatory gi", "url": "NUR2460StudyTool.html?topic=peds_gi"}, {"type": "topic", "id": "peds_integ", "name": "Skin Infections, Dermatitis & Burns", "search": "skin infections, dermatitis & burns", "url": "NUR2460StudyTool.html?topic=peds_integ"}, {"type": "topic", "id": "neuro_acute", "name": "Meningitis, Reye Syndrome, Encephalitis, ICP", "search": "meningitis, reye syndrome, encephalitis, icp", "url": "NUR2460StudyTool.html?topic=neuro_acute"}, {"type": "topic", "id": "seizures", "name": "Febrile Seizures, Epilepsy, Status Epilepticus", "search": "febrile seizures, epilepsy, status epilepticus", "url": "NUR2460StudyTool.html?topic=seizures"}, {"type": "topic", "id": "head_injury", "name": "Concussion, Skull Fractures, ICP", "search": "concussion, skull fractures, icp", "url": "NUR2460StudyTool.html?topic=head_injury"}, {"type": "topic", "id": "resp_acute", "name": "Croup, Epiglottitis, RSV, Pneumonia", "search": "croup, epiglottitis, rsv, pneumonia", "url": "NUR2460StudyTool.html?topic=resp_acute"}, {"type": "topic", "id": "asthma", "name": "Classification, Triggers, Peak Flow, Action Plan", "search": "classification, triggers, peak flow, action plan", "url": "NUR2460StudyTool.html?topic=asthma"}, {"type": "topic", "id": "cystic_fibrosis", "name": "Sweat Chloride, Pancreatic Enzymes, CPT", "search": "sweat chloride, pancreatic enzymes, cpt", "url": "NUR2460StudyTool.html?topic=cystic_fibrosis"}, {"type": "topic", "id": "cardio_peds", "name": "CHD, Heart Failure, Kawasaki, Rheumatic Fever", "search": "chd, heart failure, kawasaki, rheumatic fever", "url": "NUR2460StudyTool.html?topic=cardio_peds"}, {"type": "topic", "id": "heme_peds", "name": "Sickle Cell, Anemia, Hemophilia, Leukemia", "search": "sickle cell, anemia, hemophilia, leukemia", "url": "NUR2460StudyTool.html?topic=heme_peds"}, {"type": "topic", "id": "fractures", "name": "Types, Casting, Traction, Compartment Syndrome", "search": "types, casting, traction, compartment syndrome", "url": "NUR2460StudyTool.html?topic=fractures"}, {"type": "topic", "id": "msk_congenital", "name": "DDH, Clubfoot, Scoliosis, CP, Duchenne", "search": "ddh, clubfoot, scoliosis, cp, duchenne", "url": "NUR2460StudyTool.html?topic=msk_congenital"}, {"type": "topic", "id": "endo_peds", "name": "Type 1 DM, DKA, Hypothyroidism, Growth Hormone", "search": "type 1 dm, dka, hypothyroidism, growth hormone", "url": "NUR2460StudyTool.html?topic=endo_peds"}, {"type": "topic", "id": "gu_peds", "name": "Enuresis, UTIs, Structural GU Defects", "search": "enuresis, utis, structural gu defects", "url": "NUR2460StudyTool.html?topic=gu_peds"}, {"type": "topic", "id": "renal_peds", "name": "Glomerulonephritis, Nephrotic Syndrome, HUS, Renal Failure", "search": "glomerulonephritis, nephrotic syndrome, hus, renal failure", "url": "NUR2460StudyTool.html?topic=renal_peds"}, {"type": "topic", "id": "immunizations", "name": "Childhood Vaccine Schedule, Contraindications, Adverse Effects", "search": "childhood vaccine schedule, contraindications, adverse effects", "url": "NUR2460StudyTool.html?topic=immunizations"}, {"type": "topic", "id": "communicable_diseases", "name": "Measles, Mumps, Rubella, Varicella, Pertussis, Fifth Disease", "search": "measles, mumps, rubella, varicella, pertussis, fifth disease", "url": "NUR2460StudyTool.html?topic=communicable_diseases"}, {"type": "topic", "id": "peds_cancer", "name": "Wilms Tumor, Neuroblastoma, Leukemia, Bone Cancers, Chemo Care", "search": "wilms tumor, neuroblastoma, leukemia, bone cancers, chemo care", "url": "NUR2460StudyTool.html?topic=peds_cancer"}, {"type": "topic", "id": "abuse_neglect", "name": "Physical/Sexual/Emotional Abuse, Mandatory Reporting, Documentation", "search": "physical/sexual/emotional abuse, mandatory reporting, documentation", "url": "NUR2460StudyTool.html?topic=abuse_neglect"}, {"type": "topic", "id": "child_adolescent_mh", "name": "ADHD, Autism, ODD, Conduct Disorder, Eating Disorders", "search": "adhd, autism, odd, conduct disorder, eating disorders", "url": "NUR2460StudyTool.html?topic=child_adolescent_mh"}, {"type": "topic", "id": "mood_disorders", "name": "Depression, Suicide, Bipolar, Lithium", "search": "depression, suicide, bipolar, lithium", "url": "NUR2460StudyTool.html?topic=mood_disorders"}, {"type": "drug", "id": "oxytocin_ind", "name": "Oxytocin (Induction)", "search": "oxytocin (induction)", "url": "NUR2460Pharmacology.html?drug=oxytocin_ind"}, {"type": "drug", "id": "oxytocin_pp", "name": "Oxytocin (Postpartum)", "search": "oxytocin (postpartum)", "url": "NUR2460Pharmacology.html?drug=oxytocin_pp"}, {"type": "drug", "id": "mag_sulfate", "name": "Magnesium Sulfate", "search": "magnesium sulfate", "url": "NUR2460Pharmacology.html?drug=mag_sulfate"}, {"type": "drug", "id": "methergine", "name": "Methergine", "search": "methergine", "url": "NUR2460Pharmacology.html?drug=methergine"}, {"type": "drug", "id": "carboprost", "name": "Carboprost (Hemabate)", "search": "carboprost (hemabate)", "url": "NUR2460Pharmacology.html?drug=carboprost"}, {"type": "drug", "id": "misoprostol_rip", "name": "Misoprostol (Ripening)", "search": "misoprostol (ripening)", "url": "NUR2460Pharmacology.html?drug=misoprostol_rip"}, {"type": "drug", "id": "misoprostol_pp", "name": "Misoprostol (PPH)", "search": "misoprostol (pph)", "url": "NUR2460Pharmacology.html?drug=misoprostol_pp"}, {"type": "drug", "id": "dinoprostone", "name": "Dinoprostone (Cervidil)", "search": "dinoprostone (cervidil)", "url": "NUR2460Pharmacology.html?drug=dinoprostone"}, {"type": "drug", "id": "terbutaline", "name": "Terbutaline", "search": "terbutaline", "url": "NUR2460Pharmacology.html?drug=terbutaline"}, {"type": "drug", "id": "nifedipine", "name": "Nifedipine", "search": "nifedipine", "url": "NUR2460Pharmacology.html?drug=nifedipine"}, {"type": "drug", "id": "indomethacin", "name": "Indomethacin", "search": "indomethacin", "url": "NUR2460Pharmacology.html?drug=indomethacin"}, {"type": "drug", "id": "betamethasone", "name": "Betamethasone", "search": "betamethasone", "url": "NUR2460Pharmacology.html?drug=betamethasone"}, {"type": "drug", "id": "hydralazine", "name": "Hydralazine", "search": "hydralazine", "url": "NUR2460Pharmacology.html?drug=hydralazine"}, {"type": "drug", "id": "labetalol", "name": "Labetalol", "search": "labetalol", "url": "NUR2460Pharmacology.html?drug=labetalol"}, {"type": "drug", "id": "methotrexate", "name": "Methotrexate", "search": "methotrexate", "url": "NUR2460Pharmacology.html?drug=methotrexate"}, {"type": "drug", "id": "rhogam", "name": "RhoGAM", "search": "rhogam", "url": "NUR2460Pharmacology.html?drug=rhogam"}, {"type": "drug", "id": "folic_acid", "name": "Folic Acid", "search": "folic acid", "url": "NUR2460Pharmacology.html?drug=folic_acid"}, {"type": "drug", "id": "iron_supp", "name": "Iron Supplement", "search": "iron supplement", "url": "NUR2460Pharmacology.html?drug=iron_supp"}, {"type": "drug", "id": "calcium_supp", "name": "Calcium Supplement", "search": "calcium supplement", "url": "NUR2460Pharmacology.html?drug=calcium_supp"}, {"type": "drug", "id": "heparin_pp", "name": "Heparin/Enoxaparin", "search": "heparin/enoxaparin", "url": "NUR2460Pharmacology.html?drug=heparin_pp"}, {"type": "drug", "id": "warfarin_pp", "name": "Warfarin", "search": "warfarin", "url": "NUR2460Pharmacology.html?drug=warfarin_pp"}, {"type": "drug", "id": "opioid_analgesics", "name": "Opioid Analgesics", "search": "opioid analgesics", "url": "NUR2460Pharmacology.html?drug=opioid_analgesics"}, {"type": "drug", "id": "epidural", "name": "Epidural", "search": "epidural", "url": "NUR2460Pharmacology.html?drug=epidural"}, {"type": "drug", "id": "spinal", "name": "Spinal Anesthesia", "search": "spinal anesthesia", "url": "NUR2460Pharmacology.html?drug=spinal"}, {"type": "drug", "id": "pudendal", "name": "Pudendal Block", "search": "pudendal block", "url": "NUR2460Pharmacology.html?drug=pudendal"}, {"type": "drug", "id": "naloxone", "name": "Naloxone (Narcan)", "search": "naloxone (narcan)", "url": "NUR2460Pharmacology.html?drug=naloxone"}, {"type": "drug", "id": "sertraline_pp", "name": "Sertraline (Zoloft)", "search": "sertraline (zoloft)", "url": "NUR2460Pharmacology.html?drug=sertraline_pp"}, {"type": "drug", "id": "coc", "name": "Combined Oral Contraceptives", "search": "combined oral contraceptives", "url": "NUR2460Pharmacology.html?drug=coc"}, {"type": "drug", "id": "depo_provera", "name": "Depo-Provera", "search": "depo-provera", "url": "NUR2460Pharmacology.html?drug=depo_provera"}, {"type": "drug", "id": "clomiphene", "name": "Clomiphene (Clomid)", "search": "clomiphene (clomid)", "url": "NUR2460Pharmacology.html?drug=clomiphene"}, {"type": "drug", "id": "erythromycin_eye", "name": "Erythromycin Eye Ointment", "search": "erythromycin eye ointment", "url": "NUR2460Pharmacology.html?drug=erythromycin_eye"}, {"type": "drug", "id": "vitamin_k", "name": "Vitamin K", "search": "vitamin k", "url": "NUR2460Pharmacology.html?drug=vitamin_k"}, {"type": "drug", "id": "hep_b_vax", "name": "Hepatitis B Vaccine", "search": "hepatitis b vaccine", "url": "NUR2460Pharmacology.html?drug=hep_b_vax"}, {"type": "drug", "id": "surfactant", "name": "Surfactant", "search": "surfactant", "url": "NUR2460Pharmacology.html?drug=surfactant"}, {"type": "drug", "id": "nas_meds", "name": "NAS Medications", "search": "nas medications", "url": "NUR2460Pharmacology.html?drug=nas_meds"}, {"type": "drug", "id": "acyclovir", "name": "Acyclovir", "search": "acyclovir", "url": "NUR2460Pharmacology.html?drug=acyclovir"}, {"type": "drug", "id": "metronidazole", "name": "Metronidazole (Flagyl)", "search": "metronidazole (flagyl)", "url": "NUR2460Pharmacology.html?drug=metronidazole"}, {"type": "drug", "id": "permethrin", "name": "Permethrin", "search": "permethrin", "url": "NUR2460Pharmacology.html?drug=permethrin"}, {"type": "drug", "id": "silvadene", "name": "Silver Sulfadiazine", "search": "silver sulfadiazine", "url": "NUR2460Pharmacology.html?drug=silvadene"}, {"type": "drug", "id": "isotretinoin", "name": "Isotretinoin (Accutane)", "search": "isotretinoin (accutane)", "url": "NUR2460Pharmacology.html?drug=isotretinoin"}, {"type": "drug", "id": "griseofulvin", "name": "Griseofulvin", "search": "griseofulvin", "url": "NUR2460Pharmacology.html?drug=griseofulvin"}, {"type": "drug", "id": "phenytoin_e3", "name": "Phenytoin (Dilantin)", "search": "phenytoin (dilantin)", "url": "NUR2460Pharmacology.html?drug=phenytoin_e3"}, {"type": "drug", "id": "carbamazepine", "name": "Carbamazepine (Tegretol)", "search": "carbamazepine (tegretol)", "url": "NUR2460Pharmacology.html?drug=carbamazepine"}, {"type": "drug", "id": "valproic_acid", "name": "Valproic Acid (Depakote)", "search": "valproic acid (depakote)", "url": "NUR2460Pharmacology.html?drug=valproic_acid"}, {"type": "drug", "id": "phenobarbital_e3", "name": "Phenobarbital", "search": "phenobarbital", "url": "NUR2460Pharmacology.html?drug=phenobarbital_e3"}, {"type": "drug", "id": "lorazepam_e3", "name": "Lorazepam (Ativan)", "search": "lorazepam (ativan)", "url": "NUR2460Pharmacology.html?drug=lorazepam_e3"}, {"type": "drug", "id": "albuterol", "name": "Albuterol", "search": "albuterol", "url": "NUR2460Pharmacology.html?drug=albuterol"}, {"type": "drug", "id": "fluticasone", "name": "Fluticasone", "search": "fluticasone", "url": "NUR2460Pharmacology.html?drug=fluticasone"}, {"type": "drug", "id": "montelukast", "name": "Montelukast (Singulair)", "search": "montelukast (singulair)", "url": "NUR2460Pharmacology.html?drug=montelukast"}, {"type": "drug", "id": "pancrelipase", "name": "Pancrelipase (Creon)", "search": "pancrelipase (creon)", "url": "NUR2460Pharmacology.html?drug=pancrelipase"}, {"type": "drug", "id": "dornase_alfa", "name": "Dornase Alfa (Pulmozyme)", "search": "dornase alfa (pulmozyme)", "url": "NUR2460Pharmacology.html?drug=dornase_alfa"}, {"type": "drug", "id": "digoxin_e3", "name": "Digoxin", "search": "digoxin", "url": "NUR2460Pharmacology.html?drug=digoxin_e3"}, {"type": "drug", "id": "furosemide_e3", "name": "Furosemide (Lasix)", "search": "furosemide (lasix)", "url": "NUR2460Pharmacology.html?drug=furosemide_e3"}, {"type": "drug", "id": "hydroxyurea", "name": "Hydroxyurea", "search": "hydroxyurea", "url": "NUR2460Pharmacology.html?drug=hydroxyurea"}, {"type": "drug", "id": "kayexalate", "name": "Kayexalate (SPS)", "search": "kayexalate (sps)", "url": "NUR2460Pharmacology.html?drug=kayexalate"}, {"type": "drug", "id": "insulin_peds", "name": "Insulin (Pediatric)", "search": "insulin (pediatric)", "url": "NUR2460Pharmacology.html?drug=insulin_peds"}, {"type": "drug", "id": "levothyroxine_e3", "name": "Levothyroxine", "search": "levothyroxine", "url": "NUR2460Pharmacology.html?drug=levothyroxine_e3"}, {"type": "drug", "id": "prednisone_e4", "name": "Prednisone", "search": "prednisone", "url": "NUR2460Pharmacology.html?drug=prednisone_e4"}, {"type": "drug", "id": "ors", "name": "Oral Rehydration Solution", "search": "oral rehydration solution", "url": "NUR2460Pharmacology.html?drug=ors"}, {"type": "drug", "id": "ondansetron_e4", "name": "Ondansetron (Zofran)", "search": "ondansetron (zofran)", "url": "NUR2460Pharmacology.html?drug=ondansetron_e4"}, {"type": "drug", "id": "vincristine", "name": "Vincristine", "search": "vincristine", "url": "NUR2460Pharmacology.html?drug=vincristine"}, {"type": "drug", "id": "filgrastim", "name": "Filgrastim (Neupogen)", "search": "filgrastim (neupogen)", "url": "NUR2460Pharmacology.html?drug=filgrastim"}, {"type": "drug", "id": "methylphenidate", "name": "Methylphenidate (Ritalin)", "search": "methylphenidate (ritalin)", "url": "NUR2460Pharmacology.html?drug=methylphenidate"}, {"type": "drug", "id": "lithium_e4", "name": "Lithium", "search": "lithium", "url": "NUR2460Pharmacology.html?drug=lithium_e4"}, {"type": "drug", "id": "fluoxetine_e4", "name": "Fluoxetine (Prozac)", "search": "fluoxetine (prozac)", "url": "NUR2460Pharmacology.html?drug=fluoxetine_e4"}, {"type": "drug", "id": "risperidone_e4", "name": "Risperidone (Risperdal)", "search": "risperidone (risperdal)", "url": "NUR2460Pharmacology.html?drug=risperidone_e4"}, {"type": "drug", "id": "lamotrigine_e4", "name": "Lamotrigine (Lamictal)", "search": "lamotrigine (lamictal)", "url": "NUR2460Pharmacology.html?drug=lamotrigine_e4"}];
+
+function hubSearchHandler(q){
+  const box = document.getElementById('hubResults');
+  q = q.trim().toLowerCase();
+  if(q.length < 2){ box.classList.remove('show'); box.innerHTML = ''; return; }
+  
+  const results = SEARCH_INDEX.filter(function(e){
+    return e.search.indexOf(q) !== -1 || e.name.toLowerCase().indexOf(q) !== -1;
+  }).slice(0, 12);
+  
+  if(results.length === 0){
+    box.innerHTML = '<div class="sr-empty">No results for "' + q.replace(/</g,'&lt;') + '"</div>';
+    box.classList.add('show');
+    return;
+  }
+  
+  box.innerHTML = results.map(function(r){
+    const typeClass = r.type === 'drug' ? 'drug' : 'topic';
+    const typeLabel = r.type === 'drug' ? 'Drug' : 'Topic';
+    return '<a class="sr-item" href="' + r.url + '">'
+      + '<span class="sr-type ' + typeClass + '">' + typeLabel + '</span>'
+      + '<span class="sr-name">' + r.name + '</span>'
+      + '<span class="sr-arrow">→</span>'
+      + '</a>';
+  }).join('');
+  box.classList.add('show');
+}
+
+// Close search on click outside
+document.addEventListener('click', function(e){
+  const wrap = document.querySelector('.search-wrap');
+  if(wrap && !wrap.contains(e.target)){
+    document.getElementById('hubResults').classList.remove('show');
+  }
+});
+
+// Close on Escape
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape'){
+    document.getElementById('hubResults').classList.remove('show');
+    document.getElementById('hubSearch').blur();
+  }
+});
+
+
+// ── Weak Spots Dashboard ──────────────────
+function renderWeakSpots(){
+  const el = document.getElementById('wsGrid');
+  const container = document.getElementById('weakSpots');
+  if(!el || !container) return;
+
+  let cards = [];
+
+  // 1. Unmastered study topics
+  try {
+    const sp = JSON.parse(localStorage.getItem('nur2460_progress')||'{}');
+    const topics = SEARCH_INDEX.filter(e => e.type === 'topic');
+    const unmastered = topics.filter(t => {
+      const v = sp[t.id];
+      return !v || v < 2; // 0=unread, 1=reviewed, 2=mastered
+    });
+    if(unmastered.length > 0){
+      const reviewed = unmastered.filter(t => sp[t.id] === 1);
+      const untouched = unmastered.filter(t => !sp[t.id]);
+      // Show untouched first, then reviewed
+      const sorted = untouched.concat(reviewed).slice(0, 6);
+      cards.push({
+        icon: '📚',
+        title: 'Topics to Master',
+        count: unmastered.length,
+        subtitle: unmastered.length + ' of ' + topics.length + ' topics not yet mastered',
+        items: sorted.map(t => ({
+          name: t.name,
+          url: t.url,
+          cls: sp[t.id] === 1 ? 'warn' : ''
+        }))
+      });
+    }
+  } catch(e){}
+
+  // 2. Unmastered drugs
+  try {
+    const pp = JSON.parse(localStorage.getItem('nur2460_pharm_progress')||'{}');
+    const drugs = SEARCH_INDEX.filter(e => e.type === 'drug');
+    const unmastered = drugs.filter(d => {
+      const v = pp[d.id];
+      return !v || v < 2;
+    });
+    if(unmastered.length > 0){
+      const reviewed = unmastered.filter(d => pp[d.id] === 1);
+      const untouched = unmastered.filter(d => !pp[d.id]);
+      const sorted = untouched.concat(reviewed).slice(0, 6);
+      cards.push({
+        icon: '💊',
+        title: 'Drugs to Master',
+        count: unmastered.length,
+        subtitle: unmastered.length + ' of ' + drugs.length + ' drugs not yet mastered',
+        items: sorted.map(d => ({
+          name: d.name,
+          url: d.url,
+          cls: pp[d.id] === 1 ? 'warn' : ''
+        }))
+      });
+    }
+  } catch(e){}
+
+  // 3. Lowest accuracy flashcard topics
+  try {
+    const fa = JSON.parse(localStorage.getItem('nur2460_fc_accuracy')||'{}');
+    const topicAccs = [];
+    Object.keys(fa).forEach(topic => {
+      const r = fa[topic].r || 0;
+      const w = fa[topic].w || 0;
+      const total = r + w;
+      if(total >= 3){ // need at least 3 attempts to be meaningful
+        const pct = Math.round(r / total * 100);
+        topicAccs.push({topic: topic, pct: pct, total: total});
+      }
+    });
+    topicAccs.sort(function(a,b){ return a.pct - b.pct; });
+    const weak = topicAccs.filter(t => t.pct < 80).slice(0, 6);
+    if(weak.length > 0){
+      cards.push({
+        icon: '🎯',
+        title: 'Weakest Flashcard Topics',
+        count: weak.length,
+        subtitle: 'Topics with accuracy below 80%',
+        items: weak.map(t => ({
+          name: t.topic + ' (' + t.pct + '%)',
+          url: 'NUR2460Flashcards.html',
+          cls: t.pct < 50 ? 'danger' : 'warn'
+        }))
+      });
+    }
+  } catch(e){}
+
+  // 4. Cards due today
+  try {
+    const sched = JSON.parse(localStorage.getItem('nur2460_fc_schedule')||'{}');
+    const now = Date.now();
+    let dueCount = 0;
+    Object.values(sched).forEach(dueAt => {
+      if(dueAt && dueAt <= now) dueCount++;
+    });
+    if(dueCount > 0){
+      cards.push({
+        icon: '📅',
+        title: 'Due for Review',
+        count: dueCount,
+        subtitle: dueCount + ' flashcard' + (dueCount > 1 ? 's' : '') + ' due today',
+        items: [{
+          name: 'Start review session →',
+          url: 'NUR2460Flashcards.html',
+          cls: 'warn'
+        }]
+      });
+    }
+  } catch(e){}
+
+  // Render
+  if(cards.length === 0){
+    container.style.display = 'none';
+    return;
+  }
+
+  container.style.display = '';
+  el.innerHTML = cards.map(function(card){
+    return '<div class="ws-card">'
+      + '<div class="ws-card-header">'
+      +   '<span class="ws-card-title">' + card.icon + ' ' + card.title + '</span>'
+      +   '<span class="ws-card-count">' + card.count + '</span>'
+      + '</div>'
+      + '<div class="ws-card-subtitle">' + card.subtitle + '</div>'
+      + '<div class="ws-items">'
+      +   card.items.map(function(item){
+            return '<a class="ws-item ' + (item.cls||'') + '" href="' + item.url + '">' + item.name + '</a>';
+          }).join('')
+      + '</div>'
+      + '</div>';
+  }).join('');
+}
+
+// Render on load
+renderWeakSpots();
+
 </script>
 </body>
 </html>

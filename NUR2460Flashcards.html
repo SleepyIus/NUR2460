@@ -216,6 +216,34 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',system-ui
 .session-btn-primary:hover{filter:brightness(1.1)}
 .session-btn-secondary{background:var(--bg);color:var(--text2)}
 .session-btn-secondary:hover{background:var(--border)}
+
+.tap-hint kbd{display:inline-block;padding:1px 5px;font-family:'SF Mono',Menlo,monospace;font-size:9px;font-weight:600;background:var(--surface2);color:var(--text2);border:1px solid var(--border);border-radius:3px;vertical-align:middle}
+
+.print-btn-fc{display:inline-block;background:transparent;color:var(--text2);border:1px solid var(--border);border-radius:6px;padding:6px 12px;font-family:inherit;font-size:11px;font-weight:600;cursor:pointer;margin:8px 0;transition:all .15s}
+.print-btn-fc:hover{color:var(--accent);border-color:var(--accent)}
+
+/* Print styles — print study sheet from grid view */
+@media print {
+  body{background:#fff!important;color:#000!important}
+  .sidebar,.sidebar-toggle,.mob-toggle,.mob-back,.sidebar-overlay,.mode-toggle,.study-view,.top-bar,.print-btn-fc,.session-summary,.end-screen,.card-wrapper,.perf-dashboard,.grid-filter,.grid-count,.sb-actions,.sb-back,.sb-theme,.exam-section,.session-overlay{display:none!important}
+  .grid-view,#gridView{display:block!important;padding:0!important;margin:0!important}
+  .grid-card{display:block!important;break-inside:avoid;page-break-inside:avoid;border:1px solid #999!important;background:transparent!important;box-shadow:none!important;margin-bottom:8px!important;padding:10px!important;width:100%!important;min-height:auto!important}
+  .grid-card-tag{display:none!important}
+  .grid-card-q{font-size:12px!important;font-weight:600!important;color:#000!important;margin-bottom:4px!important;line-height:1.4!important}
+  .grid-card-a{display:block!important;font-size:11px!important;color:#000!important;line-height:1.4!important;border-top:1px dashed #999!important;padding-top:4px!important;margin-top:4px!important}
+  .grid-card-a strong{color:#000!important}
+  .layout,main,.main{display:block!important;padding:0!important;margin:0!important}
+  ul,ol{padding-left:18px!important;margin:2px 0!important}
+  li{font-size:11px!important;color:#000!important;line-height:1.3!important;margin:1px 0!important}
+  @page{margin:0.5in;size:letter}
+}
+
+.due-banner{display:flex;align-items:center;gap:12px;padding:12px 16px;margin-bottom:14px;background:linear-gradient(90deg,rgba(245,158,11,.12),rgba(245,158,11,.04));border:1px solid rgba(245,158,11,.4);border-radius:10px;cursor:pointer;transition:all .15s}
+.due-banner:hover{border-color:rgba(245,158,11,.7);background:linear-gradient(90deg,rgba(245,158,11,.18),rgba(245,158,11,.08))}
+.due-banner-icon{font-size:18px;flex-shrink:0}
+.due-banner-text{flex:1;font-size:13px;color:var(--text)}
+.due-banner-text strong{color:#f59e0b;font-weight:700}
+.due-banner-cta{font-size:12px;font-weight:600;color:#f59e0b;flex-shrink:0}
 </style>
 </head>
 <body>
@@ -237,9 +265,10 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',system-ui
       <span style="color:var(--text3)">·</span>
       <button class="sb-select-btn" onclick="deselectAll()">Deselect All</button>
     </div>
-    <div style="display:flex;gap:6px">
-      <button class="top-btn" id="shuffleBtn" onclick="toggleShuffle()" style="flex:1;text-align:center">🔀 Shuffle</button>
-      <button class="top-btn" id="starFilter" onclick="toggleStarFilter()" style="flex:1;text-align:center">⭐ Starred</button>
+    <div style="display:flex;gap:6px;flex-wrap:wrap">
+      <button class="top-btn" id="shuffleBtn" onclick="toggleShuffle()" style="flex:1;min-width:90px;text-align:center">🔀 Shuffle</button>
+      <button class="top-btn" id="starFilter" onclick="toggleStarFilter()" style="flex:1;min-width:90px;text-align:center">⭐ Starred</button>
+      <button class="top-btn" id="dueFilter" onclick="toggleDueFilter()" style="flex:1;min-width:120px;text-align:center" title="Show only cards due for review based on spaced repetition">📅 Due Today <span id="dueCount" style="opacity:.7"></span></button>
     </div>
     <button class="sb-start" onclick="switchMode('study');startRound()">Start Studying</button>
   </div>
@@ -262,6 +291,11 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',system-ui
 
 <div class="perf-dashboard" id="perfDashboard">
   <div class="perf-title">📊 Performance Tracker</div>
+  <div class="due-banner" id="dueBanner" onclick="startDueSession()" style="display:none">
+    <span class="due-banner-icon">📅</span>
+    <span class="due-banner-text"><strong id="dueBannerCount">0</strong> cards due for review today</span>
+    <span class="due-banner-cta">Study now →</span>
+  </div>
   <div class="perf-tiers">
     <div class="perf-tier tier-new"><div class="perf-tier-count" id="tierNew">0</div><div class="perf-tier-label">New</div></div>
     <div class="perf-tier tier-learning"><div class="perf-tier-count" id="tierLearning">0</div><div class="perf-tier-label">Learning</div></div>
@@ -285,6 +319,7 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',system-ui
     </select>
   </div>
   <div class="grid-count" id="gridCount"></div>
+  <button class="print-btn-fc" onclick="printStudySheet()" title="Print currently filtered cards as a study sheet">⎙ Print Study Sheet</button>
   <div id="gridContainer"></div>
 </div>
 
@@ -308,7 +343,7 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',system-ui
       <div class="card-question" id="cardQ"></div>
       <hr class="card-divider">
       <div class="card-answer" id="cardA"></div>
-      <div class="tap-hint" id="tapHint">Tap to reveal answer</div>
+      <div class="tap-hint" id="tapHint">Tap or press <kbd>Space</kbd> to reveal</div>
     </div>
     <div class="card-actions" id="cardActions">
       <button class="action-btn btn-wrong" onclick="answer(false)">✗ Wrong</button>
@@ -448,7 +483,7 @@ const CARDS=[
 {q:"Placenta previa vs abruptio placentae — how does the bleeding differ?",a:"<strong>Previa:</strong> painless, bright red, sudden. <strong>Abruption:</strong> painful, dark red, may have concealed bleeding with rigid board-like abdomen and uterine tenderness.",t:"HR Pregnancy",p:5,s:"ati"},
 {q:"HELLP Syndrome — what does it stand for and how is it diagnosed?",a:"H=Hemolysis, EL=Elevated Liver enzymes, LP=Low Platelets (<100,000). Diagnosed by LABS only — NOT clinical findings. Many women may NOT have signs of preeclampsia.",t:"HR Pregnancy",p:5,s:"ati"},
 {q:"What are the MgSO4 toxicity signs and antidote?",a:"Toxicity: absent DTRs, respirations <12/min, urine output <25-30 mL/hr, Mg level ≥10 mEq/L. <strong>Antidote: CALCIUM GLUCONATE</strong> — always keep at bedside.",t:"HR Pregnancy",p:5,s:"ati"},
-{q:"What are the GDM blood glucose targets (Perry)?",a:"Fasting: <95 mg/dL. 1-hr postprandial: <140 mg/dL. 2-hr postprandial: <120 mg/dL. GDM initially managed with diet and exercise; insulin if glucose persistently high.",t:"HR Pregnancy",p:5,s:"both"},
+{q:"What are the GDM blood glucose targets?",a:"Fasting: <95 mg/dL. 1-hr postprandial: <140 mg/dL. 2-hr postprandial: <120 mg/dL. GDM initially managed with diet and exercise; insulin if glucose persistently high.",t:"HR Pregnancy",p:5,s:"both"},
 {q:"What is fetal fibronectin and what does a positive result mean?",a:"Protein present between 24-34 wk 6 days indicates inflammation and increased risk for preterm labor within the next 2 weeks. fFN + cervical length = best predictor of preterm labor.",t:"HR Pregnancy",p:5,s:"ati"},
 {q:"How does dehydration cause preterm labor?",a:"Dehydration → pituitary releases ADH AND oxytocin → oxytocin stimulates uterine contractions → preterm labor. IV hydration is one of the first interventions.",t:"HR Pregnancy",p:5,s:"ati"},
 // --- HR L&D ---
@@ -492,7 +527,7 @@ const CARDS=[
 {q:"What are the TORCH infections and why do they matter?",a:"<strong>T</strong>=Toxoplasmosis (cat litter, raw meat), <strong>O</strong>=Other (Hep B, syphilis, varicella, HIV), <strong>R</strong>=Rubella, <strong>C</strong>=CMV (most common congenital infection), <strong>H</strong>=Herpes. All can cause congenital anomalies, IUGR, or fetal death if contracted during pregnancy.",t:"HR Pregnancy",p:5,s:"ati"},
 {q:"Hyperemesis gravidarum — when does it become a diagnosis and what is first-line treatment?",a:"N/V prolonged <strong>past 16 weeks</strong> or causing weight loss, dehydration, ketonuria, and electrolyte imbalances. <strong>First-line:</strong> pyridoxine (B6) + doxylamine (ACOG recommendation). IV LR for hydration. Labs show elevated Hct (hemoconcentration).",t:"HR Pregnancy",p:5,s:"ati"},
 {q:"Preeclampsia vs severe preeclampsia — what are the BP thresholds?",a:"<strong>Preeclampsia:</strong> BP ≥140/90 on 2 occasions ≥4 hr apart + proteinuria ≥1+. <strong>Severe preeclampsia:</strong> BP ≥160/110 + proteinuria >3+ + oliguria + creatinine >1.1 + cerebral/visual disturbances + hyperreflexia with clonus + epigastric/RUQ pain + thrombocytopenia.",t:"HR Pregnancy",p:5,s:"ati"},
-{q:"What is placenta accreta and why is it dangerous?",a:"Abnormal adherence of placenta to myometrium — the placenta cannot separate after delivery. Occurs in up to <strong>25% of women with previa + prior cesarean</strong> (Perry). Often requires <strong>hysterectomy</strong> and carries high risk of massive hemorrhage.",t:"HR Pregnancy",p:5,s:"both"},
+{q:"What is placenta accreta and why is it dangerous?",a:"Abnormal adherence of placenta to myometrium — the placenta cannot separate after delivery. Occurs in up to <strong>25% of women with previa + prior cesarean</strong>. Often requires <strong>hysterectomy</strong> and carries high risk of massive hemorrhage.",t:"HR Pregnancy",p:5,s:"both"},
 
 // --- HR L&D (additional) ---
 {q:"VBAC — what are the selection criteria and absolute contraindication?",a:"<strong>Criteria:</strong> 1-2 prior low transverse cesareans, adequate pelvis, nonrecurring indication for prior cesarean, providers available for emergency cesarean. <strong>Absolute contraindication:</strong> previous <strong>classical VERTICAL uterine incision</strong> (high rupture risk).",t:"HR L&D",p:6,s:"ati"},
@@ -655,7 +690,7 @@ const CARDS=[
 
 // ═══ ENGINE ═══
 let deck=[],current=0,rightN=0,wrongN=0,wrongCards=[];
-let shuffleOn=false,starFilterOn=false;
+let shuffleOn=false,starFilterOn=false,dueOnly=false;
 let starred=JSON.parse(localStorage.getItem('nur2460_fc_stars')||'{}');
 
 const EXAMS={
@@ -743,6 +778,28 @@ function deselectAll(){
 
 function toggleShuffle(){shuffleOn=!shuffleOn;document.getElementById('shuffleBtn').classList.toggle('active',shuffleOn);startRound()}
 function toggleStarFilter(){starFilterOn=!starFilterOn;document.getElementById('starFilter').classList.toggle('active',starFilterOn);startRound()}
+function toggleDueFilter(){
+  dueOnly=!dueOnly;
+  document.getElementById('dueFilter').classList.toggle('active',dueOnly);
+  updateDueCount();
+}
+function updateDueCount(){
+  const n=countDueCards();
+  const el=document.getElementById('dueCount');
+  if(el) el.textContent=n>0?'('+n+')':'';
+  // Update dashboard banner too
+  const banner=document.getElementById('dueBanner');
+  const bannerCount=document.getElementById('dueBannerCount');
+  if(banner && bannerCount){
+    if(n>0){
+      banner.style.display='flex';
+      bannerCount.textContent=n;
+    } else {
+      banner.style.display='none';
+    }
+  }
+}
+
 
 // Session tracking
 var sessionChanges=[];
@@ -752,6 +809,10 @@ function resetSessionTracking(){sessionChanges=[];sessionTopicStats={};}
 function startRound(){
   let pool=CARDS.filter(c=>selectedTopics.has(c.t));
   if(starFilterOn)pool=pool.filter((_,i)=>starred[CARDS.indexOf(_)]);
+  if(dueOnly){
+    const dueSet=new Set(getDueCards());
+    pool=pool.filter(c=>dueSet.has(CARDS.indexOf(c)));
+  }
   // Close mobile sidebar
   closeSidebar();
   if(shuffleOn)pool.sort(()=>Math.random()-.5);
@@ -827,6 +888,8 @@ function updateUI(){
   const wPct=total?((wrongN/total)*100)+'%':'0%';
   document.getElementById('progRight').style.width=rPct;
   document.getElementById('progWrong').style.width=wPct;
+
+  updateDueCount();
 }
 
 function showEnd(){
@@ -848,12 +911,55 @@ function reviewWrong(){
   showCard();updateUI();
 }
 
-// Keyboard shortcuts
-document.addEventListener('keydown',e=>{
-  if(e.key===' '||e.key==='Enter'){e.preventDefault();if(!document.getElementById('cardA').classList.contains('visible'))revealAnswer()}
-  else if(e.key==='ArrowRight'&&document.getElementById('cardA').classList.contains('visible'))answer(true);
-  else if(e.key==='ArrowLeft'&&document.getElementById('cardA').classList.contains('visible'))answer(false);
-  else if(e.key==='s'||e.key==='S')toggleStar();
+// ── Keyboard shortcuts ────────────────────────
+document.addEventListener('keydown', function(e){
+  // Don't intercept when typing in inputs
+  if(e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) return;
+
+  // Only active when in study view (card is showing)
+  const studyView = document.getElementById('studyView');
+  const cardWrapper = document.getElementById('cardWrapper');
+  const endScreen = document.getElementById('endScreen');
+
+  // If end screen is visible, only handle Escape
+  const endVisible = endScreen && endScreen.offsetParent !== null;
+  if(endVisible){
+    if(e.key === 'Escape'){ e.preventDefault(); if(typeof closeSession === 'function') closeSession(); }
+    return;
+  }
+
+  const inStudyMode = studyView && !studyView.classList.contains('hidden') && cardWrapper && cardWrapper.style.display !== 'none';
+  if(!inStudyMode) return;
+
+  const isRevealed = document.getElementById('cardA').classList.contains('visible');
+
+  switch(e.key){
+    case ' ':
+    case 'Enter':
+      if(!isRevealed){ e.preventDefault(); revealAnswer(); }
+      break;
+    case 'ArrowRight':
+    case 'k':
+    case 'K':
+      e.preventDefault();
+      if(!isRevealed) revealAnswer();
+      else answer(true);
+      break;
+    case 'ArrowLeft':
+    case 'j':
+    case 'J':
+      if(isRevealed){ e.preventDefault(); answer(false); }
+      break;
+    case 's':
+    case 'S':
+      e.preventDefault();
+      if(typeof toggleStar === 'function') toggleStar();
+      break;
+    case 'Escape':
+      e.preventDefault();
+      if(typeof closeSession === 'function') closeSession();
+      break;
+  }
 });
 
 // Touch swipe support
@@ -982,7 +1088,46 @@ renderGrid();
 // ═══ PERFORMANCE TRACKER ═══
 const MASTERY_KEY='nur2460_fc_mastery';
 const ACCURACY_KEY='nur2460_fc_accuracy';
+const SCHEDULE_KEY='nur2460_fc_schedule';
 const TIER_NAMES=['New','Learning','Familiar','Mastered'];
+
+function getSchedule(){try{return JSON.parse(localStorage.getItem(SCHEDULE_KEY))||{}}catch(e){return{}}}
+function saveSchedule(s){localStorage.setItem(SCHEDULE_KEY,JSON.stringify(s))}
+
+// Spaced repetition: schedule a card based on outcome and current tier
+function scheduleCard(cardIdx,correct){
+  const m=getMastery();
+  const s=getSchedule();
+  const newStreak=correct?(m[cardIdx]||0)+1:0;
+  const tier=newStreak>=3?3:newStreak>=2?2:newStreak>=1?1:0;
+  let daysUntilDue;
+  if(!correct){daysUntilDue=1}
+  else if(tier>=3){daysUntilDue=7}
+  else if(tier===2){daysUntilDue=4}
+  else if(tier===1){daysUntilDue=2}
+  else {daysUntilDue=1}
+  s[cardIdx]=Date.now()+(daysUntilDue*24*60*60*1000);
+  saveSchedule(s);
+}
+
+function getDueCards(){
+  // Cards previously studied AND now due for review
+  const s=getSchedule();
+  const now=Date.now();
+  const due=[];
+  CARDS.forEach((c,i)=>{
+    const dueAt=s[i];
+    if(dueAt && dueAt<=now) due.push(i);
+  });
+  return due;
+}
+
+function getNewCards(){
+  const s=getSchedule();
+  return CARDS.map((c,i)=>i).filter(i=>!s[i]);
+}
+
+function countDueCards(){return getDueCards().length}
 
 function getMastery(){try{return JSON.parse(localStorage.getItem(MASTERY_KEY))||{}}catch(e){return{}}}
 function saveMastery(m){localStorage.setItem(MASTERY_KEY,JSON.stringify(m))}
@@ -1099,6 +1244,29 @@ function closeSession(){
 
 // Initialize dashboard on load
 renderDashboard();
+updateDueCount();
+
+
+
+function startDueSession(){
+  // Switch to study mode
+  switchMode('study');
+  // Enable "due only" filter
+  if(!dueOnly){
+    dueOnly=true;
+    document.getElementById('dueFilter').classList.add('active');
+  }
+  // Make sure all topics are selected so we have the full pool to filter from
+  selectAll();
+}
+
+// Print currently visible cards as study sheet
+function printStudySheet(){
+  // Flip all visible grid cards (so answers are visible in print)
+  document.querySelectorAll('.grid-card').forEach(c => c.classList.add('flipped'));
+  // Brief timeout to allow render before print dialog
+  setTimeout(() => window.print(), 100);
+}
 
 </script>
 </body>
