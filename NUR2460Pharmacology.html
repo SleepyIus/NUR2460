@@ -211,8 +211,8 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',system-ui
   @page{margin:0.5in;size:letter}
 }
 
-.print-btn{background:transparent;color:var(--text3);border:1px solid var(--border);border-radius:6px;padding:8px 10px;font-size:14px;cursor:pointer;flex-shrink:0;transition:all .15s;line-height:1;position:absolute;bottom:0;right:90px;z-index:2}
-.print-btn:hover{color:var(--accent);border-color:var(--accent)}
+.print-btn{background:transparent;color:var(--text3);border:1px solid var(--border);border-bottom:2px solid var(--border);border-radius:6px 6px 0 0;padding:10px 14px;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s;position:absolute;bottom:0;right:90px;z-index:2;box-shadow:-12px 0 12px -8px var(--surface)}
+.print-btn:hover{color:var(--accent);border-color:var(--accent);border-bottom-color:var(--accent)}
 
 /* Cross-tool: related topic chips in drug modal */
 .related-topics{margin-top:10px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
@@ -1995,7 +1995,8 @@ function togglePharmQuickReview(){
       + '<div class="pharm-grid-cell"><h4>Interactions</h4>'+d.interactions+'</div>'
       + '<div class="pharm-grid-cell"><h4>Client Education</h4>'+d.education+'</div>'
       + '<div class="pharm-grid-cell full-width"><h4>Evaluation of Medication Effectiveness</h4>'+d.evaluation+'</div>'
-      + '</div>';
+      + '</div>'
+      + renderRelatedTopics(currentDrugId);
     body.innerHTML = grid;
     body.scrollTop = 0;
     fab.classList.remove('in-review');
@@ -3468,15 +3469,6 @@ function openDrug(id){
   document.getElementById('modalTitle').textContent=d.title;
   document.getElementById('modalSub').textContent=d.subtitle;
   document.getElementById('modalRefs').innerHTML=d.refs.map(r=>'<span class="modal-ref">'+r.icon+' '+r.short+'</span>').join('');
-  // Render related study topics
-  const relatedHtml = renderRelatedTopics(id);
-  let relatedEl = document.getElementById('modalRelatedTopics');
-  if(!relatedEl){
-    relatedEl = document.createElement('div');
-    relatedEl.id = 'modalRelatedTopics';
-    document.getElementById('modalRefs').parentElement.appendChild(relatedEl);
-  }
-  relatedEl.innerHTML = relatedHtml;
   const grid='<div class="pharm-grid">'
     +'<div class="pharm-grid-cell"><h4>Expected Pharmacological Action</h4>'+d.action+'</div>'
     +'<div class="pharm-grid-cell"><h4>Therapeutic Use</h4>'+d.use+'</div>'
@@ -3487,7 +3479,8 @@ function openDrug(id){
     +'<div class="pharm-grid-cell"><h4>Interactions</h4>'+d.interactions+'</div>'
     +'<div class="pharm-grid-cell"><h4>Client Education</h4>'+d.education+'</div>'
     +'<div class="pharm-grid-cell full-width"><h4>Evaluation of Medication Effectiveness</h4>'+d.evaluation+'</div>'
-    +'</div>';
+    +'</div>'
+    + renderRelatedTopics(id);
   document.getElementById('modalBody').innerHTML=grid;
   document.getElementById('modalOverlay').classList.add('show');
   document.body.style.overflow='hidden';
