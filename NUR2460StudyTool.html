@@ -876,38 +876,59 @@ function updateBars(){
   let total=0,done=0;
   Object.keys(PARTS).forEach(partId=>{
     const ids=PARTS[partId];
-    const partDone=ids.filter(id=>p[id]).length;
-    total+=ids.length;done+=partDone;
+    let partMastered=0, partReviewed=0;
+    ids.forEach(id=>{
+      const v=p[id];
+      if(v===2||v===true) partMastered++;
+      else if(v===1) partReviewed++;
+    });
+    const partDone=partMastered+partReviewed;
+    total+=ids.length; done+=partDone;
     const pct=Math.round((partDone/ids.length)*100);
     const countEl=document.getElementById(partId+'count');
     const barEl=document.getElementById(partId+'bar');
     if(countEl)countEl.textContent=partDone+'/'+ids.length;
-    if(barEl)barEl.style.width=pct+'%';
+    if(barEl){
+      barEl.style.width=pct+'%';
+      if(partDone>0){
+        const masteredRatio=Math.round(partMastered/partDone*100);
+        barEl.style.background='linear-gradient(to right,var(--accent) '+masteredRatio+'%,transparent '+masteredRatio+'%),repeating-linear-gradient(45deg,#f59e0b,#f59e0b 3px,#d97706 3px,#d97706 6px)';
+      } else {
+        barEl.style.background='';
+      }
+    }
   });
-  // Exam 1 totals
-  const e1parts=['part1','part2','part3','part4'];
-  let e1total=0,e1done=0;
-  e1parts.forEach(pid=>{if(PARTS[pid]){const ids=PARTS[pid];e1total+=ids.length;e1done+=ids.filter(id=>p[id]).length}});
-  const e1pct=e1total?Math.round((e1done/e1total)*100):0;
-  document.getElementById('plannerCount').textContent=e1done+' / '+e1total;
-  document.getElementById('plannerBar').style.width=e1pct+'%';
-  // Exam 2 totals
-  const e2parts=['part5','part6','part7','part8'];
-  const e3parts=['part9','part10','part11','part12','part13'];
-  let e2total=0,e2done=0;
-  e2parts.forEach(pid=>{if(PARTS[pid]){const ids=PARTS[pid];e2total+=ids.length;e2done+=ids.filter(id=>p[id]).length}});
-  const e2pct=e2total?Math.round((e2done/e2total)*100):0;
-  var e2c=document.getElementById('exam2Count');if(e2c)e2c.textContent=e2done+' / '+e2total;
-  var e2b=document.getElementById('exam2Bar');if(e2b)e2b.style.width=e2pct+'%';
-  // Exam 3
-  let e3t=0,e3d=0;
-  e3parts.forEach(pid=>{const ids=PARTS[pid];if(!ids)return;e3t+=ids.length;ids.forEach(id=>{if(p[id])e3d++});
-    const el=document.getElementById(pid+'count');if(el)el.textContent=e3d+'/'+e3t;
-    const b=document.getElementById(pid+'bar');if(b)b.style.width=(e3t?Math.round(e3d/e3t*100):0)+'%';
+  const totalPct=total?Math.round((done/total)*100):0;
+  // Update exam-level bars
+  ['exam1','exam2','exam3','exam4'].forEach((eid,i)=>{
+    const examParts = [['part1','part2','part3','part4'],['part5','part6','part7','part8'],['part9','part10','part11','part12','part13'],['part14','part15','part16','part17']][i];
+    let eMastered=0,eReviewed=0,eTotal=0;
+    examParts.forEach(pid=>{
+      const ids=PARTS[pid]||[];
+      ids.forEach(id=>{
+        const v=p[id];
+        if(v===2||v===true) eMastered++;
+        else if(v===1) eReviewed++;
+      });
+      eTotal+=ids.length;
+    });
+    const eDone=eMastered+eReviewed;
+    const ePct=eTotal?Math.round(eDone/eTotal*100):0;
+    const eCountId=i===0?'plannerCount':'exam'+(i+1)+'Count';
+    const eBarId=i===0?'plannerBar':'exam'+(i+1)+'Bar';
+    const ec=document.getElementById(eCountId);
+    const eb=document.getElementById(eBarId);
+    if(ec)ec.textContent=eDone+' / '+eTotal;
+    if(eb){
+      eb.style.width=ePct+'%';
+      if(eDone>0){
+        const mr=Math.round(eMastered/eDone*100);
+        eb.style.background='linear-gradient(to right,var(--accent) '+mr+'%,transparent '+mr+'%),repeating-linear-gradient(45deg,#f59e0b,#f59e0b 3px,#d97706 3px,#d97706 6px)';
+      } else {
+        eb.style.background='';
+      }
+    }
   });
-  const e3pct=e3t?Math.round((e3d/e3t)*100):0;
-  const e3c=document.getElementById('exam3Count');if(e3c)e3c.textContent=e3d+' / '+e3t;
-  const e3b=document.getElementById('exam3Bar');if(e3b)e3b.style.width=e3pct+'%';
 }
 
 function resetProgress(){

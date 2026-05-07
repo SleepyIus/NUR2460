@@ -888,53 +888,48 @@ function togglePharmCheck(el){
 
 function updatePharmBars(){
   const p=getPharmProgress();
-  let total=0,done=0;
-  const e1cats=['pc1','pc2','pc3','pc4','pc5','pc6','pc7'];
-  e1cats.forEach(catId=>{
-    const ids=PHARM_CATS[catId];
-    const catDone=ids.filter(id=>p[id]).length;
-    total+=ids.length;done+=catDone;
-    const el=document.getElementById(catId+'count');
-    if(el)el.textContent=catDone+'/'+ids.length;
+  
+  function setBarStyle(barEl, mastered, reviewed){
+    var done=mastered+reviewed;
+    if(done>0){
+      var mr=Math.round(mastered/done*100);
+      barEl.style.background='linear-gradient(to right,var(--accent) '+mr+'%,transparent '+mr+'%),repeating-linear-gradient(45deg,#f59e0b,#f59e0b 3px,#d97706 3px,#d97706 6px)';
+    } else {
+      barEl.style.background='';
+    }
+  }
+  
+  var examCats={
+    e1:['pc1','pc2','pc3','pc4','pc5','pc6','pc7'],
+    e2:['pc8','pc9','pc10','pc11','pc12'],
+    e3:['pc13','pc14','pc15','pc16'],
+    e4:['pc17','pc18','pc19']
+  };
+  var examIds={e1:{count:'pharmCount',bar:'pharmBar'},e2:{count:'pharmCount2',bar:'pharmBar2'},e3:{count:'exam3Count',bar:'exam3Bar'},e4:{count:'exam4Count',bar:'exam4Bar'}};
+  
+  Object.keys(examCats).forEach(function(ek){
+    var cats=examCats[ek];
+    var eMastered=0,eReviewed=0,eTotal=0;
+    cats.forEach(function(catId){
+      var ids=PHARM_CATS[catId];if(!ids)return;
+      var catMastered=0,catReviewed=0;
+      ids.forEach(function(id){
+        var v=p[id];
+        if(v===2||v===true) catMastered++;
+        else if(v===1) catReviewed++;
+      });
+      var catDone=catMastered+catReviewed;
+      eTotal+=ids.length; eMastered+=catMastered; eReviewed+=catReviewed;
+      var el=document.getElementById(catId+'count');
+      if(el)el.textContent=catDone+'/'+ids.length;
+    });
+    var eDone=eMastered+eReviewed;
+    var ePct=eTotal?Math.round(eDone/eTotal*100):0;
+    var ec=document.getElementById(examIds[ek].count);
+    var eb=document.getElementById(examIds[ek].bar);
+    if(ec)ec.textContent=eDone+' / '+eTotal;
+    if(eb){eb.style.width=ePct+'%';setBarStyle(eb,eMastered,eReviewed);}
   });
-  const pct=total?Math.round((done/total)*100):0;
-  document.getElementById('pharmCount').textContent=done+' / '+total;
-  // Exam 2 pharm
-  const e2cats=['pc8','pc9','pc10','pc11','pc12'];
-  const e3cats=['pc13','pc14','pc15','pc16'];
-  const e4cats=['pc17','pc18','pc19'];
-  let e2total=0,e2done=0;
-  e2cats.forEach(catId=>{
-    const ids=PHARM_CATS[catId];if(!ids)return;
-    const catDone=ids.filter(id=>p[id]).length;
-    e2total+=ids.length;e2done+=catDone;
-    const el=document.getElementById(catId+'count');
-    if(el)el.textContent=catDone+'/'+ids.length;
-  });
-  const e2pct=e2total?Math.round((e2done/e2total)*100):0;
-  var e2c=document.getElementById('pharmCount2');if(e2c)e2c.textContent=e2done+' / '+e2total;
-  var e2b=document.getElementById('pharmBar2');if(e2b)e2b.style.width=e2pct+'%';
-  // Exam 3 pharm
-  let e3total=0,e3done=0;
-  e3cats.forEach(catId=>{
-    const ids=PHARM_CATS[catId];if(!ids)return;
-    const catDone=ids.filter(id=>p[id]).length;
-    e3total+=ids.length;e3done+=catDone;
-  });
-  const e3pct=e3total?Math.round((e3done/e3total)*100):0;
-  var e3c=document.getElementById('exam3Count');if(e3c)e3c.textContent=e3done+' / '+e3total;
-  var e3b=document.getElementById('exam3Bar');if(e3b)e3b.style.width=e3pct+'%';
-  // Exam 4
-  let e4total=0,e4done=0;
-  e4cats.forEach(catId=>{
-    const ids=PHARM_CATS[catId];if(!ids)return;
-    const catDone=ids.filter(id=>p[id]).length;
-    e4total+=ids.length;e4done+=catDone;
-  });
-  const e4pct=e4total?Math.round((e4done/e4total)*100):0;
-  var e4c=document.getElementById('exam4Count');if(e4c)e4c.textContent=e4done+' / '+e4total;
-  var e4b=document.getElementById('exam4Bar');if(e4b)e4b.style.width=e4pct+'%';
-  document.getElementById('pharmBar').style.width=pct+'%';
 }
 
 function resetPharmProgress(){
