@@ -184,7 +184,9 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',system-ui
 
 /* Print styles */
 @media print {
-  body{background:#fff!important;color:#000!important}
+  body{background:#fff!important;color:#000!important
+.abbr-mark{border-bottom:none!important;cursor:default!important}
+}
   .sidebar,.sidebar-toggle,.sidebar-overlay,.back-home-mobile,.modal-close,.qr-fab,.print-btn,#searchInput,.search-results,.modal-refs{display:none!important}
   .modal-overlay{position:static!important;background:transparent!important;display:block!important;overflow:visible!important;height:auto!important}
   .modal-overlay:not(.show) #modalBody,.modal-overlay:not(.show) .modal-header{display:none!important}
@@ -318,7 +320,9 @@ body.compare-mode .pharm-drug-row{padding-left:24px}
 .print-deep-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
 .print-deep-content{font-size:13px;line-height:1.6;color:var(--text2)}
 @media print{
-  .print-overlay-header .print-overlay-close{display:none!important}
+  .print-overlay-header .print-overlay-close{display:none!important
+.abbr-mark{border-bottom:none!important;cursor:default!important}
+}
   .print-overlay{padding:0!important}
   .pharm-print-overlay{display:none!important}
   .print-deep-section{page-break-inside:avoid;border:1px solid #ccc!important;background:transparent!important}
@@ -339,6 +343,8 @@ body.compare-mode .pharm-drug-row{padding-left:24px}
 .print-mode-btn{padding:6px 14px;background:transparent;border:none;color:var(--text3);font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s}
 .print-mode-btn.active{background:var(--accent);color:#fff}
 .print-mode-btn:hover:not(.active){background:var(--surface2)}
+
+.print-overlay .abbr-mark{border-bottom:none!important;cursor:default!important}
 </style>
 </head>
 <body>

@@ -254,7 +254,9 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',system-ui
 
 /* Print styles — for printing Quick Reviews / topic content */
 @media print {
-  body{background:#fff!important;color:#000!important}
+  body{background:#fff!important;color:#000!important
+.abbr-mark{border-bottom:none!important;cursor:default!important}
+}
   .sidebar,.sidebar-toggle,.sidebar-overlay,.back-home-mobile,.modal-close,.qr-fab,.tab-bar,#searchInput,.search-results,.modal-refs{display:none!important}
   .modal-overlay{position:static!important;background:transparent!important;display:block!important;overflow:visible!important;height:auto!important}
   .modal-overlay:not(.show) #modalBody,.modal-overlay:not(.show) .modal-header{display:none!important}
@@ -317,7 +319,9 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',system-ui
 .print-topic-title{font-family:'DM Serif Display',serif;font-size:18px;color:var(--text);margin-bottom:4px}
 .print-topic-sub{font-size:12px;color:var(--text3);margin-bottom:12px}
 @media print{
-  .print-overlay-header{display:none!important}
+  .print-overlay-header{display:none!important
+.abbr-mark{border-bottom:none!important;cursor:default!important}
+}
   .print-overlay{padding:0!important;background:#fff!important}
   .print-topic-block{page-break-inside:avoid}
   .print-topic-title{color:#000!important;font-size:20px!important}
@@ -347,7 +351,9 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',system-ui
 .print-deep-content ul{padding-left:18px;margin:4px 0}
 .print-deep-content li{margin:3px 0}
 @media print{
-  .print-deep-section{border:1px solid #ccc!important;background:transparent!important;page-break-inside:avoid}
+  .print-deep-section{border:1px solid #ccc!important;background:transparent!important;page-break-inside:avoid
+.abbr-mark{border-bottom:none!important;cursor:default!important}
+}
   .print-deep-label{color:#000!important}
   .print-deep-content{color:#000!important}
   .print-mode-toggle{display:none!important}
@@ -387,6 +393,8 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',system-ui
 .pharm-print-all{padding:12px;text-align:center;border-top:1px solid var(--border);margin-top:8px}
 .pharm-print-all-btn{padding:10px 24px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;width:100%}
 .pharm-print-all-btn:hover{opacity:.85}
+
+.print-overlay .abbr-mark{border-bottom:none!important;cursor:default!important}
 </style>
 </head>
 <body>
