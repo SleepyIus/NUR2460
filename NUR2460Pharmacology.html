@@ -209,6 +209,8 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',system-ui
   li{font-size:12px!important;line-height:1.4!important;color:#000!important;margin:2px 0!important}
   a{color:#000!important;text-decoration:none!important}
   @page{margin:0.5in;size:letter}
+
+.abbr-mark{border-bottom:none!important;cursor:default!important}
 }
 
 .print-btn{background:transparent;color:var(--text3);border:1px solid var(--border);border-bottom:2px solid var(--border);border-radius:6px 6px 0 0;padding:10px 14px;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s;position:absolute;bottom:0;right:90px;z-index:2;box-shadow:-12px 0 12px -8px var(--surface)}
@@ -281,6 +283,62 @@ body.compare-mode .pharm-drug-row{padding-left:24px}
 .sb-ec-btn{padding:2px 8px;background:transparent;border:none;color:var(--text3);font-family:inherit;font-size:10px;cursor:pointer;transition:all .15s;opacity:.6}
 .sb-ec-btn:hover{color:var(--accent);opacity:1}
 .sb-ec-btn:hover{color:var(--accent);border-color:var(--accent)}
+
+.pharm-print-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:200;overflow-y:auto;padding:20px}
+.pharm-print-overlay.show{display:flex;align-items:flex-start;justify-content:center}
+.pharm-print-panel{background:var(--surface);border-radius:16px;width:100%;max-width:600px;margin:auto;overflow:hidden}
+.pharm-print-header{display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid var(--border)}
+.pharm-print-title{font-family:'DM Serif Display',serif;font-size:20px}
+.pharm-print-controls{display:flex;align-items:center;gap:8px;padding:14px 24px;border-bottom:1px solid var(--border)}
+.pharm-print-exam-tabs{display:flex;gap:4px}
+.pharm-print-exam-tab{padding:6px 14px;background:transparent;border:1px solid var(--border);border-radius:8px;color:var(--text3);font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s}
+.pharm-print-exam-tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.pharm-print-exam-tab:hover:not(.active){background:var(--surface2)}
+.pharm-print-cats{padding:16px 24px;max-height:50vh;overflow-y:auto}
+.pharm-print-cat-row{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border:1px solid var(--border);border-radius:10px;margin-bottom:8px;transition:all .15s}
+.pharm-print-cat-row:hover{border-color:var(--accent)}
+.pharm-print-cat-info{flex:1}
+.pharm-print-cat-name{font-size:14px;font-weight:600;color:var(--text)}
+.pharm-print-cat-count{font-size:11px;color:var(--text3);margin-top:2px}
+.pharm-print-cat-btn{padding:6px 14px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;transition:opacity .15s}
+.pharm-print-cat-btn:hover{opacity:.85}
+.pharm-print-all{padding:12px;text-align:center;border-top:1px solid var(--border);margin-top:8px}
+.pharm-print-all-btn{padding:10px 24px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;width:100%}
+.pharm-print-all-btn:hover{opacity:.85}
+
+.print-overlay{display:none;position:fixed;inset:0;z-index:9999;background:var(--bg);overflow-y:auto;padding:20px}
+.print-overlay.active{display:block}
+.print-overlay-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);margin-bottom:20px;position:sticky;top:0;background:var(--bg);z-index:1}
+.print-overlay-title{font-family:'DM Serif Display',serif;font-size:22px;color:var(--text)}
+.print-overlay-close{background:var(--surface);border:1px solid var(--border);color:var(--text3);padding:8px 16px;border-radius:8px;font-family:inherit;font-size:12px;cursor:pointer}
+.print-topic-block{margin-bottom:32px;page-break-inside:avoid}
+.print-topic-title{font-family:'DM Serif Display',serif;font-size:18px;color:var(--text);margin-bottom:4px}
+.print-topic-sub{font-size:12px;color:var(--text3);margin-bottom:12px}
+.print-deep-section{margin-bottom:16px;padding:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:10px}
+.print-deep-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+.print-deep-content{font-size:13px;line-height:1.6;color:var(--text2)}
+@media print{
+  .print-overlay-header .print-overlay-close{display:none!important}
+  .print-overlay{padding:0!important}
+  .pharm-print-overlay{display:none!important}
+  .print-deep-section{page-break-inside:avoid;border:1px solid #ccc!important;background:transparent!important}
+  .print-deep-label{color:#000!important}
+  .print-deep-content{color:#000!important}
+
+.print-mode-toggle{display:none!important}
+}
+
+.print-deep-content h4{padding:10px 16px 4px;margin:0;font-size:14px}
+.print-deep-content ul,.print-deep-content ol{padding:4px 16px 10px 32px;margin:0}
+.print-deep-content li{padding:2px 0}
+.print-deep-content p{padding:6px 16px;margin:0}
+.qr-section-content ul{padding-left:20px}
+.qr-section-content li{padding:2px 0}
+
+.print-mode-toggle{display:flex;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.print-mode-btn{padding:6px 14px;background:transparent;border:none;color:var(--text3);font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s}
+.print-mode-btn.active{background:var(--accent);color:#fff}
+.print-mode-btn:hover:not(.active){background:var(--surface2)}
 </style>
 </head>
 <body>
@@ -421,6 +479,7 @@ body.compare-mode .pharm-drug-row{padding-left:24px}
   <p class="main-desc">Comprehensive medication reference organized by ATI template. Check off drugs as you review them — progress is saved automatically.</p>
 
   <button class="compare-btn" id="compareBtn" onclick="enterCompareMode()">⚖️ Compare Drugs</button>
+  <button class="compare-btn" onclick="openPharmPrintPanel()">🖨️ Print Drugs</button>
   <div class="compare-bar" id="compareBar" style="display:none">
     <div class="compare-bar-inner">
       <span class="compare-bar-text" id="compareBarText">Select 2-3 drugs to compare</span>
@@ -4016,6 +4075,157 @@ function expandAllSidebar(){
 function collapseAllSidebar(){
   document.querySelectorAll('.nav-exam-group,.nav-cat').forEach(s=>s.classList.add('collapsed'));
 }
+
+// ── Pharmacology Print Panel ──────────────
+const PHARM_CAT_LABELS = {
+  pc1:'Prenatal Supplements',pc2:'Labor Analgesics & Anesthesia',pc3:'Cervical Ripening & Induction',
+  pc4:'Tocolytics',pc5:'Uterotonics (PPH)',pc6:'Glucocorticoids',pc7:'Newborn Prophylaxis',
+  pc8:'HR Pregnancy Meds',pc9:'Anticoagulants & PPD',pc10:'Contraception & Infertility',
+  pc11:'Neonatal Meds',pc12:'Peds GI & Integumentary',pc13:'Neuro Meds',pc14:'Respiratory Meds',
+  pc15:'CV & Heme Meds',pc16:'Endocrine Meds',pc17:'GU & Renal Meds',pc18:'Oncology Meds',pc19:'Psych Meds'
+};
+
+const PHARM_EXAM_CATS = {
+  'Exam 1':['pc1','pc2','pc3','pc4','pc5','pc6','pc7'],
+  'Exam 2':['pc8','pc9','pc10','pc11','pc12'],
+  'Exam 3':['pc13','pc14','pc15','pc16'],
+  'Exam 4':['pc17','pc18','pc19']
+};
+
+let pharmPrintExam = 'Exam 1';
+let pharmPrintMode = 'brief';
+
+function openPharmPrintPanel(){
+  pharmPrintExam = 'Exam 1';
+  pharmPrintMode = 'brief';
+  renderPharmPrintPanel();
+  document.getElementById('pharmPrintOverlay').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+function closePharmPrintPanel(){
+  document.getElementById('pharmPrintOverlay').classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+
+
+function renderPharmPrintPanel(){
+  // Render exam tabs
+  var tabs = document.getElementById('pharmPrintExamTabs');
+  tabs.innerHTML = Object.keys(PHARM_EXAM_CATS).map(function(exam){
+    var active = exam === pharmPrintExam ? ' active' : '';
+    return '<button class="pharm-print-exam-tab' + active + '" data-exam="' + exam + '" onclick="pharmPrintExam=this.dataset.exam;renderPharmPrintPanel()">' + exam + '</button>';
+  }).join('');
+  
+  // Render categories for selected exam
+  var cats = document.getElementById('pharmPrintCats');
+  var catIds = PHARM_EXAM_CATS[pharmPrintExam] || [];
+  var totalDrugs = 0;
+  
+  var html = catIds.map(function(catId){
+    var drugIds = PHARM_CATS[catId] || [];
+    totalDrugs += drugIds.length;
+    var label = PHARM_CAT_LABELS[catId] || catId;
+    return '<div class="pharm-print-cat-row">'
+      + '<div class="pharm-print-cat-info"><div class="pharm-print-cat-name">' + label + '</div>'
+      + '<div class="pharm-print-cat-count">' + drugIds.length + ' drug' + (drugIds.length !== 1 ? 's' : '') + '</div></div>'
+      + '<button class="pharm-print-cat-btn" data-cat="' + catId + '" onclick="printPharmCategory(this.dataset.cat)">Print</button>'
+      + '</div>';
+  }).join('');
+  
+  html += '<div class="pharm-print-all"><button class="pharm-print-all-btn" onclick="printPharmExam()">Print All ' + pharmPrintExam + ' (' + totalDrugs + ' drugs)</button></div>';
+  
+  cats.innerHTML = html;
+}
+
+function printPharmCategory(catId){
+  var drugIds = PHARM_CATS[catId] || [];
+  var label = PHARM_CAT_LABELS[catId] || catId;
+  renderPharmPrintContent(drugIds, label);
+}
+
+function printPharmExam(){
+  var catIds = PHARM_EXAM_CATS[pharmPrintExam] || [];
+  var drugIds = [];
+  catIds.forEach(function(cid){ drugIds = drugIds.concat(PHARM_CATS[cid] || []); });
+  renderPharmPrintContent(drugIds, pharmPrintExam + ' — All Medications');
+}
+
+function renderPharmPrintContent(drugIds, title){
+  window._pharmPrintDrugIds = drugIds;
+  window._pharmPrintTitle = title;
+  rebuildPharmPrint();
+}
+
+function rebuildPharmPrint(){
+  var drugIds = window._pharmPrintDrugIds || [];
+  var title = window._pharmPrintTitle || '';
+  var mode = pharmPrintMode;
+  var html = '';
+  
+  drugIds.forEach(function(did){
+    var d = DRUGS[did];
+    var qr = QUICK_REVIEWS[did];
+    if(!d) return;
+    
+    var name = d.title.split(' · ')[0].split(' / ')[0];
+    html += '<div class="print-topic-block">';
+    html += '<div class="print-topic-title">' + name + '</div>';
+    html += '<div class="print-topic-sub">' + d.title + '</div>';
+    
+    if(mode === 'brief'){
+      if(qr){
+        html += '<div class="qr-card">';
+        if(qr.tldr) html += '<div class="qr-section tldr"><div class="qr-section-label">TL;DR</div><div class="qr-section-content">' + qr.tldr + '</div></div>';
+        if(qr.facts && qr.facts.length) html += '<div class="qr-section facts"><div class="qr-section-label">Must-Know Facts</div><div class="qr-section-content"><ul>' + qr.facts.map(function(f){return '<li>'+f+'</li>';}).join('') + '</ul></div></div>';
+        if(qr.flags && qr.flags.length) html += '<div class="qr-section flags"><div class="qr-section-label">Red Flags</div><div class="qr-section-content"><ul>' + qr.flags.map(function(f){return '<li>'+f+'</li>';}).join('') + '</ul></div></div>';
+        html += '</div>';
+      }
+    } else {
+      var sections = ['action','use','complications','admin','contraindications','nursing','interactions','education','evaluation'];
+      var labels = ['Pharmacological Action','Therapeutic Use','Adverse Effects','Administration','Contraindications','Nursing Interventions','Interactions','Client Education','Effectiveness Evaluation'];
+      sections.forEach(function(sec, i){
+        if(d[sec]) html += '<div class="print-deep-section"><div class="print-deep-label">' + labels[i] + '</div><div class="print-deep-content">' + d[sec] + '</div></div>';
+      });
+    }
+    
+    html += '</div>';
+  });
+  
+  var overlay = document.getElementById('printOverlay');
+  if(!overlay){
+    overlay = document.createElement('div');
+    overlay.id = 'printOverlay';
+    overlay.className = 'print-overlay';
+    document.body.appendChild(overlay);
+  }
+  
+  overlay.innerHTML = '<div class="print-overlay-header">'
+    + '<span class="print-overlay-title">' + title + '</span>'
+    + '<div style="display:flex;align-items:center;gap:8px">'
+    + '<div class="print-mode-toggle">'
+    + '<button class="print-mode-btn' + (mode==='brief'?' active':'') + '" data-mode="brief" onclick="switchPharmPrintMode(this.dataset.mode)">Brief</button>'
+    + '<button class="print-mode-btn' + (mode==='deep'?' active':'') + '" data-mode="deep" onclick="switchPharmPrintMode(this.dataset.mode)">Deep</button>'
+    + '</div>'
+    + '<button class="print-overlay-close" onclick="closePharmPrintOverlay()">Close</button>'
+    + '<button class="print-overlay-close" onclick="window.print()" style="background:var(--accent);color:#fff;border-color:var(--accent)">Print / Save PDF</button>'
+    + '</div></div>' + html;
+  
+  overlay.classList.add('active');
+}
+
+function switchPharmPrintMode(mode){
+  pharmPrintMode = mode;
+  rebuildPharmPrint();
+}
+
+function closePharmPrintOverlay(){
+  var overlay = document.getElementById('printOverlay');
+  if(overlay){ overlay.classList.remove('active'); overlay.innerHTML = ''; }
+  document.body.style.overflow = '';
+}
+
 </script>
 
 <div class="compare-overlay" id="compareOverlay" onclick="if(event.target===this)closeComparison()">
@@ -4032,5 +4242,18 @@ function collapseAllSidebar(){
   </div>
 </div>
 
+
+<div class="pharm-print-overlay" id="pharmPrintOverlay">
+  <div class="pharm-print-panel">
+    <div class="pharm-print-header">
+      <span class="pharm-print-title">Print Drug Reference</span>
+      <button class="modal-close" onclick="closePharmPrintPanel()">×</button>
+    </div>
+    <div class="pharm-print-controls">
+      <div class="pharm-print-exam-tabs" id="pharmPrintExamTabs"></div>
+    </div>
+    <div class="pharm-print-cats" id="pharmPrintCats"></div>
+  </div>
+</div>
 </body>
 </html>

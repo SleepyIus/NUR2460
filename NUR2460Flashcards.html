@@ -236,6 +236,8 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',system-ui
   ul,ol{padding-left:18px!important;margin:2px 0!important}
   li{font-size:11px!important;color:#000!important;line-height:1.3!important;margin:1px 0!important}
   @page{margin:0.5in;size:letter}
+
+.abbr-mark{border-bottom:none!important;cursor:default!important}
 }
 
 .due-banner{display:flex;align-items:center;gap:12px;padding:12px 16px;margin-bottom:14px;background:linear-gradient(90deg,rgba(245,158,11,.12),rgba(245,158,11,.04));border:1px solid rgba(245,158,11,.4);border-radius:10px;cursor:pointer;transition:all .15s}
@@ -256,6 +258,56 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',system-ui
 .sb-ec-btn{padding:2px 8px;background:transparent;border:none;color:var(--text3);font-family:inherit;font-size:10px;cursor:pointer;transition:all .15s;opacity:.6}
 .sb-ec-btn:hover{color:var(--accent);opacity:1}
 .sb-ec-btn:hover{color:var(--accent);border-color:var(--accent)}
+
+.fc-print-exam-row{display:flex;gap:4px;margin-top:6px;flex-wrap:wrap}
+.fc-print-exam-btn{padding:4px 10px;background:transparent;border:1px solid var(--border);border-radius:6px;color:var(--text3);font-family:inherit;font-size:11px;cursor:pointer;transition:all .15s}
+.fc-print-exam-btn:hover{color:var(--accent);border-color:var(--accent)}
+
+.fc-print-grid{display:flex;flex-direction:column;gap:10px}
+.fc-print-card{padding:18px 22px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+.fc-print-q{font-size:13px;color:var(--text);margin-bottom:8px;line-height:1.5}
+.fc-print-a{font-size:13px;color:var(--text2);line-height:1.5;padding-top:8px;border-top:1px dashed var(--border)}
+.print-overlay{display:none;position:fixed;inset:0;z-index:9999;background:var(--bg);overflow-y:auto;padding:20px}
+.print-overlay.active{display:block}
+.print-overlay-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);margin-bottom:20px;position:sticky;top:0;background:var(--bg);z-index:1}
+.print-overlay-title{font-family:'DM Serif Display',serif;font-size:22px;color:var(--text)}
+.print-overlay-close{background:var(--surface);border:1px solid var(--border);color:var(--text3);padding:8px 16px;border-radius:8px;font-family:inherit;font-size:12px;cursor:pointer}
+.print-topic-block{margin-bottom:32px;page-break-inside:avoid}
+.print-topic-title{font-family:'DM Serif Display',serif;font-size:18px;color:var(--text);margin-bottom:12px}
+@media print{
+  .print-overlay-header .print-overlay-close{display:none!important}
+  .print-overlay{padding:0!important}
+  .fc-print-card{page-break-inside:avoid;border:1px solid #ccc!important;background:transparent!important}
+  .fc-print-q,.fc-print-a{color:#000!important}
+  .fc-print-a{border-top-color:#ccc!important}
+}
+
+.fc-print-q ul,.fc-print-q ol,.fc-print-a ul,.fc-print-a ol{padding-left:20px;margin:6px 0}
+.fc-print-q li,.fc-print-a li{padding:2px 0}
+.fc-print-q p,.fc-print-a p{margin:4px 0}
+.fc-print-q strong,.fc-print-a strong{color:var(--text)}
+
+.fc-print-panel-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:200;overflow-y:auto;padding:20px}
+.fc-print-panel-overlay.show{display:flex;align-items:flex-start;justify-content:center}
+.pharm-print-panel{background:var(--surface);border-radius:16px;width:100%;max-width:600px;margin:auto;overflow:hidden}
+.pharm-print-header{display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid var(--border)}
+.pharm-print-title{font-family:'DM Serif Display',serif;font-size:20px}
+.pharm-print-controls{display:flex;align-items:center;gap:8px;padding:14px 24px;border-bottom:1px solid var(--border)}
+.pharm-print-exam-tabs{display:flex;gap:4px}
+.pharm-print-exam-tab{padding:6px 14px;background:transparent;border:1px solid var(--border);border-radius:8px;color:var(--text3);font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s}
+.pharm-print-exam-tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.pharm-print-exam-tab:hover:not(.active){background:var(--surface2)}
+.pharm-print-cats{padding:16px 24px;max-height:50vh;overflow-y:auto}
+.pharm-print-cat-row{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border:1px solid var(--border);border-radius:10px;margin-bottom:8px;transition:all .15s}
+.pharm-print-cat-row:hover{border-color:var(--accent)}
+.pharm-print-cat-info{flex:1}
+.pharm-print-cat-name{font-size:14px;font-weight:600;color:var(--text)}
+.pharm-print-cat-count{font-size:11px;color:var(--text3);margin-top:2px}
+.pharm-print-cat-btn{padding:6px 14px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;transition:opacity .15s}
+.pharm-print-cat-btn:hover{opacity:.85}
+.pharm-print-all{padding:12px;text-align:center;border-top:1px solid var(--border);margin-top:8px}
+.pharm-print-all-btn{padding:10px 24px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;width:100%}
+.pharm-print-all-btn:hover{opacity:.85}
 </style>
 </head>
 <body>
@@ -335,7 +387,7 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',system-ui
     </select>
   </div>
   <div class="grid-count" id="gridCount"></div>
-  <button class="print-btn-fc" onclick="printStudySheet()" title="Print currently filtered cards as a study sheet">⎙ Print Study Sheet</button>
+  <button class="print-btn-fc" onclick="openFcPrintPanel()" title="Print flashcards by exam or topic">🖨️ Print Flashcards</button>
   <div id="gridContainer"></div>
 </div>
 
@@ -1063,10 +1115,10 @@ function switchMode(mode){
 }
 
 function getExamForCard(card){
-  // Map part numbers to exams
-  if(card.p>=1 && card.p<=4) return 'Exam 1';
-  if(card.p===5 && (card.t==='Pharmacology')) return 'Exam 1';
-  return 'Exam 2';
+  for(var exam in EXAMS){
+    if(EXAMS[exam][card.t]) return exam;
+  }
+  return 'Exam 1';
 }
 
 function populateTopicFilter(){
@@ -1652,6 +1704,122 @@ function expandAllSidebar(){
 function collapseAllSidebar(){
   document.querySelectorAll('.sb-section').forEach(s=>s.classList.add('collapsed'));
 }
+
+// ── Print Flashcards by Exam ──────────────
+function printFlashcardsExam(examName){
+  var examCards = CARDS.filter(function(c){ return getExamForCard(c) === examName; });
+  if(examCards.length === 0) return;
+  renderFcPrintContent(examCards, examName + ' — Flashcards (' + examCards.length + ' cards)');
+}
+
+function closeFcPrintOverlay(){
+  var overlay = document.getElementById('fcPrintOverlay');
+  if(overlay){ overlay.classList.remove('active'); overlay.innerHTML = ''; }
+  document.body.style.overflow = '';
+}
+
+
+// ── Flashcard Print Panel ──────────────
+let fcPrintExam = 'Exam 1';
+
+function openFcPrintPanel(){
+  fcPrintExam = 'Exam 1';
+  renderFcPrintPanel();
+  document.getElementById('fcPrintPanelOverlay').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeFcPrintPanel(){
+  document.getElementById('fcPrintPanelOverlay').classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+function renderFcPrintPanel(){
+  var tabs = document.getElementById('fcPrintExamTabs');
+  tabs.innerHTML = Object.keys(EXAMS).map(function(exam){
+    var active = exam === fcPrintExam ? ' active' : '';
+    return '<button class="pharm-print-exam-tab' + active + '" data-exam="' + exam + '" onclick="fcPrintExam=this.dataset.exam;renderFcPrintPanel()">' + exam + '</button>';
+  }).join('');
+  
+  var topicsDiv = document.getElementById('fcPrintTopics');
+  var examTopics = EXAMS[fcPrintExam] || {};
+  var totalCards = 0;
+  
+  var html = Object.keys(examTopics).map(function(tKey){
+    var tName = examTopics[tKey];
+    var count = CARDS.filter(function(c){ return c.t === tName; }).length;
+    totalCards += count;
+    return '<div class="pharm-print-cat-row">'
+      + '<div class="pharm-print-cat-info"><div class="pharm-print-cat-name">' + tName + '</div>'
+      + '<div class="pharm-print-cat-count">' + count + ' card' + (count !== 1 ? 's' : '') + '</div></div>'
+      + '<button class="pharm-print-cat-btn" data-topic="' + tName + '" onclick="printFlashcardsTopic(this.dataset.topic)">Print</button>'
+      + '</div>';
+  }).join('');
+  
+  html += '<div class="pharm-print-all"><button class="pharm-print-all-btn" data-exam="' + fcPrintExam + '" onclick="printFlashcardsExam(this.dataset.exam)">Print All ' + fcPrintExam + ' (' + totalCards + ' cards)</button></div>';
+  
+  topicsDiv.innerHTML = html;
+}
+
+function printFlashcardsTopic(topicName){
+  var topicCards = CARDS.filter(function(c){ return c.t === topicName; });
+  if(topicCards.length === 0) return;
+  renderFcPrintContent(topicCards, topicName + ' (' + topicCards.length + ' cards)');
+}
+
+function renderFcPrintContent(cards, title){
+  var groups = {};
+  cards.forEach(function(c){
+    if(!groups[c.t]) groups[c.t] = [];
+    groups[c.t].push(c);
+  });
+  
+  var html = '';
+  Object.keys(groups).sort().forEach(function(topic){
+    html += '<div class="print-topic-block">';
+    html += '<div class="print-topic-title">' + topic + '</div>';
+    html += '<div class="fc-print-grid">';
+    groups[topic].forEach(function(c){
+      html += '<div class="fc-print-card">';
+      html += '<div class="fc-print-q"><strong>Q:</strong> ' + c.q + '</div>';
+      html += '<div class="fc-print-a"><strong>A:</strong> ' + c.a + '</div>';
+      html += '</div>';
+    });
+    html += '</div></div>';
+  });
+  
+  var overlay = document.getElementById('fcPrintOverlay');
+  if(!overlay){
+    overlay = document.createElement('div');
+    overlay.id = 'fcPrintOverlay';
+    overlay.className = 'print-overlay';
+    document.body.appendChild(overlay);
+  }
+  
+  overlay.innerHTML = '<div class="print-overlay-header">'
+    + '<span class="print-overlay-title">' + title + '</span>'
+    + '<div style="display:flex;gap:8px">'
+    + '<button class="print-overlay-close" onclick="closeFcPrintOverlay()">Close</button>'
+    + '<button class="print-overlay-close" onclick="window.print()" style="background:var(--accent);color:#fff;border-color:var(--accent)">Print / Save PDF</button>'
+    + '</div></div>' + html;
+  
+  overlay.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
 </script>
+
+<div class="fc-print-panel-overlay" id="fcPrintPanelOverlay">
+  <div class="pharm-print-panel">
+    <div class="pharm-print-header">
+      <span class="pharm-print-title">Print Flashcards</span>
+      <button class="modal-close" onclick="closeFcPrintPanel()">×</button>
+    </div>
+    <div class="pharm-print-controls">
+      <div class="pharm-print-exam-tabs" id="fcPrintExamTabs"></div>
+    </div>
+    <div class="pharm-print-cats" id="fcPrintTopics"></div>
+  </div>
+</div>
 </body>
 </html>

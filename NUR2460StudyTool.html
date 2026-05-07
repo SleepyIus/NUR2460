@@ -336,6 +336,57 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',system-ui
 .sb-ec-btn{padding:2px 8px;background:transparent;border:none;color:var(--text3);font-family:inherit;font-size:10px;cursor:pointer;transition:all .15s;opacity:.6}
 .sb-ec-btn:hover{color:var(--accent);opacity:1}
 .sb-ec-btn:hover{color:var(--accent);border-color:var(--accent)}
+
+.print-mode-toggle{display:flex;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.print-mode-btn{padding:6px 14px;background:transparent;border:none;color:var(--text3);font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s}
+.print-mode-btn.active{background:var(--accent);color:#fff}
+.print-mode-btn:hover:not(.active){background:var(--surface2)}
+.print-deep-section{margin-bottom:16px;padding:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:10px}
+.print-deep-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+.print-deep-content{font-size:13px;line-height:1.6;color:var(--text2)}
+.print-deep-content ul{padding-left:18px;margin:4px 0}
+.print-deep-content li{margin:3px 0}
+@media print{
+  .print-deep-section{border:1px solid #ccc!important;background:transparent!important;page-break-inside:avoid}
+  .print-deep-label{color:#000!important}
+  .print-deep-content{color:#000!important}
+  .print-mode-toggle{display:none!important}
+
+.abbr-mark{border-bottom:none!important;cursor:default!important}
+}
+
+.print-deep-content p,.print-deep-content ul,.print-deep-content ol,.print-deep-content table,.print-deep-content div{margin:8px 0}
+.print-deep-content>:first-child{margin-top:0}
+.print-deep-content>:last-child{margin-bottom:0}
+
+.content-block h4{padding:10px 16px 4px;margin:0;font-size:14px}
+.content-block ul,.content-block ol{padding:4px 16px 10px 32px;margin:0}
+.content-block li{padding:2px 0}
+.compare-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text2);font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;margin:16px 0 8px}
+.compare-btn:hover{border-color:var(--accent);color:var(--accent)}
+
+.study-print-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:200;overflow-y:auto;padding:20px}
+.study-print-overlay.show{display:flex;align-items:flex-start;justify-content:center}
+
+.pharm-print-panel{background:var(--surface);border-radius:16px;width:100%;max-width:600px;margin:auto;overflow:hidden}
+.pharm-print-header{display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid var(--border)}
+.pharm-print-title{font-family:'DM Serif Display',serif;font-size:20px}
+.pharm-print-controls{display:flex;align-items:center;gap:8px;padding:14px 24px;border-bottom:1px solid var(--border)}
+.pharm-print-exam-tabs{display:flex;gap:4px}
+.pharm-print-exam-tab{padding:6px 14px;background:transparent;border:1px solid var(--border);border-radius:8px;color:var(--text3);font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s}
+.pharm-print-exam-tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.pharm-print-exam-tab:hover:not(.active){background:var(--surface2)}
+.pharm-print-cats{padding:16px 24px;max-height:50vh;overflow-y:auto}
+.pharm-print-cat-row{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border:1px solid var(--border);border-radius:10px;margin-bottom:8px;transition:all .15s}
+.pharm-print-cat-row:hover{border-color:var(--accent)}
+.pharm-print-cat-info{flex:1}
+.pharm-print-cat-name{font-size:14px;font-weight:600;color:var(--text)}
+.pharm-print-cat-count{font-size:11px;color:var(--text3);margin-top:2px}
+.pharm-print-cat-btn{padding:6px 14px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;transition:opacity .15s}
+.pharm-print-cat-btn:hover{opacity:.85}
+.pharm-print-all{padding:12px;text-align:center;border-top:1px solid var(--border);margin-top:8px}
+.pharm-print-all-btn{padding:10px 24px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;width:100%}
+.pharm-print-all-btn:hover{opacity:.85}
 </style>
 </head>
 <body>
@@ -442,6 +493,7 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',system-ui
   <p class="main-desc">Topic-by-topic reference with six tabs per condition: overview, assessment, diagnostics, patient-centered care, medications & education, and ADPIE & complications.</p>
 
   <div class="section-divider">Study Planner</div>
+  <button class="compare-btn" onclick="openStudyPrintPanel()">🖨️ Print Topics</button>
 
   <div class="exam-accordion collapsed" id="exam1acc">
     <div class="exam-header" onclick="this.parentElement.classList.toggle('collapsed')">
@@ -10511,38 +10563,59 @@ function printPart(partId){
   const topicIds = PARTS[partId];
   if(!topicIds || topicIds.length === 0) return;
   
-  // Build print content using Quick Reviews
-  let html = '';
+  const partTitle = document.querySelector('#' + partId + ' .planner-part-title');
+  window._printMode = 'brief';
+  window._printTopicIds = topicIds;
+  window._printTitle = partTitle ? partTitle.textContent : partId;
+  renderPrintContent();
+}
+
+function renderPrintContent(){
+  var mode = window._printMode || 'brief';
+  var topicIds = window._printTopicIds || [];
+  var title = window._printTitle || '';
+  var html = '';
+  
   topicIds.forEach(function(tid){
-    const t = TOPICS[tid];
-    const qr = QUICK_REVIEWS[tid];
+    var t = TOPICS[tid];
+    var qr = QUICK_REVIEWS[tid];
     if(!t) return;
     
     html += '<div class="print-topic-block">';
     html += '<div class="print-topic-title">' + t.title + '</div>';
     html += '<div class="print-topic-sub">' + (t.subtitle || '') + '</div>';
     
-    if(qr){
-      html += '<div class="qr-card">';
-      if(qr.tldr){
-        html += '<div class="qr-section tldr"><div class="qr-section-label">TL;DR</div><div class="qr-section-content">' + qr.tldr + '</div></div>';
+    if(mode === 'brief'){
+      if(qr){
+        html += '<div class="qr-card">';
+        if(qr.tldr){
+          html += '<div class="qr-section tldr"><div class="qr-section-label">TL;DR</div><div class="qr-section-content">' + qr.tldr + '</div></div>';
+        }
+        if(qr.facts && qr.facts.length){
+          html += '<div class="qr-section facts"><div class="qr-section-label">Key Facts</div><div class="qr-section-content"><ul>' + qr.facts.map(function(f){return '<li>' + f + '</li>';}).join('') + '</ul></div></div>';
+        }
+        if(qr.flags && qr.flags.length){
+          html += '<div class="qr-section flags"><div class="qr-section-label">Red Flags</div><div class="qr-section-content"><ul>' + qr.flags.map(function(f){return '<li>' + f + '</li>';}).join('') + '</ul></div></div>';
+        }
+        html += '</div>';
+      } else {
+        html += '<p style="color:var(--text3);font-style:italic">Quick Review not available.</p>';
       }
-      if(qr.facts && qr.facts.length){
-        html += '<div class="qr-section facts"><div class="qr-section-label">Key Facts</div><div class="qr-section-content"><ul>' + qr.facts.map(function(f){return '<li>' + f + '</li>';}).join('') + '</ul></div></div>';
-      }
-      if(qr.flags && qr.flags.length){
-        html += '<div class="qr-section flags"><div class="qr-section-label">Red Flags</div><div class="qr-section-content"><ul>' + qr.flags.map(function(f){return '<li>' + f + '</li>';}).join('') + '</ul></div></div>';
-      }
-      html += '</div>';
     } else {
-      html += '<p style="color:var(--text3);font-style:italic">Quick Review not available for this topic.</p>';
+      var tabs = ['overview','assessment','diagnostics','interventions','medications','complications'];
+      tabs.forEach(function(tab){
+        var tabContent = t[tab];
+        if(tabContent){
+          var label = tab.charAt(0).toUpperCase() + tab.slice(1);
+          html += '<div class="print-deep-section"><div class="print-deep-label">' + label + '</div><div class="print-deep-content">' + tabContent + '</div></div>';
+        }
+      });
     }
     
     html += '</div>';
   });
   
-  // Show in print overlay
-  let overlay = document.getElementById('printOverlay');
+  var overlay = document.getElementById('printOverlay');
   if(!overlay){
     overlay = document.createElement('div');
     overlay.id = 'printOverlay';
@@ -10550,18 +10623,26 @@ function printPart(partId){
     document.body.appendChild(overlay);
   }
   
-  const partTitle = document.querySelector('#' + partId + ' .planner-part-title');
-  const title = partTitle ? partTitle.textContent : partId;
-  
   overlay.innerHTML = '<div class="print-overlay-header">'
     + '<span class="print-overlay-title">' + title + '</span>'
-    + '<div><button class="print-overlay-close" onclick="closePrintOverlay()" style="margin-right:8px">Close</button>'
-    + '<button class="print-overlay-close" onclick="window.print()" style="background:var(--accent);color:#fff;border-color:var(--accent)">Print / Save PDF</button></div>'
+    + '<div style="display:flex;align-items:center;gap:8px">'
+    + '<div class="print-mode-toggle">'
+    + '<button class="print-mode-btn' + (mode==='brief'?' active':'') + '" data-mode="brief" onclick="switchPrintMode(this.dataset.mode)">Brief</button>'
+    + '<button class="print-mode-btn' + (mode==='deep'?' active':'') + '" data-mode="deep" onclick="switchPrintMode(this.dataset.mode)">Deep</button>'
+    + '</div>'
+    + '<button class="print-overlay-close" onclick="closePrintOverlay()">Close</button>'
+    + '<button class="print-overlay-close" onclick="window.print()" style="background:var(--accent);color:#fff;border-color:var(--accent)">Print / Save PDF</button>'
+    + '</div>'
     + '</div>'
     + html;
   
   overlay.classList.add('active');
   document.body.style.overflow = 'hidden';
+}
+
+function switchPrintMode(mode){
+  window._printMode = mode;
+  renderPrintContent();
 }
 
 function closePrintOverlay(){
@@ -10580,6 +10661,98 @@ function expandAllSidebar(){
 function collapseAllSidebar(){
   document.querySelectorAll('.nav-section').forEach(s=>s.classList.add('collapsed'));
 }
+
+// ── Study Tool Print Panel ──────────────
+const STUDY_EXAM_PARTS = {
+  'Exam 1':['part1','part2','part3','part4'],
+  'Exam 2':['part5','part6','part7','part8'],
+  'Exam 3':['part9','part10','part11','part12','part13'],
+  'Exam 4':['part14','part15','part16','part17']
+};
+
+const PART_LABELS = {
+  part1:'Part 1 — Antepartum',part2:'Part 2 — Labor & Delivery',
+  part3:'Part 3 — Newborn',part4:'Part 4 — Postpartum',
+  part5:'Part 5 — High-Risk Pregnancy',part6:'Part 6 — HR L&D, NB & PP',
+  part7:'Part 7 — GYN & Growth/Dev',part8:'Part 8 — Peds GI & Integumentary',
+  part9:'Part 9 — Peds Neuro',part10:'Part 10 — Peds Respiratory',
+  part11:'Part 11 — Peds CV & Hematology',part12:'Part 12 — Peds MSK',
+  part13:'Part 13 — Peds Endocrine',part14:'Part 14 — Peds GU & Renal',
+  part15:'Part 15 — Immunizations & Communicable Diseases',part16:'Part 16 — Peds Oncology',
+  part17:'Part 17 — Mental Health'
+};
+
+let studyPrintExam = 'Exam 1';
+
+function openStudyPrintPanel(){
+  studyPrintExam = 'Exam 1';
+  renderStudyPrintPanel();
+  document.getElementById('studyPrintOverlay').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeStudyPrintPanel(){
+  document.getElementById('studyPrintOverlay').classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+function renderStudyPrintPanel(){
+  var tabs = document.getElementById('studyPrintExamTabs');
+  tabs.innerHTML = Object.keys(STUDY_EXAM_PARTS).map(function(exam){
+    var active = exam === studyPrintExam ? ' active' : '';
+    return '<button class="pharm-print-exam-tab' + active + '" data-exam="' + exam + '" onclick="studyPrintExam=this.dataset.exam;renderStudyPrintPanel()">' + exam + '</button>';
+  }).join('');
+  
+  var partsDiv = document.getElementById('studyPrintParts');
+  var partIds = STUDY_EXAM_PARTS[studyPrintExam] || [];
+  var totalTopics = 0;
+  
+  var html = partIds.map(function(pid){
+    var topicIds = PARTS[pid] || [];
+    totalTopics += topicIds.length;
+    var label = PART_LABELS[pid] || pid;
+    return '<div class="pharm-print-cat-row">'
+      + '<div class="pharm-print-cat-info"><div class="pharm-print-cat-name">' + label + '</div>'
+      + '<div class="pharm-print-cat-count">' + topicIds.length + ' topic' + (topicIds.length !== 1 ? 's' : '') + '</div></div>'
+      + '<button class="pharm-print-cat-btn" data-part="' + pid + '" onclick="printPartFromPanel(this.dataset.part)">Print</button>'
+      + '</div>';
+  }).join('');
+  
+  html += '<div class="pharm-print-all"><button class="pharm-print-all-btn" onclick="printStudyExam()">Print All ' + studyPrintExam + ' (' + totalTopics + ' topics)</button></div>';
+  
+  partsDiv.innerHTML = html;
+}
+
+function printPartFromPanel(partId){
+  window._printMode = window._printMode || 'brief';
+  window._printTopicIds = PARTS[partId];
+  window._printTitle = PART_LABELS[partId] || partId;
+  renderPrintContent();
+}
+
+function printStudyExam(){
+  var partIds = STUDY_EXAM_PARTS[studyPrintExam] || [];
+  var allTopicIds = [];
+  partIds.forEach(function(pid){ allTopicIds = allTopicIds.concat(PARTS[pid] || []); });
+  window._printMode = window._printMode || 'brief';
+  window._printTopicIds = allTopicIds;
+  window._printTitle = studyPrintExam + ' — All Topics';
+  renderPrintContent();
+}
+
 </script>
+
+<div class="study-print-overlay" id="studyPrintOverlay">
+  <div class="pharm-print-panel">
+    <div class="pharm-print-header">
+      <span class="pharm-print-title">Print Study Topics</span>
+      <button class="modal-close" onclick="closeStudyPrintPanel()">×</button>
+    </div>
+    <div class="pharm-print-controls">
+      <div class="pharm-print-exam-tabs" id="studyPrintExamTabs"></div>
+    </div>
+    <div class="pharm-print-cats" id="studyPrintParts"></div>
+  </div>
+</div>
 </body>
 </html>
