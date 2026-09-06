@@ -1,0 +1,64 @@
+/* Extend the established study-tool palette and compact, rounded controls. */
+/* Share the heading's grid row so stars follow its actual height, including
+   wrapped titles. Keep buttons in their existing DOM position and save logic. */
+#modalBody .content-block.box-bookmarkable:has(> h4) {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 50px;
+}
+#modalBody .content-block.box-bookmarkable:has(> h4) > * {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+#modalBody .content-block.box-bookmarkable > h4 {
+  grid-row: 1;
+  padding-right: 50px;
+}
+#modalBody .content-block.box-bookmarkable:has(> h4) > .box-bookmark-btn {
+  position: static;
+  grid-column: 2;
+  grid-row: 1;
+  align-self: center;
+  justify-self: end;
+  margin-right: 8px;
+  padding: 0;
+  line-height: 1;
+  transform: none;
+}
+.starred-folder-launch {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text2);
+  font-family: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+.starred-folder-launch:hover { color: var(--accent); border-color: var(--accent); }
+.starred-folder-sidebar { margin: 6px 14px 10px; }
+.starred-folder-count { padding: 1px 6px; border-radius: 999px; background: var(--surface2); color: var(--accent); font-size: 11px; }
+#boxBookmarkOverlay .annotation-panel { max-width: 920px; }
+.starred-folder-nav { display: flex; flex-wrap: wrap; gap: 6px; padding: 14px 18px; border-bottom: 1px solid var(--border); }
+.starred-folder-nav button { padding: 6px 12px; background: var(--bg); color: var(--text2); border: 1px solid var(--border); border-radius: 999px; font-family: inherit; font-size: 12px; cursor: pointer; }
+.starred-folder-nav button[aria-pressed="true"] { color: var(--accent); border-color: var(--accent); background: var(--surface2); }
+.starred-folder-summary { color: var(--text); font-size: 14px; font-weight: 600; margin: 0 0 5px; }
+.starred-folder-help { color: var(--text2); font-size: 12px; margin: 0 0 16px; }
+.starred-folder-error { color: var(--red); padding: 10px; border: 1px solid var(--red); border-radius: 8px; }
+.starred-topic-heading { font-size: 13px; color: var(--accent); margin: 18px 0 10px; }
+.starred-box-detail > summary { color: var(--text); font-size: 14px; font-weight: 600; line-height: 1.5; cursor: pointer; overflow-wrap: anywhere; }
+.starred-box-detail[open] > summary { margin-bottom: 14px; }
+.starred-box-content { overflow-wrap: anywhere; overflow-x: auto; color: var(--text2); }
+.starred-box-content > .content-block, .starred-box-content > .callout { margin-bottom: 0; }
+#boxBookmarkOverlay .box-bookmark-actions { flex-wrap: wrap; }
+#boxBookmarkOverlay .box-bookmark-actions button { font-family: inherit; font-size: 12px; padding: 5px 0; color: var(--text2); }
+#boxBookmarkOverlay .box-bookmark-actions button:hover { color: var(--accent); }
+.starred-folder-launch:focus-visible, #boxBookmarkOverlay :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+@media (max-width: 600px) {
+  #boxBookmarkOverlay { padding: 10px; }
+  #boxBookmarkOverlay .annotation-panel { max-height: 92vh; }
+  #boxBookmarkOverlay .annotation-panel-body, .starred-folder-nav { padding: 12px; }
+}
+@media print { .starred-folder-launch, #boxBookmarkOverlay { display: none !important; } }

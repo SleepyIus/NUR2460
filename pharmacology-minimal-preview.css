@@ -1,0 +1,162 @@
+/* Presentation-only preview. Original clinical wording and print rules stay intact. */
+@media screen {
+  :root { --text3: #939ab6; --border: #343b4f; }
+  [data-theme="light"] { --text3: #746e62; --border: #d6cebf; }
+  .sidebar { width: 264px; min-width: 264px; background: var(--bg); }
+  .sidebar-header { padding: 24px 20px 18px; }
+  .back-home { font-size: .875rem; font-weight: 500; letter-spacing: 0; padding-bottom: 20px; }
+  .sb-course { font-size: .75rem; letter-spacing: .08em; margin-bottom: 8px; }
+  .sb-title { font-size: 1.5rem; line-height: 1.2; }
+  .sb-sub { font-size: .75rem; margin-top: 6px; }
+  #themeToggle { min-height: 40px; margin-top: 18px; padding: 9px 14px; gap: 8px; border-radius: 8px; background: var(--surface); font-size: .875rem; font-weight: 500; line-height: 1.4; }
+  #themeIcon { display: inline-flex; justify-content: center; width: 16px; line-height: 1; }
+  .search-wrap { padding: 16px 20px; }
+  #searchInput { min-height: 44px; padding: 11px 12px; border-radius: 8px; font-size: .875rem; }
+  #searchResults { left: 20px; right: 20px; border-radius: 8px; border-top: 1px solid var(--border); }
+  .sr-title { font-size: .875rem; flex-wrap: wrap; line-height: 1.5; }
+  .sr-section, .sr-snippet, .sr-count { font-size: .75rem; line-height: 1.5; letter-spacing: 0; text-transform: none; }
+  .sb-ec-row { padding: 12px 20px; gap: 8px; }
+  .sb-ec-btn { min-height: 34px; padding: 6px 8px; border: 1px solid var(--border); border-radius: 8px; font-size: .75rem; opacity: 1; }
+  .nav-exam-label { padding: 16px 20px 8px; font-size: .875rem; font-weight: 600; line-height: 1.5; color: var(--text); letter-spacing: 0; text-transform: none; }
+  .nav-cat-label { padding: 12px 20px 6px; font-size: .875rem; font-weight: 500; line-height: 1.5; opacity: 1; letter-spacing: 0; text-transform: none; }
+  .nav-drug { padding: 10px 12px; margin: 2px 12px; font-size: .875rem; line-height: 1.5; border-radius: 8px; }
+
+  .main-content { min-width: 0; max-width: 1160px; margin-left: 264px; padding: 32px 40px 56px; }
+  .pharm-preview-bar { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 20px; border-bottom: 1px solid var(--border); padding-bottom: 18px; margin-bottom: 24px; font-size: .875rem; color: var(--text3); }
+  .pharm-preview-bar a { margin-left: auto; color: var(--text2); text-decoration: none; }
+  .pharm-preview-bar a:hover { color: var(--accent); }
+  .pharm-preview-state { margin-bottom: 24px; color: var(--text3); font-size: .75rem; line-height: 1.5; }
+  .main-course { font-size: .75rem; letter-spacing: .1em; }
+  .main-title { font-size: clamp(2rem, 3.5vw, 2.75rem); line-height: 1.1; margin-bottom: 14px; }
+  .main-desc { max-width: 690px; font-size: 1rem; line-height: 1.65; margin-bottom: 24px; }
+  .pharm-preview-tools { display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 24px; }
+  .compare-btn, .compare-bar-go, .compare-bar-cancel, .compare-toggle-btn, .pharm-print-exam-tab, .pharm-print-cat-btn, .pharm-print-all-btn, .print-mode-btn, .print-overlay-close { min-height: 40px; padding: 9px 14px; border-radius: 8px; font-family: inherit; font-size: .875rem; font-weight: 500; line-height: 1.4; }
+  .pharm-preview-tools .compare-btn { margin: 0; }
+  .section-divider { margin: 30px 0 12px; border: 0; padding: 0; color: var(--text); font-size: 1rem; font-weight: 600; letter-spacing: 0; text-transform: none; }
+  .exam-accordion { background: transparent; border-radius: 12px; margin-bottom: 20px; }
+  .exam-header { padding: 20px; gap: 10px 14px; }
+  .exam-header:hover { background: var(--surface); }
+  .exam-title { flex: 1 1 230px; font-size: 1rem; font-weight: 600; line-height: 1.5; letter-spacing: 0; }
+  .exam-count { font-size: .875rem; font-weight: 500; white-space: nowrap; }
+  .exam-bar-wrap { padding: 0 20px 16px; }
+  .exam-bar-outer { height: 4px; background: var(--surface2); }
+  .exam-body { padding: 0 20px 8px; }
+  .pharm-cat { margin: 0; border: 0; border-radius: 0; background: transparent; }
+  .pharm-cat + .pharm-cat { border-top: 1px solid var(--border); }
+  .pharm-cat-header { padding: 18px 0; gap: 10px; }
+  .pharm-cat-header:hover { background: transparent; }
+  .pharm-cat-title { min-width: 0; font-size: .875rem; font-weight: 500; line-height: 1.5; letter-spacing: 0; }
+  .pharm-cat-count { font-size: .875rem; white-space: nowrap; }
+  .pharm-cat-body { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; padding: 0 0 18px; border-top: 0; }
+  .pharm-drug-row { min-width: 0; padding: 12px; gap: 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); }
+  .pharm-check { width: 28px; height: 28px; border-width: 1px; border-radius: 7px; }
+  .pharm-pill { flex: 1; min-width: 0; min-height: 40px; padding: 8px 10px; text-align: left; white-space: normal; overflow-wrap: anywhere; font-size: .875rem; line-height: 1.5; border-radius: 8px; }
+  .exam-reset { margin: 10px 0; }
+  .exam-reset button { font-size: .75rem; min-height: 32px; padding: 8px 0; }
+  body.compare-mode .pharm-drug-row { padding-left: 32px; }
+  .compare-bar { border-radius: 12px; box-shadow: none; padding: 16px 20px; }
+  .compare-bar-inner { flex-wrap: wrap; gap: 12px; }
+  .compare-bar-text { font-size: .875rem; }
+  .compare-bar-pill { font-size: .875rem; white-space: normal; line-height: 1.5; }
+  .compare-bar-pill .remove { padding: 4px; }
+
+  .modal-overlay { padding: 24px; backdrop-filter: blur(4px); }
+  .modal { max-width: 1080px; border-radius: 12px; box-shadow: none; }
+  .modal-header { padding: 24px 28px 18px; }
+  .modal-title { font-size: clamp(1.5rem, 2.5vw, 1.875rem); line-height: 1.25; }
+  .modal-sub { font-size: .875rem; line-height: 1.5; margin-top: 6px; }
+  .modal-close { width: 36px; height: 36px; border-radius: 8px; }
+  .modal-refs, .modal.e1-enriched .modal-refs { margin-top: 14px; padding: 0; }
+  .modal-ref { font-size: .75rem; line-height: 1.5; border-radius: 6px; }
+  .pharm-preview-modal-tools { display: flex; align-items: center; gap: 10px; margin-top: 16px; }
+  .pharm-preview-modal-tools .qr-fab, .pharm-preview-modal-tools .print-btn { position: static; min-height: 40px; padding: 9px 14px; border: 1px solid var(--border); border-radius: 8px; font-size: .875rem; line-height: 1.4; box-shadow: none; }
+  .pharm-preview-modal-tools .qr-fab { border-color: var(--accent); }
+  .pharm-preview-modal-tools .qr-fab:hover { transform: none; }
+  #modalBody { padding: 24px 28px 28px; }
+  .pharm-grid { gap: 14px; }
+  .pharm-grid-cell { border-radius: 10px; }
+  .pharm-grid-cell h4 { font-size: 1rem; font-weight: 600; line-height: 1.5; padding: 12px 16px; background: var(--surface); letter-spacing: 0; }
+  .pharm-grid-cell ul { padding: 12px 16px; }
+  .pharm-grid-cell ul li, .pharm-grid-cell p, .pharm-grid-cell p.source-boundary[data-field-state], .field-status { font-size: 1rem; line-height: 1.65; overflow-wrap: anywhere; }
+  /* A7: paired purpose boxes, wider four-box left stack, three-box right stack.
+     Content determines height; the only connecting stem is Nursing → Education. */
+  .pharm-grid.pharm-a7-layout { --a7-gap: 20px; display: flex; flex-direction: column; gap: var(--a7-gap); padding: 0; }
+  .pharm-a7-purpose { padding: 16px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface2); }
+  .pharm-a7-purpose-title { margin: 0 0 12px; color: var(--text); font-size: .875rem; font-weight: 600; line-height: 1.5; }
+  .pharm-a7-purpose-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  .pharm-a7-body { display: grid; grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr); gap: var(--a7-gap); align-items: stretch; }
+  .pharm-a7-column { display: flex; flex-direction: column; gap: var(--a7-gap); min-width: 0; }
+  .pharm-a7-layout .pharm-grid-cell { min-width: 0; min-height: 160px; }
+  .pharm-a7-left > .pharm-grid-cell:last-child { flex: 1; }
+  .pharm-a7-care { display: flex; flex: 1; flex-direction: column; min-width: 0; }
+  .pharm-a7-care > .pharm-grid-cell:last-child { flex: 1; }
+  .pharm-a7-connector { display: block; align-self: center; flex: 0 0 var(--a7-gap); width: 0; border-left: 3px solid var(--text3); pointer-events: none; }
+  .bsrc, .fact-locator, .e1-cite { font-size: .75rem; line-height: 1.5; letter-spacing: 0; }
+  .source-notice, .e1-scope { max-width: none; font-size: .875rem; line-height: 1.6; border-radius: 8px; }
+  .e1-learning { padding: 16px; font-size: 1rem; line-height: 1.65; }
+  .e1-recall summary { padding: 8px 0; font-weight: 500; }
+  .verified-comparison { font-size: .875rem; line-height: 1.65; overflow-wrap: anywhere; }
+  .verified-comparison caption { font-weight: 600; }
+  .verified-comparison th, .verified-comparison td { padding: 12px; }
+  .qr-card { border-radius: 10px; }
+  .qr-section-label { font-size: .875rem; font-weight: 600; letter-spacing: 0; text-transform: none; padding: 16px 20px 8px; }
+  .qr-section-content, .qr-section.tldr .qr-section-content { padding: 0 20px 18px; font-size: 1rem; line-height: 1.65; }
+  .related-topics, .related-templates { font-size: .875rem; line-height: 1.5; }
+  .topic-chip, .template-chip { min-height: 36px; padding: 8px 12px; font-size: .875rem; line-height: 1.5; border-radius: 8px; }
+  .compare-modal, .pharm-print-panel { border: 1px solid var(--border); border-radius: 12px; }
+  .compare-header, .pharm-print-header { padding: 18px 20px; gap: 12px; flex-wrap: wrap; border-radius: 12px 12px 0 0; }
+  .compare-title, .pharm-print-title { font-size: 1.5rem; }
+  .compare-view-toggle, .print-mode-toggle { border-radius: 8px; }
+  .compare-table th, .compare-table td, .compare-table td:first-child, .compare-table li { font-size: .875rem; line-height: 1.65; letter-spacing: 0; text-transform: none; }
+  .compare-table th.drug-col { font-size: 1.125rem; }
+  .pharm-print-controls, .pharm-print-exam-tabs { flex-wrap: wrap; }
+  .pharm-print-cat-row { gap: 14px; }
+  .pharm-print-cat-name { font-size: 1rem; line-height: 1.5; }
+  .pharm-print-cat-count { font-size: .75rem; }
+  .print-overlay-header { flex-wrap: wrap; gap: 16px; }
+  .print-overlay-header > div { flex-wrap: wrap; }
+  .print-deep-content { font-size: 1rem; line-height: 1.65; }
+  button:focus-visible, a:focus-visible, input:focus-visible, summary:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+}
+@media screen and (max-width: 1100px) {
+  .main-content { padding-left: 28px; padding-right: 28px; }
+  .pharm-cat-body { grid-template-columns: 1fr; }
+}
+@media screen and (max-width: 900px) {
+  .sidebar { width: 288px; min-width: 0; max-width: calc(100vw - 32px); }
+  .sidebar-header { padding-top: 84px; }
+  .main-content { margin-left: 0; padding: 90px 28px 40px; }
+  .sidebar-toggle { top: 18px; left: auto; right: 18px; }
+  .back-home-mobile { top: 18px; left: 22px; min-height: 40px; font-size: .875rem; }
+}
+@media screen and (max-width: 600px) {
+  .main-content { padding-left: 22px; padding-right: 22px; }
+  .exam-header { padding: 16px; }
+  .exam-title { flex-basis: 170px; }
+  .exam-body { padding: 0 12px 6px; }
+  .modal-overlay { padding: 10px; }
+  .modal-header { padding: 18px 16px; }
+  #modalBody { padding: 20px 16px; }
+  .pharm-grid { grid-template-columns: 1fr; }
+  .compare-bar-actions { width: 100%; }
+  .compare-bar-pills { flex-basis: 100%; }
+  .pharm-print-cat-row { flex-wrap: wrap; }
+}
+@media screen and (max-width: 760px) {
+  .pharm-a7-purpose-grid, .pharm-a7-body { grid-template-columns: minmax(0, 1fr); }
+  .pharm-a7-purpose { padding: 12px; }
+  .pharm-a7-layout .pharm-grid-cell { min-height: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+}
+@media print {
+  .pharm-preview-bar, .pharm-preview-state, .pharm-preview-tools, .pharm-preview-modal-tools { display: none !important; }
+  .exam-accordion.collapsed .exam-body, .pharm-cat.collapsed .pharm-cat-body { display: block !important; }
+  /* Keep long clinical fields in normal page flow, never clipped to a form height. */
+  .pharm-a7-purpose-title { margin: 0 0 12px; color: #000; font-size: 12pt; }
+  .pharm-a7-layout, .pharm-a7-purpose-grid, .pharm-a7-body, .pharm-a7-column, .pharm-a7-care { display: block !important; height: auto !important; }
+  .pharm-a7-layout .pharm-grid-cell { min-height: 0; height: auto; }
+  .pharm-a7-care > .pharm-grid-cell:first-child { margin-bottom: 0 !important; }
+  .pharm-a7-connector { display: block; width: 0; height: 16px; margin: 0 auto; border-left: 2px solid #777; break-after: avoid; }
+}

@@ -1,0 +1,79 @@
+@media screen {
+  .anki-preview { --again: #ed8896; --hard: #e5b773; --good: #83c6a0; --easy: #90b7ec; }
+  [data-theme="light"] .anki-preview { --again: #a72842; --hard: #805305; --good: #286842; --easy: #2d5c9c; }
+  .anki-preview .top-title { font-size: 2rem; }
+  .anki-preview .top-bar { margin-bottom: 18px; }
+  .anki-study-button, .anki-deck-study { min-height: 40px; padding: 9px 14px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); color: var(--text); font-family: inherit; font-size: .875rem; font-weight: 500; line-height: 1.4; cursor: pointer; }
+  .anki-study-button { display: block; width: 100%; margin: 0 0 20px; background: var(--accent); color: #fff; border-color: var(--accent); font-family: inherit; }
+  .anki-study-button:disabled { opacity: .5; cursor: default; }
+  .anki-deck-study { margin: 0 20px 16px; font-family: inherit; }
+  .fc-topic-group > .anki-deck-study { margin: 0 0 16px; }
+  .anki-deck-study:hover { border-color: var(--accent); }
+  .anki-studying .sidebar { display: none; }
+  .anki-studying .app { width: 100%; max-width: 1040px; margin: 0 auto; }
+  .anki-studying .mob-toggle { display: none; }
+  .anki-studying .top-bar { display: none; }
+  .anki-studying .fc-preview-bar { margin-bottom: 12px; padding-bottom: 12px; }
+  .anki-studying .fc-preview-state { margin-bottom: 18px; }
+  .anki-preview .study-view { width: 100%; max-width: 880px; align-self: center; }
+  .anki-preview .stats, .anki-preview .end-stats { display: none; }
+  .anki-queue { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px 28px; margin: 0 0 20px; font-size: .875rem; }
+  .anki-queue strong { margin-right: 5px; font-size: 1rem; }
+  .anki-new { color: var(--easy); }
+  .anki-learn { color: var(--again); }
+  .anki-review { color: var(--good); }
+  .anki-preview .progress-bar { margin-bottom: 22px; }
+  .anki-preview .card-area { padding: 0; min-height: 0; display: block; }
+  .anki-preview .flashcard { min-height: 300px; padding: 32px 40px; cursor: default; border-radius: 12px; box-shadow: none; transition: none; }
+  .anki-preview .flashcard:hover { border-color: var(--border); }
+  .anki-preview .card-tag { text-align: center; padding: 0 36px; margin: 0 0 30px; font-size: .875rem; }
+  .anki-preview .card-question { margin: 0; text-align: center; font-size: 1.25rem; line-height: 1.7; font-weight: 500; }
+  .anki-preview .card-question:focus, .anki-preview .card-answer:focus { outline: none; }
+  .anki-preview .card-answer { text-align: left; margin-top: 0; padding-top: 0; font-size: 1rem; line-height: 1.75; }
+  .anki-preview .card-divider { display: none; margin: 26px 0; border: 0; border-top: 1px solid var(--border); }
+  .anki-preview .anki-revealed .card-divider { display: block; }
+  .anki-preview .tap-hint { margin-top: 40px; text-align: center; color: var(--text3); }
+  .anki-answer-dock { padding: 24px 0 12px; text-align: center; }
+  .anki-show { min-width: 220px; min-height: 48px; padding: 12px 24px; color: #fff; background: var(--accent); border: 1px solid var(--accent); border-radius: 8px; font: inherit; font-size: 1rem; cursor: pointer; }
+  .anki-show kbd, .anki-rating kbd { margin-left: 8px; font: inherit; font-size: .75rem; opacity: .8; }
+  .anki-preview .card-actions { display: none; margin: 0; gap: 10px; }
+  .anki-preview .card-actions.visible { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .anki-rating { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 7px; min-height: 74px; padding: 10px 8px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; font: inherit; font-size: 1rem; cursor: pointer; }
+  .anki-rating-1 { color: var(--again); }
+  .anki-rating-2 { color: var(--hard); }
+  .anki-rating-3 { color: var(--good); border-color: var(--good); }
+  .anki-rating-4 { color: var(--easy); }
+  .anki-rating:hover { background: var(--surface2); border-color: currentColor; }
+  .anki-interval { color: var(--text3); font-size: .75rem; line-height: 1.4; }
+  .anki-preview .kbd-hints { text-align: center; margin-top: 12px; line-height: 1.8; }
+  .anki-rules { margin: 20px auto 0; max-width: 640px; color: var(--text3); font-size: .875rem; line-height: 1.6; }
+  .anki-rules summary { cursor: pointer; width: fit-content; margin: auto; }
+  .anki-rules p { margin-top: 12px; }
+  .anki-session-ratings { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 24px 0; }
+  .anki-session-ratings span { display: flex; flex-direction: column; gap: 8px; padding: 16px 8px; border: 1px solid var(--border); border-radius: 8px; font-size: .875rem; }
+  .anki-session-ratings strong { font-size: 1.5rem; color: var(--text); }
+  .anki-preview [hidden] { display: none !important; }
+  .anki-save-error { color: var(--again); font-weight: 600; }
+  .anki-backup { margin-top: 24px; padding: 18px 20px; border: 1px solid var(--border); border-radius: 12px; font-size: .875rem; line-height: 1.6; }
+  .anki-backup summary { cursor: pointer; font-weight: 600; }
+  .anki-backup p { margin: 12px 0; }
+  .anki-backup-actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 12px 0; }
+  .anki-backup button { min-height: 40px; padding: 9px 14px; border: 1px solid var(--border); border-radius: 8px; color: var(--text); background: var(--surface); font: inherit; cursor: pointer; }
+  .anki-backup button:disabled { opacity: .5; cursor: default; }
+  .anki-backup textarea { display: block; width: 100%; min-height: 130px; margin-top: 8px; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font: inherit; color: var(--text); background: var(--bg); }
+  .anki-backup-confirm { display: flex; align-items: flex-start; gap: 10px; }
+  .anki-backup-confirm input { margin-top: 5px; }
+}
+@media screen and (max-width: 600px) {
+  .anki-preview .flashcard { padding: 24px 20px; min-height: 260px; }
+  .anki-preview .card-question { font-size: 1.125rem; }
+  .anki-preview .card-tag { padding-left: 0; padding-right: 36px; text-align: left; }
+  .anki-preview .card-actions.visible { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .anki-answer-dock { padding-top: 16px; }
+  .anki-show { width: 100%; }
+  .anki-queue { gap: 12px 20px; }
+  .anki-session-ratings { grid-template-columns: repeat(2, 1fr); }
+}
+@media print {
+  .anki-study-button, .anki-deck-study, .anki-answer-dock, .anki-queue, .anki-rules, .anki-backup { display: none !important; }
+}

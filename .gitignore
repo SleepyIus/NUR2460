@@ -1,0 +1,6 @@
+# Local operating-system metadata and temporary files
+.DS_Store
+tmp/
+
+# Local authoring sources, drafts, rollback snapshots, and QA artifacts
+/content-governance/
