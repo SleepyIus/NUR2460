@@ -9442,7 +9442,12 @@ e1PharmRecord('iron_supp',{
   education:e1PharmList([e1PharmFact('E1PI-F-023','A stool softener might be needed for constipation.','CORE','ATI Maternal Newborn Ch.5, PDF p.38 / printed p.27')])
 });
 e1PharmRecord('rhogam',{
-  use:e1PharmList([e1PharmFact('E1PI-F-027','Additional supported contexts include amniocentesis, external cephalic version, miscarriage, and molar-pregnancy evacuation in an unsensitized Rh-negative client.','CORE','ATI Maternal Newborn Chs.6, 7, and 15')]),
+  use:e1PharmList([
+    e1PharmFact('P5E1-W1-F-009','After amniocentesis, administer Rho(D) immune globulin to an Rh-negative client to protect against Rh isoimmunization.','CORE','Ch.6 | printed p.36 / PDF p.47 | Amniocentesis—Postprocedure Nursing Actions'),
+    e1PharmFact('P5E1-W1-F-010','In miscarriage care, ATI lists Rho(D) immune globulin to suppress the immune response of clients who are Rh-negative.','CORE','Ch.7 | printed p.42 / PDF p.53 | Miscarriage—Medications'),
+    e1PharmFact('P5E1-W1-F-011','After molar-pregnancy surgery, give Rho(D) immune globulin to the client who is Rh-negative.','CORE','Ch.7 | printed pp.43-44 / PDF pp.54-55 | Gestational trophoblastic disease—Post-surgery procedure and Nursing Care'),
+    e1PharmFact('P5E1-W1-F-012','After external cephalic version, an Rh-negative client should receive Rho(D) immune globulin to suppress the maternal immune response to fetal Rh-positive blood in case minimal bleeding occurs.','CORE','Ch.15 | printed p.101 / PDF p.112 | External cephalic version—Ongoing Care')
+  ]),
   admin:e1PharmList([
     e1PharmFact('E1PI-F-025','Administer IM around <strong>28 weeks</strong> to an Rh-negative client.','CORE','ATI Maternal Newborn Ch.4, PDF p.33 / printed p.22'),
     e1PharmFact('E1PI-F-026','Administer IM within <strong>72 hr after birth</strong> when the Rh-negative client has an Rh-positive newborn.','CORE','ATI Maternal Newborn Ch.17, PDF p.136 / printed p.125')
@@ -11157,7 +11162,7 @@ DRUGS['rhogam'] = {
     }
   ],
   "action": "<ul class=\"e1-facts\"><li><span class=\"e1-fact-body\" data-fact=\"E1PD-rho-purpose\" data-source=\"ATI-MN11\" data-locator=\"Ch.17 | printed p.125 / PDF p.136 | immune system\"><strong>Maternal prevention:</strong> <span class=\"e1-claim\">Postpartum Rho(D) immune globulin suppresses antibody formation in the Rh-negative mother after an Rh-positive birth.</span> <span class=\"bsrc bsrc-ati\">CORE</span><small class=\"e1-cite\" title=\"ATI RN Maternal Newborn Nursing, Edition 11.0 (2019)\">ATI-MN11 · Ch.17 · p.125 (PDF 136)</small></span></li></ul>",
-  "use": "<ul><li data-fact=\"E1PI-F-027\" data-locator=\"ATI Maternal Newborn Chs.6, 7, and 15\">Additional supported contexts include amniocentesis, external cephalic version, miscarriage, and molar-pregnancy evacuation in an unsensitized Rh-negative client. <span class=\"bsrc bsrc-ati\">CORE</span><div class=\"fact-locator\">ATI Maternal Newborn Chs.6, 7, and 15</div></li></ul>",
+  "use": "<ul class=\"e1-facts\"><li><span class=\"e1-fact-body\" data-fact=\"P5E1-W1-F-009\" data-source=\"ATI-MN11\" data-locator=\"Ch.6 | printed p.36 / PDF p.47 | Amniocentesis—Postprocedure Nursing Actions\"><strong>After amniocentesis:</strong> <span class=\"e1-claim\">Administer Rho(D) immune globulin to an Rh-negative client to protect against Rh isoimmunization.</span> <span class=\"bsrc bsrc-ati\">CORE</span><small class=\"e1-cite\">ATI-MN11 · Ch.6 · p.36 (PDF 47)</small></span></li><li><span class=\"e1-fact-body\" data-fact=\"P5E1-W1-F-010\" data-source=\"ATI-MN11\" data-locator=\"Ch.7 | printed p.42 / PDF p.53 | Miscarriage—Medications\"><strong>Miscarriage care:</strong> <span class=\"e1-claim\">ATI lists Rho(D) immune globulin to suppress the immune response of clients who are Rh-negative.</span> <span class=\"bsrc bsrc-ati\">CORE</span><small class=\"e1-cite\">ATI-MN11 · Ch.7 · p.42 (PDF 53)</small></span></li><li><span class=\"e1-fact-body\" data-fact=\"P5E1-W1-F-011\" data-source=\"ATI-MN11\" data-locator=\"Ch.7 | printed pp.43-44 / PDF pp.54-55 | Gestational trophoblastic disease—Post-surgery procedure and Nursing Care\"><strong>After molar-pregnancy surgery:</strong> <span class=\"e1-claim\">Give Rho(D) immune globulin to the client who is Rh-negative.</span> <span class=\"bsrc bsrc-ati\">CORE</span><small class=\"e1-cite\">ATI-MN11 · Ch.7 · pp.43-44 (PDF 54-55)</small></span></li><li><span class=\"e1-fact-body\" data-fact=\"P5E1-W1-F-012\" data-source=\"ATI-MN11\" data-locator=\"Ch.15 | printed p.101 / PDF p.112 | External cephalic version—Ongoing Care\"><strong>After external cephalic version:</strong> <span class=\"e1-claim\">An Rh-negative client should receive Rho(D) immune globulin to suppress the maternal immune response to fetal Rh-positive blood in case minimal bleeding occurs.</span> <span class=\"bsrc bsrc-ati\">CORE</span><small class=\"e1-cite\">ATI-MN11 · Ch.15 · p.101 (PDF 112)</small></span></li></ul>",
   "complications": "<p class=\"source-boundary\" data-field-state=\"deferred\"><strong>Review limit:</strong> Further detail for this field is deferred in this bounded Exam 1 source review.</p>",
   "admin": "<ul><li data-fact=\"E1PI-F-025\" data-locator=\"ATI Maternal Newborn Ch.4, PDF p.33 / printed p.22\">Administer IM around <strong>28 weeks</strong> to an Rh-negative client. <span class=\"bsrc bsrc-ati\">CORE</span><div class=\"fact-locator\">ATI Maternal Newborn Ch.4, PDF p.33 / printed p.22</div></li><li data-fact=\"E1PI-F-026\" data-locator=\"ATI Maternal Newborn Ch.17, PDF p.136 / printed p.125\">Administer IM within <strong>72 hr after birth</strong> when the Rh-negative client has an Rh-positive newborn. <span class=\"bsrc bsrc-ati\">CORE</span><div class=\"fact-locator\">ATI Maternal Newborn Ch.17, PDF p.136 / printed p.125</div></li></ul>",
   "contraindications": "<p class=\"source-boundary\" data-field-state=\"deferred\"><strong>Review limit:</strong> Further detail for this field is deferred in this bounded Exam 1 source review.</p>",
@@ -11187,6 +11192,54 @@ QUICK_REVIEWS['rhogam'] = {
   ],
   "flags": []
 };
+
+// ── Worker 1 accepted pilot · PHARM-E1-W1-PILOT-2026-09-06 ────────────────
+// Field-level integration only: medication IDs, field anchors, and learner storage stay unchanged.
+function p5e1W1Fact(factId, label, claim, source, locator, citation) {
+  return '<span class="e1-fact-body" data-fact="' + factId + '" data-source="' + source + '" data-locator="' + locator + '"><strong>' + label + ':</strong> <span class="e1-claim">' + claim + '</span> <span class="bsrc bsrc-ati">CORE</span><small class="e1-cite">' + citation + '</small></span>';
+}
+function p5e1W1List() {
+  return '<ul class="e1-facts">' + Array.from(arguments, fact => '<li>' + fact + '</li>').join('') + '</ul>';
+}
+const P5E1_W1_FACTS = Object.freeze({
+  folicB12: p5e1W1Fact('P5E1-W1-F-001', 'Concurrent vitamin B12 safeguard', 'When folic acid is used concurrently, ensure that the client receives adequate doses of vitamin B12 because folic acid can mask manifestations of vitamin B12 deficiency.', 'ATI-PHARM8', 'Ch.30 | printed p.237 / PDF p.248 | Vitamin B12/Cyanocobalamin—Interactions, folic-acid nursing action', 'ATI-PHARM8 · Ch.30 · p.237 (PDF 248)'),
+  folicInteractions: p5e1W1Fact('P5E1-W1-F-002', 'Methotrexate and sulfonamides', 'These medications decrease folic acid levels; ATI directs avoiding concurrent use with folic acid.', 'ATI-PHARM8', 'Ch.30 | printed p.237 / PDF p.248 | Folic acid—Interactions', 'ATI-PHARM8 · Ch.30 · p.237 (PDF 248)'),
+  folicAssess: p5e1W1Fact('P5E1-W1-F-003', 'Megaloblastic-anemia assessment', 'Assess for pallor, easy fatigability, palpitations, and paresthesias of the hands or feet.', 'ATI-PHARM8', 'Ch.30 | printed p.237 / PDF p.248 | Folic acid—Nursing Administration, Nursing Care', 'ATI-PHARM8 · Ch.30 · p.237 (PDF 248)'),
+  folicOutcome: p5e1W1Fact('P5E1-W1-F-004', 'Prevention-intent outcome', 'For the neural-tube-defect prevention intent, ATI lists absence of neural tube defects in the newborn as an effectiveness outcome; this does not guarantee prevention or establish a prenatal diagnostic rule.', 'ATI-PHARM8', 'Ch.30 | printed p.237 / PDF p.248 | Folic acid—Nursing Evaluation of Medication Effectiveness', 'ATI-PHARM8 · Ch.30 · p.237 (PDF 248)'),
+  folicEctopic: p5e1W1Fact('P5E1-W1-F-005', 'Ectopic-pregnancy methotrexate context', 'If taking methotrexate for ectopic-pregnancy treatment, avoid vitamins containing folic acid to prevent a toxic response to the medication.', 'ATI-MN11', 'Ch.7 | printed p.43 / PDF p.54 | Ectopic pregnancy—Client Education', 'ATI-MN11 · Ch.7 · p.43 (PDF 54)'),
+  ironSpacing: p5e1W1Fact('P5E1-W1-F-006', 'Dose spacing', 'Space oral iron doses at approximately equal intervals throughout the day to most efficiently increase red blood cell production.', 'ATI-PHARM8', 'Ch.30 | printed p.236 / PDF p.247 | Iron preparations—Nursing Administration, Client Education', 'ATI-PHARM8 · Ch.30 · p.236 (PDF 247)'),
+  ironDuration: p5e1W1Fact('P5E1-W1-F-007', 'Bounded course statement', 'Iron therapy can last 1 to 2 months; ATI states that dietary intake usually will be sufficient after hemoglobin has returned to a therapeutic level. This is not a universal stop date and does not replace prescribed follow-up.', 'ATI-PHARM8', 'Ch.30 | printed p.236 / PDF p.247 | Iron preparations—Nursing Administration, Client Education', 'ATI-PHARM8 · Ch.30 · p.236 (PDF 247)'),
+  ironRouteBoundary: p5e1W1Fact('P5E1-W1-F-008', 'Oral/parenteral boundary', 'Avoid using oral and parenteral iron concurrently.', 'ATI-PHARM8', 'Ch.30 | printed p.236 / PDF p.247 | Fatal iron toxicity in children—Nursing Actions', 'ATI-PHARM8 · Ch.30 · p.236 (PDF 247)'),
+  rhogamEcv: p5e1W1Fact('P5E1-W1-F-012', 'After external cephalic version', 'An Rh-negative client should receive Rho(D) immune globulin to suppress the maternal immune response to fetal Rh-positive blood in case minimal bleeding occurs.', 'ATI-MN11', 'Ch.15 | printed p.101 / PDF p.112 | External cephalic version—Ongoing Care', 'ATI-MN11 · Ch.15 · p.101 (PDF 112)')
+});
+
+DRUGS['folic_acid'].nursing += p5e1W1List(P5E1_W1_FACTS.folicB12, P5E1_W1_FACTS.folicAssess);
+DRUGS['folic_acid'].interactions += p5e1W1List(P5E1_W1_FACTS.folicInteractions, P5E1_W1_FACTS.folicEctopic);
+DRUGS['folic_acid'].evaluation += p5e1W1List(P5E1_W1_FACTS.folicOutcome);
+DRUGS['folic_acid'].canonicalFactIds.push('P5E1-W1-F-001', 'P5E1-W1-F-002', 'P5E1-W1-F-003', 'P5E1-W1-F-004', 'P5E1-W1-F-005');
+DRUGS['folic_acid'].studyGuide = DRUGS['folic_acid'].studyGuide.replace(/<\/section>\s*$/, '<details class="e1-recall" data-retrieval="P5E1-W1-Q-001"><summary>Check yourself: Which two medications does ATI list as decreasing folic acid levels, and what action does ATI direct?</summary><div class="e1-answer">' + P5E1_W1_FACTS.folicInteractions + '</div></details></section>');
+DRUGS['folic_acid'].enrichmentVersion = 'PHARM-E1-W1-PILOT-2026-09-06';
+QUICK_REVIEWS['folic_acid'].flags.push(P5E1_W1_FACTS.folicInteractions);
+QUICK_REVIEWS['folic_acid'].enrichmentVersion = 'PHARM-E1-W1-PILOT-2026-09-06';
+
+DRUGS['iron_supp'].admin += p5e1W1List(P5E1_W1_FACTS.ironSpacing);
+DRUGS['iron_supp'].education += p5e1W1List(P5E1_W1_FACTS.ironDuration);
+DRUGS['iron_supp'].interactions += p5e1W1List(P5E1_W1_FACTS.ironRouteBoundary);
+DRUGS['iron_supp'].canonicalFactIds.push('P5E1-W1-F-006', 'P5E1-W1-F-007', 'P5E1-W1-F-008');
+DRUGS['iron_supp'].studyGuide = DRUGS['iron_supp'].studyGuide.replace(/<\/section>\s*$/, '<details class="e1-recall" data-retrieval="P5E1-W1-Q-002"><summary>Check yourself: How does ATI say to space oral iron doses through the day?</summary><div class="e1-answer">' + P5E1_W1_FACTS.ironSpacing + '</div></details><aside class="e1-scope" role="note" data-synthesis="P5E1-W1-R-004"><strong>Formulation boundary:</strong> ' + P5E1_W1_FACTS.ironRouteBoundary + ' Parenteral-iron adverse effects, route, and test-dose details are not transferred into this oral ferrous-sulfate record.</aside></section>');
+DRUGS['iron_supp'].enrichmentVersion = 'PHARM-E1-W1-PILOT-2026-09-06';
+QUICK_REVIEWS['iron_supp'].flags.push(P5E1_W1_FACTS.ironRouteBoundary);
+QUICK_REVIEWS['iron_supp'].enrichmentVersion = 'PHARM-E1-W1-PILOT-2026-09-06';
+
+DRUGS['rhogam'].canonicalFactIds.push('P5E1-W1-F-009', 'P5E1-W1-F-010', 'P5E1-W1-F-011', 'P5E1-W1-F-012');
+DRUGS['rhogam'].studyGuide = DRUGS['rhogam'].studyGuide.replace(/<\/section>\s*$/, '<details class="e1-recall" data-retrieval="P5E1-W1-Q-003"><summary>Check yourself: What action does ATI state after external cephalic version for an Rh-negative client?</summary><div class="e1-answer">' + P5E1_W1_FACTS.rhogamEcv + '</div></details><table class="verified-comparison e1-comparison" data-synthesis="P5E1-W1-CMP-002"><caption>Rho(D) timing and sensitizing-context map</caption><thead><tr><th scope="col">Context</th><th scope="col">Source-bounded teaching</th></tr></thead><tbody><tr><th scope="row">Routine prenatal</th><td>IM around 28 weeks for an Rh-negative client; the indirect Coombs test is repeated between 24 and 28 weeks in unsensitized Rh-negative clients.</td></tr><tr><th scope="row">After amniocentesis</th><td>Administer to the Rh-negative client to protect against Rh isoimmunization.</td></tr><tr><th scope="row">Miscarriage care</th><td>ATI lists it to suppress the immune response of Rh-negative clients.</td></tr><tr><th scope="row">After molar-pregnancy surgery</th><td>Give it to the client who is Rh-negative.</td></tr><tr><th scope="row">After external cephalic version</th><td>Give it to the Rh-negative client in case minimal bleeding occurs.</td></tr><tr><th scope="row">Postpartum after an Rh-positive birth</th><td>Give IM within 72 hr to the Rh-negative client.</td></tr></tbody></table></section>');
+DRUGS['rhogam'].enrichmentVersion = 'PHARM-E1-W1-PILOT-2026-09-06';
+
+window.NUR2460_FACT_MIGRATIONS = Object.freeze(Object.assign({}, window.NUR2460_FACT_MIGRATIONS, {
+  'E1PI-F-027': Object.freeze(['P5E1-W1-F-009', 'P5E1-W1-F-010', 'P5E1-W1-F-011', 'P5E1-W1-F-012'])
+}));
+// ── End Worker 1 accepted pilot ────────────────────────────────────────────
+
 DRUGS['opioid_analgesics'] = {
   "title": "Opioid Analgesics (Labor)",
   "subtitle": "Labor opioids • Pain relief, birth timing and respiratory monitoring",
@@ -11442,6 +11495,174 @@ QUICK_REVIEWS['naloxone'] = {
   ],
   "reviewLimit": "A dose and repeat interval are not established in this bounded labor/neonatal source review; do not infer an adult regimen for a newborn."
 };
+
+// ── Worker 2 accepted integration · PHARM-E1-W2-2026-09-06 ───────────────
+// Field-level integration only: medication IDs, anchors, storage keys, and learner state stay unchanged.
+function p5e1W2Fact(factId, label, claim, source, locator, citation, badgeClass, badgeText) {
+  return '<span class="e1-fact-body" data-fact="' + factId + '" data-source="' + source + '" data-locator="' + locator + '"><strong>' + label + ':</strong> <span class="e1-claim">' + claim + '</span> <span class="bsrc ' + badgeClass + '">' + badgeText + '</span><small class="e1-cite">' + citation + '</small></span>';
+}
+function p5e1W2List() {
+  return '<ul class="e1-facts">' + Array.from(arguments, fact => '<li>' + fact + '</li>').join('') + '</ul>';
+}
+function p5e1W2AddIds(record) {
+  const additions = Array.from(arguments).slice(1);
+  record.canonicalFactIds = Array.from(new Set([].concat(record.canonicalFactIds || [], additions)));
+}
+function p5e1W2AddPerryRef(record) {
+  record.refs = record.refs || [];
+  if (!record.refs.some(ref => /Perry.*Seventh Edition/i.test(ref.short || ''))) {
+    record.refs.push({ icon: '✓', short: 'SUPP · Perry Maternal Child Nursing Care, Seventh Edition' });
+  }
+}
+function p5e1W2ReplaceAll(value, before, after) {
+  return typeof value === 'string' ? value.split(before).join(after) : value;
+}
+const P5E1_W2_FACTS = Object.freeze({
+  neuraxialContraindications: p5e1W2Fact(
+    'P5E1-W2-F-001',
+    'Perry spinal/epidural contraindications',
+    'Perry lists active or anticipated serious maternal hemorrhage with acute hypovolemia, maternal hypotension, coagulopathy or bleeding/anticoagulant risk, infection at the insertion site, increased intracranial pressure from a mass lesion, anesthetic allergy, maternal refusal or inability to cooperate, and some maternal cardiac conditions. Its coagulopathy example includes a low-molecular-weight-heparin dose within 12 hr; retain this as a source-era example rather than a universal current protocol.',
+    'PERRY7-C14',
+    'Chapter 14 | printed p.349; EPUB #st0465, p1830-l0150; visual PDF p.1186',
+    'PERRY7-C14 · printed p.349 · PDF 1186',
+    'bsrc-perry',
+    'SUPP'
+  ),
+  pudendalLimitation: p5e1W2Fact(
+    'P5E1-W2-F-002',
+    'Coverage limit',
+    'A pudendal nerve block relieves lower-vaginal, vulvar and perineal pain but does not relieve pain from uterine contractions.',
+    'PERRY7-C14',
+    'Chapter 14 | printed p.345; EPUB #st0430, p1570; visual PDF p.1171',
+    'PERRY7-C14 · printed p.345 · PDF 1171',
+    'bsrc-perry',
+    'SUPP'
+  ),
+  naloxoneDependence: p5e1W2Fact(
+    'P5E1-W2-F-003',
+    'Opioid-dependence warning',
+    'Perry directs not giving naloxone to the woman or newborn when the woman is opioid dependent because abrupt withdrawal can occur in both.',
+    'PERRY7-C14',
+    'Chapter 14 | printed p.344; EPUB b0220/p1535 and Safety Alert p1550; visual PDF p.1170',
+    'PERRY7-C14 · printed p.344 · PDF 1170',
+    'bsrc-perry',
+    'SUPP'
+  ),
+  naloxoneAdverse: p5e1W2Fact(
+    'P5E1-W2-F-004',
+    'Maternal adverse effects',
+    'Perry lists maternal hypotension or hypertension, tachycardia, hyperventilation, nausea and vomiting, sweating, and tremulousness. These findings are not transferred to the newborn.',
+    'PERRY7-C14',
+    'Chapter 14 | printed p.344; EPUB b0220/p1530; visual PDF p.1170',
+    'PERRY7-C14 · printed p.344 · PDF 1170',
+    'bsrc-perry',
+    'SUPP'
+  ),
+  naloxoneRoutes: p5e1W2Fact(
+    'P5E1-W2-F-005',
+    'Maternal obstetric routes',
+    'In Perry’s obstetric opioid-antagonist discussion, naloxone can be administered intravenously or intramuscularly. No adult-overdose dose or newborn route/regimen is inferred.',
+    'PERRY7-C14',
+    'Chapter 14 | printed p.343; EPUB #st0375, p1495; visual PDF p.1169',
+    'PERRY7-C14 · printed p.343 · PDF 1169',
+    'bsrc-perry',
+    'SUPP'
+  ),
+  naloxonePainReturn: p5e1W2Fact(
+    'P5E1-W2-F-006',
+    'Pain can return',
+    'Teach that pain relieved by the opioid can return suddenly when naloxone reverses the opioid effect.',
+    'PERRY7-C14',
+    'Chapter 14 | printed pp.343-344; EPUB p1495 and b0220/p1535; visual PDF pp.1169-1170',
+    'PERRY7-C14 · printed pp.343-344 · PDF 1169-1170',
+    'bsrc-perry',
+    'SUPP'
+  ),
+  naloxoneBreastfeeding: p5e1W2Fact(
+    'P5E1-W2-F-007',
+    'Source-era breastfeeding instruction',
+    'Perry’s Seventh Edition medication guide instructs the woman to delay breastfeeding until approximately 2 hr after the last naloxone dose. Retain the approximate timing and source-specific attribution.',
+    'PERRY7-C14',
+    'Chapter 14 | printed p.344; EPUB b0220/p1535; visual PDF p.1170',
+    'PERRY7-C14 · printed p.344 · PDF 1170',
+    'bsrc-perry',
+    'SUPP'
+  ),
+  spinalContext: p5e1W2Fact(
+    'P5E1-W2-F-008',
+    'Route and birth-context boundary',
+    'ATI describes local anesthetic injected into subarachnoid spinal fluid, alone or with an analgesic such as fentanyl. In the cesarean-birth context, the block eliminates sensation from the nipple line to the feet; ATI separately identifies a low spinal block for late-second-stage vaginal birth. The described spinal anesthetic is not used for labor.',
+    'ATI-MN11',
+    'Chapter 12 | printed p.84 / physical PDF p.95 | Spinal anesthesia (block)',
+    'ATI-MN11 · Ch.12 · p.84 (PDF 95)',
+    'bsrc-ati',
+    'CORE'
+  )
+});
+
+const P5E1_W2_COMPARISON = '<table class="verified-comparison e1-comparison" data-synthesis="P5E1-W2-CMP-001"><caption>Match labor pain or reversal need to the source-bounded option</caption><thead><tr><th scope="col">Option</th><th scope="col">Source-bounded distinction</th></tr></thead><tbody>' +
+  '<tr data-facts="E1PD-opioid-purpose E1PD-opioid-late E1PD-opioid-monitor"><th scope="row">Systemic opioids</th><td>Partial, temporary relief in early active labor; retain the exact birth-timing and monitoring envelope. <span class="bsrc bsrc-ati">CORE</span></td></tr>' +
+  '<tr data-facts="E1PD-epi-pressure E1PI-F-008 P5E1-W2-F-001"><th scope="row">Epidural</th><td>Relieves labor/birth pain while pressure can remain; ATI’s minimum-4-cm statement and Perry’s contraindications stay separately source-labeled. <span class="bsrc bsrc-ati">CORE</span> <span class="bsrc bsrc-perry">SUPP</span></td></tr>' +
+  '<tr data-facts="P5E1-W2-F-008 E1PD-spinal-use E1PD-spinal-vitals"><th scope="row">Spinal</th><td>Cesarean or low late-second-stage vaginal block, not labor analgesia; keep coverage and monitoring contexts explicit. <span class="bsrc bsrc-ati">CORE</span></td></tr>' +
+  '<tr data-facts="E1PD-pud-admin P5E1-W2-F-002"><th scope="row">Pudendal</th><td>Late local perineal anesthesia; does not relieve uterine-contraction pain. <span class="bsrc bsrc-ati">CORE</span> <span class="bsrc bsrc-perry">SUPP</span></td></tr>' +
+  '<tr data-facts="E1PD-nal-action P5E1-W2-F-003 E1PI-F-012"><th scope="row">Naloxone</th><td>Opioid reversal with opioid-dependence screening and recurrence monitoring; no neonatal regimen is added. <span class="bsrc bsrc-ati">CORE</span> <span class="bsrc bsrc-perry">SUPP</span></td></tr>' +
+  '</tbody></table>';
+const P5E1_W2_MALFORMED_BOUNDARY = '<aside class="e1-scope" role="note" data-conflict="P5E1-W2-C-004"><strong>Source boundary:</strong> ATI’s visible dosage-comparison sentence is grammatically malformed and cannot safely support a precise fentanyl-versus-agonist-antagonist dose-response statement. Perry separately describes a ceiling effect and drug-specific respiratory-depression differences. The generic ATI respiratory-depression risk remains; the comparative claim is not repaired or inferred.</aside>';
+
+DRUGS['opioid_analgesics'].studyGuide = DRUGS['opioid_analgesics'].studyGuide
+  .replace(/<table class="verified-comparison e1-comparison" data-synthesis="E1PD-S-pain-options">[\s\S]*?<\/table>/, P5E1_W2_COMPARISON + P5E1_W2_MALFORMED_BOUNDARY);
+DRUGS['opioid_analgesics'].enrichmentVersion = 'PHARM-E1-W2-2026-09-06';
+
+DRUGS['epidural'].contraindications += p5e1W2List(P5E1_W2_FACTS.neuraxialContraindications);
+p5e1W2AddIds(DRUGS['epidural'], 'P5E1-W2-F-001');
+DRUGS['epidural'].studyGuide = DRUGS['epidural'].studyGuide.replace(/<\/section>\s*$/, '<aside class="e1-scope" role="note" data-synthesis="P5E1-W2-R-001"><strong>Before a neuraxial block:</strong> Screen the source-listed contraindications before proceeding, then retain the technique-specific ATI monitoring and response sequence.</aside><aside class="e1-scope" role="note" data-conflict="P5E1-W2-C-001"><strong>Source conflict—epidural timing:</strong> ATI describes administration in active labor at a minimum dilation of 4 cm. Perry states that a fixed cervical dilation or fetal station is no longer recommended before epidural anesthesia. ATI remains exam-facing under ATI_FIRST_V1; do not average or silently reconcile the statements.</aside></section>');
+DRUGS['epidural'].enrichmentVersion = 'PHARM-E1-W2-2026-09-06';
+
+DRUGS['spinal'].action = p5e1W2List(P5E1_W2_FACTS.spinalContext);
+DRUGS['spinal'].evaluation = p5e1W2List(P5E1_W2_FACTS.spinalContext);
+DRUGS['spinal'].contraindications += p5e1W2List(P5E1_W2_FACTS.neuraxialContraindications);
+DRUGS['spinal'].nursing += '<aside class="e1-scope" role="note" data-conflict="P5E1-W2-C-002"><strong>Source conflict—post-spinal monitoring:</strong> ATI directs maternal vital-sign assessment every 10 min after spinal anesthesia. Perry directs maternal blood pressure, pulse, respirations and fetal heart rate/pattern every 5 min for the first 15 min, with further monitoring based on condition and response. ATI remains exam-facing under ATI_FIRST_V1; do not average the intervals.</aside>';
+DRUGS['spinal'].canonicalFactIds = (DRUGS['spinal'].canonicalFactIds || []).filter(id => id !== 'E1PD-spinal-action');
+p5e1W2AddIds(DRUGS['spinal'], 'P5E1-W2-F-001', 'P5E1-W2-F-008');
+DRUGS['spinal'].studyGuide = DRUGS['spinal'].studyGuide.replace(/<\/section>\s*$/, '<details class="e1-recall" data-retrieval="P5E1-W2-Q-003"><summary>Check yourself: In ATI’s spinal description, which birth context belongs with nipple-to-feet anesthesia?</summary><div class="e1-answer">' + P5E1_W2_FACTS.spinalContext + '</div></details><aside class="e1-scope" role="note" data-synthesis="P5E1-W2-R-004"><strong>Keep contexts separate:</strong> Cesarean spinal sensory coverage, the low vaginal spinal block and labor analgesia are distinct source contexts; do not transfer nipple-to-feet coverage to every spinal use.</aside></section>');
+DRUGS['spinal'].enrichmentVersion = 'PHARM-E1-W2-2026-09-06';
+QUICK_REVIEWS['spinal'].tldr = DRUGS['spinal'].scopeNotice + p5e1W2List(P5E1_W2_FACTS.spinalContext) + DRUGS['spinal'].use;
+QUICK_REVIEWS['spinal'].enrichmentVersion = 'PHARM-E1-W2-2026-09-06';
+
+DRUGS['pudendal'].use += p5e1W2List(P5E1_W2_FACTS.pudendalLimitation);
+p5e1W2AddIds(DRUGS['pudendal'], 'P5E1-W2-F-002');
+DRUGS['pudendal'].studyGuide = DRUGS['pudendal'].studyGuide.replace(/<\/section>\s*$/, '<details class="e1-recall" data-retrieval="P5E1-W2-Q-001"><summary>Check yourself: Which labor pain does a pudendal block not relieve?</summary><div class="e1-answer">' + P5E1_W2_FACTS.pudendalLimitation + '</div></details><aside class="e1-scope" role="note" data-synthesis="P5E1-W2-R-002"><strong>Coverage comparison:</strong> A pudendal block targets lower-vaginal, vulvar and perineal pain but not uterine-contraction pain; epidural analgesia is described separately for labor-pain coverage.</aside></section>');
+DRUGS['pudendal'].enrichmentVersion = 'PHARM-E1-W2-2026-09-06';
+QUICK_REVIEWS['pudendal'].facts.push(P5E1_W2_FACTS.pudendalLimitation);
+QUICK_REVIEWS['pudendal'].enrichmentVersion = 'PHARM-E1-W2-2026-09-06';
+
+DRUGS['naloxone'].complications += p5e1W2List(P5E1_W2_FACTS.naloxoneAdverse);
+DRUGS['naloxone'].admin += p5e1W2List(P5E1_W2_FACTS.naloxoneRoutes);
+DRUGS['naloxone'].contraindications += p5e1W2List(P5E1_W2_FACTS.naloxoneDependence);
+DRUGS['naloxone'].education += p5e1W2List(P5E1_W2_FACTS.naloxonePainReturn, P5E1_W2_FACTS.naloxoneBreastfeeding);
+DRUGS['naloxone'].use += '<aside class="e1-scope" role="note" data-conflict="P5E1-W2-C-003"><strong>Source conflict—newborn evidence boundary:</strong> ATI lists naloxone for severe opioid-related respiratory depression in the newborn. Perry states that newborn safety and efficacy evidence is insufficient and notes case-report/animal concerns; Perry separately contraindicates use when the mother is opioid dependent. Preserve these as distinct source-era contexts; no neonatal dosing or administration guidance is added.</aside>';
+p5e1W2AddIds(DRUGS['naloxone'], 'P5E1-W2-F-003', 'P5E1-W2-F-004', 'P5E1-W2-F-005', 'P5E1-W2-F-006', 'P5E1-W2-F-007');
+DRUGS['naloxone'].studyGuide = DRUGS['naloxone'].studyGuide.replace(/<\/section>\s*$/, '<details class="e1-recall" data-retrieval="P5E1-W2-Q-002"><summary>Check yourself: Which maternal history changes naloxone from a reversal option to an abrupt-withdrawal risk for both woman and newborn?</summary><div class="e1-answer">' + P5E1_W2_FACTS.naloxoneDependence + '</div></details><aside class="e1-scope" role="note" data-synthesis="P5E1-W2-R-003"><strong>Safety sequence:</strong> Before maternal naloxone use, check opioid-dependence context; after reversal, teach that pain can return and monitor for recurrent opioid depression because naloxone can be shorter acting than the opioid.</aside></section>');
+DRUGS['naloxone'].enrichmentVersion = 'PHARM-E1-W2-2026-09-06';
+QUICK_REVIEWS['naloxone'].flags.push(P5E1_W2_FACTS.naloxoneDependence);
+QUICK_REVIEWS['naloxone'].enrichmentVersion = 'PHARM-E1-W2-2026-09-06';
+
+for (const id of ['opioid_analgesics', 'epidural', 'spinal', 'pudendal', 'naloxone']) p5e1W2AddPerryRef(DRUGS[id]);
+
+const P5E1_W2_LOCATOR_REPAIRS = Object.freeze([
+  Object.freeze({ medication: 'spinal', fields: ['admin'], briefFields: ['facts'], before: 'Perry Ch.14, Spinal block', after: 'Perry Ch.14 | printed p.346; EPUB p1595; visual PDF p.1177' }),
+  Object.freeze({ medication: 'naloxone', fields: ['nursing'], briefFields: ['facts'], before: 'Perry Ch.14, Naloxone Medication Guide', after: 'Perry Ch.14 | printed p.344; EPUB b0220/p1535; visual PDF p.1170' }),
+  Object.freeze({ medication: 'naloxone', fields: ['contraindications'], briefFields: ['flags'], before: 'Perry Ch.25, NAS Safety Alert', after: 'Perry Ch.25 | printed pp.623-624 boundary; EPUB p3005; visual PDF p.2046' })
+]);
+for (const repair of P5E1_W2_LOCATOR_REPAIRS) {
+  for (const field of repair.fields) DRUGS[repair.medication][field] = p5e1W2ReplaceAll(DRUGS[repair.medication][field], repair.before, repair.after);
+  for (const field of repair.briefFields) QUICK_REVIEWS[repair.medication][field] = QUICK_REVIEWS[repair.medication][field].map(value => p5e1W2ReplaceAll(value, repair.before, repair.after));
+}
+
+window.NUR2460_FACT_MIGRATIONS = Object.freeze(Object.assign({}, window.NUR2460_FACT_MIGRATIONS, {
+  'E1PD-spinal-action': Object.freeze(['P5E1-W2-F-008'])
+}));
+// ── End Worker 2 accepted integration ────────────────────────────────────
 DRUGS['oxytocin_ind'] = {
   "title": "Oxytocin (Pitocin)",
   "subtitle": "Oxytocin for induction • Contractions and fetal response",
@@ -12226,6 +12447,302 @@ QUICK_REVIEWS['hep_b_vax'] = {
   ]
 };
 // ── End Exam 1 dedicated Pharmacology deepening ──
+// ── Worker 3 accepted integration: induction and cervical ripening ───────
+function p5e1W3Fact(id, label, claim, sourceId, locator){
+  const sourceTitle=sourceId==='ATI-PHARM8'?'ATI RN Pharmacology for Nursing, Edition 8.0 (2019)':'ATI RN Maternal Newborn Nursing, Edition 11.0 (2019)';
+  const sourceLabel=sourceId==='ATI-PHARM8'?'ATI-PHARM8 · Ch.32 · p.255 (PDF 266)':'ATI-MN11 · Ch.15 · '+(locator.includes('PDF 114')?'p.103 (PDF 114)':'p.102 (PDF 113)');
+  return '<span class="e1-fact-body" data-fact="'+id+'" data-source="'+sourceId+'" data-locator="'+locator+'"><strong>'+label+':</strong> <span class="e1-claim">'+claim+'</span> <span class="bsrc bsrc-ati">CORE</span><small class="e1-cite" title="'+sourceTitle+'">'+sourceLabel+'</small></span>';
+}
+function p5e1W3List(){return '<ul class="e1-facts">'+Array.from(arguments).map(value=>'<li>'+value+'</li>').join('')+'</ul>'}
+function p5e1W3AddIds(record){record.canonicalFactIds=Array.from(new Set((record.canonicalFactIds||[]).concat(Array.from(arguments).slice(1))))}
+function p5e1W3RemoveFirstListOccurrence(markup,factId){
+  const marker='data-fact="'+factId+'"';
+  const found=markup.indexOf(marker);
+  if(found<0)return markup;
+  const start=markup.lastIndexOf('<ul',found);
+  const close=markup.indexOf('</ul>',found);
+  return start>=0&&close>=0?markup.slice(0,start)+markup.slice(close+5):markup;
+}
+function p5e1W3AppendGuide(record,markup){record.studyGuide=record.studyGuide.replace(/<\/section>\s*$/,markup+'</section>')}
+
+const P5E1_W3_FACTS=Object.freeze({
+  f001:p5e1W3Fact('P5E1-W3-F-001','Elective induction boundary','Elective induction of labor without a medical indication should not be undertaken before at least 39 weeks of gestation.','ATI-MN11','Ch.15 | printed p.102 / PDF 113 | Induction of labor, first paragraph'),
+  f002:p5e1W3Fact('P5E1-W3-F-002','Assessment during ripening','During cervical ripening, assess for urinary retention, rupture of membranes, uterine tenderness or pain, contractions, vaginal bleeding, and fetal distress.','ATI-MN11','Ch.15 | printed p.102 / PDF 113 | Chemical agents, Nursing Actions'),
+  f003:p5e1W3Fact('P5E1-W3-F-003','Adverse findings','After cervical-ripening agents, monitor for nausea, vomiting, diarrhea, fever, and uterine tachysystole.','ATI-MN11','Ch.15 | printed p.102 / PDF 113 | Chemical agents, Ongoing Care'),
+  f004:p5e1W3Fact('P5E1-W3-F-004','General cervical-ripening cautions','Use cervical-ripening agents cautiously in clients who have glaucoma, asthma, or cardiovascular or renal disorders.','ATI-MN11','Ch.15 | printed p.102 / PDF 113 | Chemical agents, Ongoing Care'),
+  f005:p5e1W3Fact('P5E1-W3-F-005','Tachysystole response','For uterine tachysystole during cervical ripening, administer subcutaneous terbutaline.','ATI-MN11','Ch.15 | printed p.102 / PDF 113 | Chemical agents, Complications'),
+  f006:p5e1W3Fact('P5E1-W3-F-006','Fetal-distress actions','For fetal distress during cervical ripening, source-listed actions are oxygen by face mask at 10 L/min, placing the client on the left side, increasing the IV fluid rate, and notifying the provider.','ATI-MN11','Ch.15 | printed p.102 / PDF 113 | Chemical agents, Complications'),
+  f007:p5e1W3Fact('P5E1-W3-F-007','Nonreassuring fetal-heart-rate findings','During oxytocin induction, nonreassuring fetal-heart-rate findings include a baseline below 110/min or above 160/min, loss of variability, and late or prolonged decelerations.','ATI-MN11','Ch.15 | printed p.103 / PDF 114 | Ongoing Care, nonreassuring fetal heart rate'),
+  f008:p5e1W3Fact('P5E1-W3-F-008','Source-listed response actions','For nonreassuring fetal heart rate during oxytocin induction, source-listed actions include notifying the provider, placing the client side-lying, keeping the primary IV line open and increasing the IV fluid rate to 200 mL/hr unless contraindicated, giving oxygen by face mask at 8-10 L/min, and administering terbutaline 0.25 mg subcutaneously.','ATI-MN11','Ch.15 | printed p.103 / PDF 114 | Ongoing Care, nursing actions for nonreassuring fetal heart rate'),
+  f009:p5e1W3Fact('P5E1-W3-F-009','Ongoing response evaluation','For nonreassuring fetal heart rate during oxytocin induction, monitor fetal heart rate and patterns in conjunction with uterine activity, document responses to interventions, and prepare for emergency cesarean birth if reassuring fetal heart rate cannot be restored.','ATI-MN11','Ch.15 | printed p.103 / PDF 114 | Ongoing Care, nursing actions for nonreassuring fetal heart rate'),
+  f010:p5e1W3Fact('P5E1-W3-F-010','Desired contraction pattern','A desired uterine-contraction pattern during oxytocin induction includes intensity of 40-90 mm Hg by intrauterine pressure catheter or strong by palpation, with resting tone of 10-15 mm Hg between contractions.','ATI-MN11','Ch.15 | printed p.103 / PDF 114 | Ongoing Care, desired contraction pattern'),
+  f011:p5e1W3Fact('P5E1-W3-F-011','Desired cervical dilation','A source-stated desired cervical-dilation rate during oxytocin induction is 1 cm/hr.','ATI-MN11','Ch.15 | printed p.103 / PDF 114 | Ongoing Care, desired cervical dilation'),
+  f012:p5e1W3Fact('P5E1-W3-F-012','Reassuring fetal-heart-rate range','A reassuring fetal-heart-rate range in the oxytocin induction ongoing-care passage is 110-160/min.','ATI-MN11','Ch.15 | printed p.103 / PDF 114 | Ongoing Care, reassuring fetal heart rate'),
+  f013:p5e1W3Fact('P5E1-W3-F-013','Off-label cervical-ripening use','Misoprostol is an alternative medication used off-label for cervical ripening and can stimulate the uterus.','ATI-PHARM8','Ch.32 | printed p.255 / PDF 266 | Uterine stimulants, Misoprostol')
+});
+
+DRUGS['oxytocin_ind'].use=p5e1W3RemoveFirstListOccurrence(DRUGS['oxytocin_ind'].use,'E1PI-F-018')+p5e1W3List(P5E1_W3_FACTS.f001)+'<aside class="e1-scope" role="note" data-synthesis="P5E1-W3-S-004"><strong>Decision boundary:</strong> Elective nonmedical induction eligibility and medication administration are separate decisions. The source-stated gestational minimum is not a dose, route, or universal contraindication.</aside>';
+DRUGS['oxytocin_ind'].complications+=p5e1W3List(P5E1_W3_FACTS.f007);
+DRUGS['oxytocin_ind'].nursing+=p5e1W3List(P5E1_W3_FACTS.f008,P5E1_W3_FACTS.f009)+'<aside class="e1-scope" role="note" data-synthesis="P5E1-W3-S-002"><strong>Response boundary:</strong> Keep the findings, response actions, monitoring, documentation of responses, and conditional emergency cesarean preparation as distinct source-listed elements; no action order is imposed.</aside>';
+DRUGS['oxytocin_ind'].evaluation+=p5e1W3List(P5E1_W3_FACTS.f010,P5E1_W3_FACTS.f011,P5E1_W3_FACTS.f012)+'<aside class="e1-scope" role="note" data-synthesis="P5E1-W3-S-003"><strong>Evaluation boundary:</strong> Keep contraction frequency/duration, IUPC intensity/resting tone, cervical dilation, and reassuring fetal heart rate as distinct measures.</aside><aside class="e1-scope" role="note" data-conflict="P5E1-W3-C-002"><strong>Source conflict—contraction duration:</strong> ATI Pharmacology gives a general effectiveness statement of 45-60 sec or less every 2-3 min; ATI Maternal Newborn gives an induction target of 80-90 sec every 2-3 min and directs discontinuation beyond 90 sec. Keep the contexts separate; do not merge their ranges.</aside>';
+p5e1W3AddIds(DRUGS['oxytocin_ind'],'P5E1-W3-F-001','P5E1-W3-F-007','P5E1-W3-F-008','P5E1-W3-F-009','P5E1-W3-F-010','P5E1-W3-F-011','P5E1-W3-F-012');
+DRUGS['oxytocin_ind'].enrichmentVersion='PHARM-E1-W3-2026-09-06';
+
+for(const id of ['dinoprostone','misoprostol_rip']){
+  DRUGS[id].complications+=p5e1W3List(P5E1_W3_FACTS.f003);
+  DRUGS[id].contraindications+=p5e1W3List(P5E1_W3_FACTS.f004)+'<aside class="e1-scope" role="note" data-conflict="P5E1-W3-C-003"><strong>Source boundary—precautions:</strong> Keep the general cervical-ripening cautions separate from medication-specific precautions and preserve each source\'s action strength.</aside>';
+  DRUGS[id].nursing+=p5e1W3List(P5E1_W3_FACTS.f002,P5E1_W3_FACTS.f005,P5E1_W3_FACTS.f006)+'<aside class="e1-scope" role="note" data-synthesis="P5E1-W3-S-001"><strong>Cervical-ripening workflow:</strong> Assess the source-listed maternal and fetal findings, monitor uterine/FHR and adverse findings, use subcutaneous terbutaline for tachysystole, and use the exact listed fetal-distress actions. These are parallel care elements, not an invented sequence; this passage states no terbutaline dose.</aside>';
+  DRUGS[id].education='<p class="source-boundary" data-field-state="not-stated"><strong>Source boundary:</strong> Client-education content was not stated in the admitted assigned slice; administration guidance remains in Medication Administration.</p>';
+  DRUGS[id].evaluation='<p class="source-boundary" data-field-state="not-stated"><strong>Source boundary:</strong> A separate evaluation field was not stated in the admitted assigned slice; the source-supported action and monitoring content remains in its mapped fields.</p>';
+  p5e1W3AddIds(DRUGS[id],'P5E1-W3-F-002','P5E1-W3-F-003','P5E1-W3-F-004','P5E1-W3-F-005','P5E1-W3-F-006');
+  DRUGS[id].enrichmentVersion='PHARM-E1-W3-2026-09-06';
+}
+DRUGS['misoprostol_rip'].use=p5e1W3RemoveFirstListOccurrence(DRUGS['misoprostol_rip'].use,'E1PI-F-028')+p5e1W3List(P5E1_W3_FACTS.f013);
+p5e1W3AddIds(DRUGS['misoprostol_rip'],'P5E1-W3-F-013');
+
+const P5E1_W3_POSITION_CONFLICT='<aside class="e1-scope" role="note" data-conflict="P5E1-W3-C-001"><strong>Source conflict—position after prostaglandin:</strong> ATI Pharmacology specifies supine with lateral tilt after dinoprostone (30 min for gel; 2 hr for insert) and misoprostol (30-40 min). ATI Maternal Newborn gives a general side-lying instruction after prostaglandin administration. Keep both exact contexts separately labeled; do not average them.</aside>';
+DRUGS['dinoprostone'].admin+=P5E1_W3_POSITION_CONFLICT;
+DRUGS['misoprostol_rip'].admin+=P5E1_W3_POSITION_CONFLICT;
+
+const P5E1_W3_CMP_RIP='<table class="verified-comparison e1-comparison" data-synthesis="P5E1-W3-CMP-001"><caption>Cervical-ripening agents: shared monitoring and distinct source envelopes</caption><thead><tr><th scope="col">Shared care</th><th scope="col">Boundary</th></tr></thead><tbody><tr><td>'+P5E1_W3_FACTS.f003+' '+P5E1_W3_FACTS.f005+'</td><td>Compare shared cervical-ripening care while keeping formulation-specific positioning/timing and medication-specific precautions separate.</td></tr></tbody></table>';
+const P5E1_W3_CMP_OX='<table class="verified-comparison e1-comparison" data-synthesis="P5E1-W3-CMP-002"><caption>Oxytocin induction: desired pattern versus stop/response findings</caption><thead><tr><th scope="col">Desired pattern</th><th scope="col">Nonreassuring response boundary</th></tr></thead><tbody><tr><td>'+P5E1_W3_FACTS.f010+' '+P5E1_W3_FACTS.f012+'</td><td>'+P5E1_W3_FACTS.f007+' Keep response actions and conditional cesarean preparation distinct; no action order is imposed.</td></tr></tbody></table>';
+p5e1W3AppendGuide(DRUGS['oxytocin_ind'],'<details class="e1-recall" data-retrieval="P5E1-W3-Q-001"><summary>For elective induction without a medical indication, what gestational minimum does the admitted ATI passage state?</summary><div class="e1-answer">At least 39 weeks of gestation.</div></details><details class="e1-recall" data-retrieval="P5E1-W3-Q-004"><summary>What oxygen flow range does the admitted induction passage list for nonreassuring fetal heart rate?</summary><div class="e1-answer">8-10 L/min by face mask.</div></details>'+P5E1_W3_CMP_OX);
+p5e1W3AppendGuide(DRUGS['dinoprostone'],'<details class="e1-recall" data-retrieval="P5E1-W3-Q-002"><summary>Which medication and route does the admitted cervical-ripening passage state for uterine tachysystole?</summary><div class="e1-answer">Terbutaline by the subcutaneous route; no dose is stated in this passage.</div></details>'+P5E1_W3_CMP_RIP);
+p5e1W3AppendGuide(DRUGS['misoprostol_rip'],'<details class="e1-recall" data-retrieval="P5E1-W3-Q-003"><summary>What oxygen flow rate and route does the admitted cervical-ripening passage list for fetal distress?</summary><div class="e1-answer">Oxygen by face mask at 10 L/min.</div></details>');
+
+QUICK_REVIEWS['oxytocin_ind'].tldr+=p5e1W3List(P5E1_W3_FACTS.f001);
+QUICK_REVIEWS['oxytocin_ind'].facts.push(P5E1_W3_FACTS.f010,P5E1_W3_FACTS.f012);
+QUICK_REVIEWS['oxytocin_ind'].flags.push(P5E1_W3_FACTS.f007,P5E1_W3_FACTS.f008);
+QUICK_REVIEWS['oxytocin_ind'].enrichmentVersion='PHARM-E1-W3-2026-09-06';
+QUICK_REVIEWS['dinoprostone'].flags.push(P5E1_W3_FACTS.f003,P5E1_W3_FACTS.f005,P5E1_W3_FACTS.f006);
+QUICK_REVIEWS['dinoprostone'].enrichmentVersion='PHARM-E1-W3-2026-09-06';
+QUICK_REVIEWS['misoprostol_rip'].tldr+=p5e1W3List(P5E1_W3_FACTS.f013);
+QUICK_REVIEWS['misoprostol_rip'].flags.push(P5E1_W3_FACTS.f003,P5E1_W3_FACTS.f005,P5E1_W3_FACTS.f006);
+QUICK_REVIEWS['misoprostol_rip'].enrichmentVersion='PHARM-E1-W3-2026-09-06';
+
+window.NUR2460_FACT_MIGRATIONS=Object.freeze(Object.assign({},window.NUR2460_FACT_MIGRATIONS,{
+  'E1PI-F-018::oxytocin_ind::use':Object.freeze(['E1PD-ox-ind-purpose','P5E1-W3-F-001']),
+  'E1PI-F-028::misoprostol_rip::use':Object.freeze(['E1PD-miso-rip-action','P5E1-W3-F-013'])
+}));
+// ── End Worker 3 accepted integration ────────────────────────────────────
+// ── Worker 4 accepted integration: tocolysis and fetal-lung maturation ──
+function p5e1W4Fact(id,label,claim,sourceId,locator,sourceLabel){
+  const sourceTitle=sourceId==='ATI-PHARM8'?'ATI RN Pharmacology for Nursing, Edition 8.0 (2019)':'ATI RN Maternal Newborn Nursing, Edition 11.0 (2019)';
+  return '<span class="e1-fact-body" data-fact="'+id+'" data-source="'+sourceId+'" data-locator="'+locator+'"><strong>'+label+':</strong> <span class="e1-claim">'+claim+'</span> <span class="bsrc bsrc-ati">CORE</span><small class="e1-cite" title="'+sourceTitle+'">'+sourceLabel+'</small></span>';
+}
+function p5e1W4List(){return '<ul class="e1-facts">'+Array.from(arguments).map(value=>'<li>'+value+'</li>').join('')+'</ul>'}
+function p5e1W4AddIds(record){record.canonicalFactIds=Array.from(new Set((record.canonicalFactIds||[]).concat(Array.from(arguments).slice(1))))}
+function p5e1W4AppendGuide(record,markup){record.studyGuide=record.studyGuide.replace(/<\/section>\s*$/,markup+'</section>')}
+
+const P5E1_W4_FACTS=Object.freeze({
+  f001:p5e1W4Fact('P5E1-W4-F-001','Shared tocolytic monitoring','During tocolytic therapy, monitor fetal heart rate, uterine contractions, pulse, blood pressure, respirations, lung sounds, and daily weight.','ATI-PHARM8','Ch.32 | printed p.258 / PDF 269 | general Tocolytic medications, Nursing Administration','ATI-PHARM8 · Ch.32 · p.258 (PDF 269)'),
+  f002:p5e1W4Fact('P5E1-W4-F-002','Daily fluid limit','Limit the client’s fluid intake to 2,500 to 3,000 mL/day during tocolytic therapy.','ATI-PHARM8','Ch.32 | printed p.258 / PDF 269 | general Tocolytic medications, Nursing Administration','ATI-PHARM8 · Ch.32 · p.258 (PDF 269)'),
+  f003:p5e1W4Fact('P5E1-W4-F-003','Preterm-labor regimen','In the ATI Maternal Newborn preterm-labor medication block, administer terbutaline 0.25 mg subcutaneously every 4 hr for up to 24 hr.','ATI-MN11','Ch.10 | printed p.68 / PDF 79 | Terbutaline, Nursing Actions','ATI-MN11 · Ch.10 · p.68 (PDF 79)'),
+  f004:p5e1W4Fact('P5E1-W4-F-004','Orthostatic-hypotension relationship','ATI Maternal Newborn relates nifedipine-associated headache, flushing, dizziness, and nausea to orthostatic hypotension that occurs with administration.','ATI-MN11','Ch.10 | printed p.68 / PDF 79 | Nifedipine, Nursing Actions','ATI-MN11 · Ch.10 · p.68 (PDF 79)'),
+  f005:p5e1W4Fact('P5E1-W4-F-005','Hydration teaching','Teach the client receiving nifedipine to maintain adequate hydration to counter hypotension.','ATI-MN11','Ch.10 | printed p.68 / PDF 79 | Nifedipine, Client Education','ATI-MN11 · Ch.10 · p.68 (PDF 79)'),
+  f006:p5e1W4Fact('P5E1-W4-F-006','Formulation and food','Administer indomethacin in long-acting formulations to reduce the risk of adverse effects; administer it with food to prevent gastrointestinal adverse effects.','ATI-PHARM8','Ch.32 | printed p.258 / PDF 269 | Tocolytic medications, Nursing Administration','ATI-PHARM8 · Ch.32 · p.258 (PDF 269)')
+});
+
+const P5E1_W4_SHARED_RELATION='<aside class="e1-scope" role="note" data-synthesis="P5E1-W4-R-001"><strong>Shared tocolytic care:</strong> For terbutaline, magnesium sulfate, nifedipine, and indomethacin, retain the general monitoring list and 2,500-to-3,000-mL/day fluid-intake limit; evaluate whether preterm labor ceases according to therapeutic intent and notify the provider if contractions persist or increase in frequency or duration.</aside>';
+const P5E1_W4_C1='<aside class="e1-scope" role="note" data-conflict="P5E1-W4-C-001"><strong>Source conflict—maternal heart rate:</strong> ATI Pharmacology directs withholding terbutaline and contacting the provider above 120/min; ATI Maternal Newborn directs provider notification above 130/min. Keep both thresholds and actions separately attributed; do not average them.</aside>';
+const P5E1_W4_C2='<aside class="e1-scope" role="note" data-conflict="P5E1-W4-C-002"><strong>Source conflict—magnesium urine output:</strong> ATI Pharmacology lists less than 25 mL/hr as an intolerable effect and separately directs discontinuation below 25 to 30 mL/hr or 100 mL/4 hr; ATI Maternal Newborn directs discontinuation below 30 mL/hr or 100 mL/4 hr. Keep all three source-context formulations exact; do not collapse them.</aside>';
+const P5E1_W4_C3='<aside class="e1-scope" role="note" data-conflict="P5E1-W4-C-003"><strong>Source conflict—betamethasone regimen:</strong> ATI Maternal Newborn gives a general preterm-labor course of 12 mg IM for two doses 24 hr apart at 24 to 34 weeks. Its PROM block first describes two IM injections 24 hr apart, then states that a single dose is given with PROM at 24 to 34 weeks. Keep the wording separate; do not create a reusable single-dose fact.</aside>';
+
+DRUGS['terbutaline'].admin+=p5e1W4List(P5E1_W4_FACTS.f003);
+DRUGS['terbutaline'].nursing+=p5e1W4List(P5E1_W4_FACTS.f001,P5E1_W4_FACTS.f002)+P5E1_W4_SHARED_RELATION+P5E1_W4_C1;
+p5e1W4AddIds(DRUGS['terbutaline'],'P5E1-W4-F-001','P5E1-W4-F-002','P5E1-W4-F-003');
+DRUGS['terbutaline'].enrichmentVersion='PHARM-E1-W4-2026-09-06';
+
+DRUGS['mag_sulfate'].nursing+=p5e1W4List(P5E1_W4_FACTS.f001,P5E1_W4_FACTS.f002)+P5E1_W4_SHARED_RELATION+P5E1_W4_C2;
+p5e1W4AddIds(DRUGS['mag_sulfate'],'P5E1-W4-F-001','P5E1-W4-F-002');
+DRUGS['mag_sulfate'].enrichmentVersion='PHARM-E1-W4-2026-09-06';
+
+DRUGS['nifedipine'].complications+=p5e1W4List(P5E1_W4_FACTS.f004);
+DRUGS['nifedipine'].nursing=p5e1W3RemoveFirstListOccurrence(DRUGS['nifedipine'].nursing,'E1PD-nif-monitor')+p5e1W4List(P5E1_W4_FACTS.f001,P5E1_W4_FACTS.f002)+P5E1_W4_SHARED_RELATION;
+DRUGS['nifedipine'].education=DRUGS['nifedipine'].education.replace(/<p class="source-boundary"[^>]*><strong>Review limit:<\/strong>[^<]*visible Maternal Newborn p\.68 and its extracted text disagree\.<\/p>/,'<p class="source-boundary" data-field-state="supported"><strong>Source recheck:</strong> The hydration teaching was independently rechecked against the pinned source and is included below.</p>')+p5e1W4List(P5E1_W4_FACTS.f005);
+DRUGS['nifedipine'].canonicalFactIds=(DRUGS['nifedipine'].canonicalFactIds||[]).filter(id=>id!=='E1PD-nif-monitor');
+p5e1W4AddIds(DRUGS['nifedipine'],'P5E1-W4-F-001','P5E1-W4-F-002','P5E1-W4-F-004','P5E1-W4-F-005');
+DRUGS['nifedipine'].enrichmentVersion='PHARM-E1-W4-2026-09-06';
+
+DRUGS['indomethacin'].admin+=p5e1W4List(P5E1_W4_FACTS.f006);
+DRUGS['indomethacin'].nursing+=p5e1W4List(P5E1_W4_FACTS.f001,P5E1_W4_FACTS.f002)+P5E1_W4_SHARED_RELATION;
+p5e1W4AddIds(DRUGS['indomethacin'],'P5E1-W4-F-001','P5E1-W4-F-002','P5E1-W4-F-006');
+DRUGS['indomethacin'].enrichmentVersion='PHARM-E1-W4-2026-09-06';
+
+DRUGS['betamethasone'].admin+=P5E1_W4_C3;
+DRUGS['betamethasone'].enrichmentVersion='PHARM-E1-W4-2026-09-06';
+
+const P5E1_W4_CMP_CONTEXT='<section data-synthesis="P5E1-W4-R-002"><table class="verified-comparison e1-comparison" data-comparison="P5E1-W4-CMP-002"><caption>Terbutaline context map</caption><thead><tr><th scope="col">Source context</th><th scope="col">Administration envelope</th></tr></thead><tbody><tr><th scope="row">Preterm-labor medication block</th><td>0.25 mg subcutaneously every 4 hr for up to 24 hr.</td></tr><tr><th scope="row">Cervical-ripening tachysystole</th><td>Subcutaneous terbutaline; no dose is stated in that passage.</td></tr><tr><th scope="row">Oxytocin nonreassuring FHR</th><td>Terbutaline 0.25 mg subcutaneously among source-listed actions; no sequence is inferred.</td></tr></tbody></table></section>';
+const P5E1_W4_CMP_ROLE='<section data-synthesis="P5E1-W4-R-005"><table class="verified-comparison e1-comparison" data-comparison="P5E1-W4-CMP-001"><caption>Separate tocolysis from fetal-lung maturation</caption><thead><tr><th scope="col">Medication</th><th scope="col">Source-supported distinction</th></tr></thead><tbody><tr><th scope="row">Terbutaline</th><td>Beta-adrenergic agonist used for short-term delay; keep the 24-hr regimen and up-to-48-hr delay statements in their source contexts.</td></tr><tr><th scope="row">Magnesium sulfate</th><td>Suppresses contractions in the Maternal Newborn tocolysis context; ATI Pharmacology identifies seizure prevention in preeclampsia as its primary use.</td></tr><tr><th scope="row">Nifedipine</th><td>Calcium-channel blocker used to suppress contractions; retain the source combination restrictions.</td></tr><tr><th scope="row">Indomethacin</th><td>Prostaglandin inhibition for short-course use before 32 weeks; retain fetal and bleeding limits.</td></tr><tr><th scope="row">Betamethasone</th><td>Antenatal glucocorticoid for fetal-lung maturation, not contraction suppression.</td></tr></tbody></table></section>';
+const P5E1_W4_R3='<aside class="e1-scope" role="note" data-synthesis="P5E1-W4-R-003"><strong>Nifedipine teaching rationale:</strong> The source relates headache, flushing, dizziness, and nausea to orthostatic hypotension; teach slow position changes, sitting until dizziness resolves, and maintaining adequate hydration to counter hypotension.</aside>';
+const P5E1_W4_R4='<aside class="e1-scope" role="note" data-synthesis="P5E1-W4-R-004"><strong>Indomethacin safety envelope:</strong> Keep use before 32 weeks for no more than 48 hr, long-acting formulation/food guidance, fetal ductus and fluid risks, maternal bleeding surveillance, and pulmonary-edema stop criteria together. The malformed monitoring-timing phrase remains excluded.</aside>';
+
+p5e1W4AppendGuide(DRUGS['terbutaline'],'<details class="e1-recall" data-retrieval="P5E1-W4-Q-001"><summary>What exact Maternal Newborn regimen is stated for terbutaline in the preterm-labor medication block?</summary><div class="e1-answer">0.25 mg subcutaneously every 4 hr for up to 24 hr.</div></details>'+P5E1_W4_CMP_CONTEXT+P5E1_W4_CMP_ROLE);
+p5e1W4AppendGuide(DRUGS['mag_sulfate'],'<details class="e1-recall" data-retrieval="P5E1-W4-Q-004"><summary>What daily fluid-intake range does ATI Pharmacology state in the general tocolytic administration section?</summary><div class="e1-answer">2,500 to 3,000 mL/day.</div></details>');
+p5e1W4AppendGuide(DRUGS['nifedipine'],'<details class="e1-recall" data-retrieval="P5E1-W4-Q-002"><summary>Which hydration teaching does ATI Maternal Newborn give for nifedipine?</summary><div class="e1-answer">Maintain adequate hydration to counter hypotension.</div></details>'+P5E1_W4_R3);
+p5e1W4AppendGuide(DRUGS['indomethacin'],'<details class="e1-recall" data-retrieval="P5E1-W4-Q-003"><summary>Which formulation does ATI Pharmacology direct for indomethacin to reduce adverse-effect risk?</summary><div class="e1-answer">A long-acting formulation.</div></details>'+P5E1_W4_R4);
+
+QUICK_REVIEWS['terbutaline'].facts.push(P5E1_W4_FACTS.f003);
+QUICK_REVIEWS['terbutaline'].enrichmentVersion='PHARM-E1-W4-2026-09-06';
+QUICK_REVIEWS['mag_sulfate'].facts.push(P5E1_W4_FACTS.f002);
+QUICK_REVIEWS['mag_sulfate'].enrichmentVersion='PHARM-E1-W4-2026-09-06';
+QUICK_REVIEWS['nifedipine'].facts.push(P5E1_W4_FACTS.f005);
+QUICK_REVIEWS['nifedipine'].reviewLimit='The oral route is verified. The malformed interval sentence remains deferred. The hydration teaching was independently rechecked against the pinned source and is included above.';
+QUICK_REVIEWS['nifedipine'].enrichmentVersion='PHARM-E1-W4-2026-09-06';
+QUICK_REVIEWS['indomethacin'].enrichmentVersion='PHARM-E1-W4-2026-09-06';
+QUICK_REVIEWS['betamethasone'].enrichmentVersion='PHARM-E1-W4-2026-09-06';
+
+window.NUR2460_FACT_MIGRATIONS=Object.freeze(Object.assign({},window.NUR2460_FACT_MIGRATIONS,{
+  'E1PD-nif-monitor::nifedipine::nursing':Object.freeze(['P5E1-W4-F-001','P5E1-W4-F-002'])
+}));
+// ── End Worker 4 accepted integration ────────────────────────────────────
+// ── Worker 5 accepted integration: postpartum hemorrhage and newborn prevention ──
+function p5e1W5Fact(id,label,claim,sourceId,locator,sourceLabel){
+  const isAti=sourceId.indexOf('ATI-')===0;
+  const sourceTitle=sourceId==='ATI-PHARM8'
+    ?'ATI RN Pharmacology for Nursing, Edition 8.0 (2019)'
+    :sourceId==='ATI-MN11'
+      ?'ATI RN Maternal Newborn Nursing, Edition 11.0 (2019)'
+      :'Perry Maternal Child Nursing Care, Seventh Edition (2023)';
+  const badge=isAti
+    ?'<span class="bsrc bsrc-ati">CORE</span>'
+    :'<span class="bsrc bsrc-perry">SUPP</span>';
+  return '<span class="e1-fact-body" data-fact="'+id+'" data-source="'+sourceId+'" data-locator="'+locator+'"><strong>'+label+':</strong> <span class="e1-claim">'+claim+'</span> '+badge+'<small class="e1-cite" title="'+sourceTitle+'">'+sourceLabel+'</small></span>';
+}
+function p5e1W5List(){return '<ul class="e1-facts">'+Array.from(arguments).map(value=>'<li>'+value+'</li>').join('')+'</ul>'}
+function p5e1W5AddIds(record){record.canonicalFactIds=Array.from(new Set((record.canonicalFactIds||[]).concat(Array.from(arguments).slice(1))))}
+function p5e1W5AppendGuide(record,markup){record.studyGuide=record.studyGuide.replace(/<\/section>\s*$/,markup+'</section>')}
+function p5e1W5RemoveLegacyFact(markup,factId){
+  const marker='data-fact="'+factId+'"';
+  let result=markup;
+  let found=result.indexOf(marker);
+  while(found>=0){
+    const start=result.lastIndexOf('<li',found);
+    const close=result.indexOf('</li>',found);
+    if(start<0||close<0)break;
+    result=result.slice(0,start)+result.slice(close+5);
+    found=result.indexOf(marker);
+  }
+  return result.replace(/<ul(?: class="[^"]*")?>\s*<\/ul>/g,'');
+}
+
+const P5E1_W5_FACTS=Object.freeze({
+  f001:p5e1W5Fact('P5E1-W5-F-001','Atony-response context','For excessive postpartum bleeding due to uterine atony, Perry identifies firm fundal massage, clot expression, relief of bladder distention, and continuous IV oxytocin 10 to 40 units in 1,000 mL lactated Ringer’s or normal saline as primary interventions; if the uterus does not contract in response, another uterotonic is administered.','PERRY-MCNC7-C21','Ch.21 | PDF 1674 | Postpartum hemorrhage—Medical management','Perry 7e · Ch.21 · PDF 1674'),
+  f002:p5e1W5Fact('P5E1-W5-F-002','PPH Medication Guide dose','Perry lists oxytocin 10 to 80 units in 500 to 1,000 mL crystalloid at 125 to 200 milliunits/min IV, or 10 to 20 units IM.','PERRY-MCNC7-C21','Ch.21 | PDF 1675-1676 | PPH Medication Guide—oxytocin','Perry 7e · Ch.21 · PDF 1675-1676'),
+  f003:p5e1W5Fact('P5E1-W5-F-003','Vasopressor interaction','Severe hypertension can occur if oxytocin follows vasopressor administration; monitor vital signs.','ATI-PHARM8','Ch.32 | printed p.256 / PDF 267 | Oxytocin—Interactions','ATI-PHARM8 · Ch.32 · p.256 (PDF 267)'),
+  f004:p5e1W5Fact('P5E1-W5-F-004','Rare contraindication','Perry lists hypersensitivity to oxytocin as a rare contraindication in its postpartum-hemorrhage guide.','PERRY-MCNC7-C21','Ch.21 | PDF 1676 | PPH Medication Guide—oxytocin contraindications','Perry 7e · Ch.21 · PDF 1676'),
+  f005:p5e1W5Fact('P5E1-W5-F-005','Postpartum-hemorrhage dose','Perry lists misoprostol 600 to 1,000 mcg as one dose by the rectal, sublingual, or oral route for postpartum hemorrhage.','PERRY-MCNC7-C21','Ch.21 | PDF 1676 | PPH Medication Guide—misoprostol','Perry 7e · Ch.21 · PDF 1676'),
+  f006:p5e1W5Fact('P5E1-W5-F-006','PPH adverse effects','Perry lists headache, nausea, vomiting, diarrhea, fever, and chills with misoprostol in the postpartum-hemorrhage table.','PERRY-MCNC7-C21','Ch.21 | PDF 1676 | PPH Medication Guide—misoprostol adverse effects','Perry 7e · Ch.21 · PDF 1676'),
+  f007:p5e1W5Fact('P5E1-W5-F-007','Acute PPH dose context','Perry lists methylergonovine 0.2 mg IM every 2 to 4 hr for up to five doses and states that it may also be given intrauterine or orally.','PERRY-MCNC7-C21','Ch.21 | PDF 1676 | PPH Medication Guide—methylergonovine','Perry 7e · Ch.21 · PDF 1676'),
+  f008:p5e1W5Fact('P5E1-W5-F-008','PPH adverse effects','Perry lists hypertension, hypotension, nausea, vomiting, and headache with methylergonovine.','PERRY-MCNC7-C21','Ch.21 | PDF 1676 | PPH Medication Guide—methylergonovine adverse effects','Perry 7e · Ch.21 · PDF 1676'),
+  f009:p5e1W5Fact('P5E1-W5-F-009','Perry blood-pressure boundary','Perry lists hypertension, preeclampsia, cardiovascular disease, and hypersensitivity as contraindications; check blood pressure before methylergonovine and do not administer when blood pressure is greater than 140/90 mm Hg.','PERRY-MCNC7-C21','Ch.21 | PDF 1676-1677 | PPH Medication Guide and Safety Alert','Perry 7e · Ch.21 · PDF 1676-1677'),
+  f010:p5e1W5Fact('P5E1-W5-F-010','Non-IV birth contexts','Perry describes carboprost given intramuscularly, intramyometrially at cesarean birth, or intra-abdominally after vaginal birth.','PERRY-MCNC7-C21','Ch.21 | PDF 1674 | Postpartum hemorrhage—Medical management','Perry 7e · Ch.21 · PDF 1674'),
+  f011:p5e1W5Fact('P5E1-W5-F-011','PPH dose and routes','Perry lists carboprost 250 mcg IM or by intrauterine injection every 15 to 90 min for up to eight doses.','PERRY-MCNC7-C21','Ch.21 | PDF 1676 | PPH Medication Guide—carboprost','Perry 7e · Ch.21 · PDF 1676'),
+  f012:p5e1W5Fact('P5E1-W5-F-012','PPH adverse effects','Perry lists headache, nausea, vomiting, diarrhea, fever, chills, tachycardia, and hypertension with carboprost.','PERRY-MCNC7-C21','Ch.21 | PDF 1676 | PPH Medication Guide—carboprost adverse effects','Perry 7e · Ch.21 · PDF 1676'),
+  f013:p5e1W5Fact('P5E1-W5-F-013','Asthma and relative precautions','Do not give carboprost with a history of asthma because it can cause bronchoconstriction. Perry also lists hypertension and active cardiac, pulmonary, or hepatic disease as relative contraindications.','PERRY-MCNC7-C21','Ch.21 | PDF 1676-1677 | PPH Medication Guide and Safety Alert','Perry 7e · Ch.21 · PDF 1676-1677'),
+  f014:p5e1W5Fact('P5E1-W5-F-014','All-newborn population','Perry recommends eye prophylaxis for all newborns, including those born by cesarean, because ascending infection can occur.','PERRY-MCNC7-23A','Ch.23 | printed p.554 | #st0175/#p4370','Perry 7e · Ch.23 · p.554'),
+  f015:p5e1W5Fact('P5E1-W5-F-015','Perry organism boundary','Perry identifies erythromycin 0.5% ophthalmic ointment for gonococcal infection and states that topical erythromycin is not effective for preventing chlamydial conjunctivitis.','PERRY-MCNC7-23A','Ch.23 | printed pp.554-555 | #p4375/#p4380/#p4395','Perry 7e · Ch.23 · pp.554-555'),
+  f016:p5e1W5Fact('P5E1-W5-F-016','Administration technique','Perry directs administration within 1 to 2 hr of birth: wear gloves, clean each eyelid with a sterile cotton ball, open at the lid corners, apply a 1- to 2-cm ribbon from inner to outer canthus without touching the tube to the eye, massage closed lids, wait 1 min before wiping excess, observe for irritation, and explain the treatment.','PERRY-MCNC7-23A','Ch.23 | printed p.555 | Medication Guide #b0130/#p4405/#p4415','Perry 7e · Ch.23 · p.555'),
+  f017:p5e1W5Fact('P5E1-W5-F-017','Why phytonadione works','Perry relates low newborn vitamin K to limited placental transfer and absent intestinal flora and states that phytonadione promotes hepatic formation of clotting factors II, VII, IX, and X.','PERRY-MCNC7-23A','Ch.23 | printed p.555 | #st0205/#p4420/#p4440','Perry 7e · Ch.23 · p.555'),
+  f018:p5e1W5Fact('P5E1-W5-F-018','Oral-route limitation','Perry states that oral vitamin K is less effective for preventing late hemorrhagic disease.','PERRY-MCNC7-23A','Ch.23 | printed p.555 | #st0205/#p4425','Perry 7e · Ch.23 · p.555'),
+  f019:p5e1W5Fact('P5E1-W5-F-019','Weight-specific IM branch','Perry lists 0.5 mg (0.25 mL) IM for newborns weighing 1,500 g or less and 1 mg (0.5 mL) IM for newborns weighing more than 1,500 g, soon after birth; the guide says injection can be delayed until after initial breastfeeding.','PERRY-MCNC7-23A','Ch.23 | printed p.555 | Medication Guide #b0140/#p4450','Perry 7e · Ch.23 · p.555'),
+  f020:p5e1W5Fact('P5E1-W5-F-020','Rare preterm IV branch','For a rare preterm infant with little to no muscle mass, Perry describes diluted IV vitamin K over 10 to 15 min with cardiorespiratory monitoring and warns that rapid IV administration can cause cardiac arrest.','PERRY-MCNC7-23A','Ch.23 | printed p.555 | Medication Guide #b0140/#p4450','Perry 7e · Ch.23 · p.555'),
+  f021:p5e1W5Fact('P5E1-W5-F-021','Rare adverse effects','Perry lists rare injection-site edema, erythema, and pain and reports hemolysis, jaundice, and hyperbilirubinemia, particularly in preterm infants.','PERRY-MCNC7-23A','Ch.23 | printed p.555 | Medication Guide #b0140/#p4455','Perry 7e · Ch.23 · p.555'),
+  f022:p5e1W5Fact('P5E1-W5-F-022','Comfort during injection','Use skin-to-skin comfort before, during, and after the phytonadione injection.','PERRY-MCNC7-23A','Ch.23 | printed p.555 | Medication Guide #b0140/#p4460','Perry 7e · Ch.23 · p.555'),
+  f023:p5e1W5Fact('P5E1-W5-F-023','Refusal counseling','When parents consider refusing vitamin K, explain benefits and risks, address concerns and questions, and support an informed decision.','PERRY-MCNC7-23A','Ch.23 | printed p.555 | #st0205/#p4465','Perry 7e · Ch.23 · p.555'),
+  f024:p5e1W5Fact('P5E1-W5-F-024','Circumcision context','Newborns who do not receive vitamin K are more likely to bleed after circumcision, and Perry states that many providers decline circumcision when vitamin K was not received.','PERRY-MCNC7-23A','Ch.23 | printed p.556 | #st0205/#p4470','Perry 7e · Ch.23 · p.556'),
+  f025:p5e1W5Fact('P5E1-W5-F-025','PPH adverse effects','Perry lists nausea, vomiting, and water intoxication as side effects of oxytocin in its postpartum-hemorrhage guide.','PERRY-MCNC7-C21','Ch.21 | PDF 1676 | PPH Medication Guide—oxytocin adverse effects','Perry 7e · Ch.21 · PDF 1676')
+});
+
+const P5E1_W5_C1='<aside class="e1-scope" role="note" data-conflict="P5E1-W5-C-001"><strong>Source conflict—postpartum oxytocin dose envelopes:</strong> Perry’s body text gives continuous IV oxytocin 10 to 40 units in 1,000 mL lactated Ringer’s or normal saline; its Medication Guide gives 10 to 80 units in 500 to 1,000 mL crystalloid at 125 to 200 milliunits/min IV, or 10 to 20 units IM. Preserve both complete contexts; do not average or universalize either.</aside>';
+const P5E1_W5_C2='<aside class="e1-scope" role="note" data-conflict="P5E1-W5-C-002"><strong>Source conflict—methylergonovine and hypertension:</strong> ATI’s course-facing rule is not to administer to clients who have hypertension. Perry separately gives a greater-than-140/90-mm-Hg no-administration threshold and lists hypertension or cardiovascular disease as contraindications. ATI controls; keep Perry’s protocol separately labeled.</aside>';
+const P5E1_W5_C3='<aside class="e1-scope" role="note" data-conflict="P5E1-W5-C-003"><strong>Source conflict—erythromycin organism coverage:</strong> ATI associates prophylaxis with <em>Neisseria gonorrhoeae</em> or <em>Chlamydia trachomatis</em>. Perry says erythromycin prevents gonococcal infection and is not effective for preventing chlamydial conjunctivitis. ATI controls the course-facing claim; keep Perry’s alternate visible.</aside>';
+const P5E1_W5_C4='<aside class="e1-scope" role="note" data-conflict="P5E1-W5-C-004"><strong>Source conflict—erythromycin timing:</strong> ATI allows application to be delayed for 1 hr after birth. Perry says prophylaxis is usually within the first hour, may be delayed up to 2 hr until after the first breastfeeding, and its Medication Guide directs administration within 1 to 2 hr. ATI’s 1-hour boundary controls; do not average or extend it.</aside>';
+const P5E1_W5_C5='<aside class="e1-scope" role="note" data-conflict="P5E1-W5-C-005"><strong>Source conflict—phytonadione timing:</strong> ATI directs 0.5 to 1 mg IM into the vastus lateralis soon after birth. Perry’s guide adds weight-specific IM branches and says injection can be delayed until after initial breastfeeding. ATI’s soon-after-birth wording controls; keep the Perry timing separate.</aside>';
+
+DRUGS['oxytocin_pp'].use+=p5e1W5List(P5E1_W5_FACTS.f001);
+DRUGS['oxytocin_pp'].complications+=p5e1W5List(P5E1_W5_FACTS.f025);
+DRUGS['oxytocin_pp'].admin+=p5e1W5List(P5E1_W5_FACTS.f001,P5E1_W5_FACTS.f002)+P5E1_W5_C1;
+DRUGS['oxytocin_pp'].contraindications=p5e1W5List(P5E1_W5_FACTS.f004);
+DRUGS['oxytocin_pp'].nursing+=p5e1W5List(P5E1_W5_FACTS.f001)+'<aside class="e1-scope" role="note" data-synthesis="P5E1-W5-R-001"><strong>Atony-response relationship:</strong> Firm fundal massage is Perry’s initial intervention; clot expression, bladder-distention relief, and continuous IV oxytocin are also primary interventions. Another uterotonic follows only if the uterus does not contract in response to oxytocin.</aside>';
+DRUGS['oxytocin_pp'].interactions=p5e1W5List(P5E1_W5_FACTS.f003);
+p5e1W5AddIds(DRUGS['oxytocin_pp'],'P5E1-W5-F-001','P5E1-W5-F-002','P5E1-W5-F-003','P5E1-W5-F-004','P5E1-W5-F-025');
+
+DRUGS['methergine'].complications+=p5e1W5List(P5E1_W5_FACTS.f008);
+DRUGS['methergine'].admin+=p5e1W5List(P5E1_W5_FACTS.f007);
+DRUGS['methergine'].contraindications=p5e1W5RemoveLegacyFact(DRUGS['methergine'].contraindications,'E1PI-F-010')+p5e1W5List(P5E1_W5_FACTS.f009)+P5E1_W5_C2;
+DRUGS['methergine'].nursing+=p5e1W5List(P5E1_W5_FACTS.f009);
+DRUGS['methergine'].canonicalFactIds=(DRUGS['methergine'].canonicalFactIds||[]).filter(id=>id!=='E1PI-F-010');
+p5e1W5AddIds(DRUGS['methergine'],'P5E1-W5-F-007','P5E1-W5-F-008','P5E1-W5-F-009');
+
+DRUGS['carboprost'].complications=p5e1W5RemoveLegacyFact(DRUGS['carboprost'].complications,'E1PI-F-010')+p5e1W5List(P5E1_W5_FACTS.f012,P5E1_W5_FACTS.f013);
+DRUGS['carboprost'].admin='<p class="source-boundary" data-field-state="supported"><strong>ATI boundary:</strong> The admitted ATI postpartum passages do not establish a carboprost-specific dose or route. Perry’s accepted PPH evidence is included below and does not establish an IV route.</p>'+p5e1W5List(P5E1_W5_FACTS.f010,P5E1_W5_FACTS.f011)+'<aside class="e1-scope" role="note" data-synthesis="P5E1-W5-R-004"><strong>Route safety:</strong> Keep the IM, intrauterine, intramyometrial, and intra-abdominal contexts distinct. ATI’s class-level IM/IV oxytocic wording does not establish IV carboprost.</aside>';
+DRUGS['carboprost'].contraindications=p5e1W5List(P5E1_W5_FACTS.f013);
+DRUGS['carboprost'].canonicalFactIds=(DRUGS['carboprost'].canonicalFactIds||[]).filter(id=>id!=='E1PI-F-010');
+p5e1W5AddIds(DRUGS['carboprost'],'P5E1-W5-F-010','P5E1-W5-F-011','P5E1-W5-F-012','P5E1-W5-F-013');
+
+DRUGS['misoprostol_pp'].complications+=p5e1W5List(P5E1_W5_FACTS.f006);
+DRUGS['misoprostol_pp'].admin='<p class="source-boundary" data-field-state="supported"><strong>ATI boundary:</strong> The admitted ATI postpartum passages do not establish a misoprostol-specific dose or route. Perry’s accepted postpartum-only dose is included below; no cervical-ripening regimen is transferred.</p>'+p5e1W5List(P5E1_W5_FACTS.f005);
+p5e1W5AddIds(DRUGS['misoprostol_pp'],'P5E1-W5-F-005','P5E1-W5-F-006');
+
+DRUGS['erythromycin_eye'].action+=p5e1W5List(P5E1_W5_FACTS.f015)+P5E1_W5_C3;
+DRUGS['erythromycin_eye'].use+=p5e1W5List(P5E1_W5_FACTS.f014);
+DRUGS['erythromycin_eye'].admin+=p5e1W5List(P5E1_W5_FACTS.f016)+P5E1_W5_C4;
+DRUGS['erythromycin_eye'].nursing+=p5e1W5List(P5E1_W5_FACTS.f016);
+DRUGS['erythromycin_eye'].education+=p5e1W5List(P5E1_W5_FACTS.f016);
+p5e1W5AddIds(DRUGS['erythromycin_eye'],'P5E1-W5-F-014','P5E1-W5-F-015','P5E1-W5-F-016');
+
+DRUGS['vitamin_k'].action+=p5e1W5List(P5E1_W5_FACTS.f017);
+DRUGS['vitamin_k'].complications+=p5e1W5List(P5E1_W5_FACTS.f021);
+DRUGS['vitamin_k'].admin+=p5e1W5List(P5E1_W5_FACTS.f018,P5E1_W5_FACTS.f019,P5E1_W5_FACTS.f020)+P5E1_W5_C5;
+DRUGS['vitamin_k'].nursing+=p5e1W5List(P5E1_W5_FACTS.f022);
+DRUGS['vitamin_k'].education+=p5e1W5List(P5E1_W5_FACTS.f023,P5E1_W5_FACTS.f024);
+p5e1W5AddIds(DRUGS['vitamin_k'],'P5E1-W5-F-017','P5E1-W5-F-018','P5E1-W5-F-019','P5E1-W5-F-020','P5E1-W5-F-021','P5E1-W5-F-022','P5E1-W5-F-023','P5E1-W5-F-024');
+
+const P5E1_W5_CMP_UTEROTONICS='<table class="verified-comparison e1-comparison" data-comparison="P5E1-W5-CMP-001" data-synthesis="P5E1-W5-R-005"><caption>Postpartum uterotonics: distinct safety checks</caption><thead><tr><th scope="col">Medication</th><th scope="col">Decision-relevant distinction</th></tr></thead><tbody><tr><th scope="row">Oxytocin postpartum</th><td>Water-intoxication monitoring and vasopressor interaction; keep both Perry dosing envelopes visible.</td></tr><tr><th scope="row">Methylergonovine</th><td>ATI’s broad hypertension prohibition controls over Perry’s separately labeled numeric protocol.</td></tr><tr><th scope="row">Carboprost</th><td>Use only the accepted non-IV routes; avoid with asthma because of bronchoconstriction.</td></tr><tr><th scope="row">Misoprostol postpartum</th><td>One postpartum dose by rectal, sublingual, or oral route; do not import cervical-ripening content.</td></tr></tbody></table>';
+const P5E1_W5_CMP_NEWBORN='<table class="verified-comparison e1-comparison" data-comparison="P5E1-W5-CMP-002" data-synthesis="P5E1-W5-R-008"><caption>Three newborn prevention targets</caption><thead><tr><th scope="col">Medication</th><th scope="col">Target and boundary</th></tr></thead><tbody><tr><th scope="row">Erythromycin eye</th><td>Ophthalmia prophylaxis for all newborns; organism and timing conflicts remain labeled.</td></tr><tr><th scope="row">Phytonadione</th><td>Hemorrhagic-disorder prevention with a clotting-factor rationale and a separate rare preterm branch.</td></tr><tr><th scope="row">Hepatitis B vaccine</th><td>Hepatitis B protection under the exact ATI 2019 course-source schedules.</td></tr></tbody></table>';
+const P5E1_W5_CMP_IDENTITY='<section data-synthesis="P5E1-W5-R-002"><section data-synthesis="P5E1-W5-R-003"><table class="verified-comparison e1-comparison" data-comparison="P5E1-W5-CMP-003"><caption>Indication-specific identity guard</caption><thead><tr><th scope="col">Record</th><th scope="col">Keep separate</th></tr></thead><tbody><tr><th scope="row">oxytocin_pp</th><td>Postpartum hemorrhage only; do not import induction rates or monitoring.</td></tr><tr><th scope="row">misoprostol_pp</th><td>Postpartum hemorrhage only; do not import cervical-ripening dose, route, positioning, or monitoring.</td></tr></tbody></table></section></section>';
+const P5E1_W5_CONFLICT_POLICY='<aside class="e1-scope" role="note" data-synthesis="P5E1-W5-R-009"><strong>ATI-first conflict policy:</strong> ATI controls overlapping course-facing wording. Perry’s postpartum oxytocin doses, methylergonovine pressure threshold, erythromycin organism/timing, and phytonadione timing remain separately labeled and two-sided.</aside>';
+const P5E1_W5_BRIEF_CONTRACT='<aside class="e1-scope" role="note" data-synthesis="P5E1-W5-R-010"><strong>View contract:</strong> Brief selects only verified facts already present in Deep and keeps their source, population, indication, route, timing, and conflict qualifiers.</aside>';
+
+p5e1W5AppendGuide(DRUGS['oxytocin_pp'],'<details class="e1-recall" data-retrieval="P5E1-W5-Q-001"><summary>Which interaction can produce severe hypertension with oxytocin?</summary><div class="e1-answer">Oxytocin following vasopressor administration.</div></details>'+P5E1_W5_CMP_UTEROTONICS+P5E1_W5_CMP_IDENTITY+P5E1_W5_CONFLICT_POLICY+P5E1_W5_BRIEF_CONTRACT);
+p5e1W5AppendGuide(DRUGS['methergine'],'<details class="e1-recall" data-retrieval="P5E1-W5-Q-002"><summary>Which broad ATI condition prevents methylergonovine administration?</summary><div class="e1-answer">Hypertension.</div></details>');
+p5e1W5AppendGuide(DRUGS['carboprost'],'<details class="e1-recall" data-retrieval="P5E1-W5-Q-003"><summary>Which route must not be inferred for carboprost from ATI’s class-level oxytocic line?</summary><div class="e1-answer">IV.</div></details>');
+p5e1W5AppendGuide(DRUGS['misoprostol_pp'],'<details class="e1-recall" data-retrieval="P5E1-W5-Q-004"><summary>Which routes does Perry list for the single postpartum-hemorrhage misoprostol dose?</summary><div class="e1-answer">Rectal, sublingual, or oral.</div></details>');
+p5e1W5AppendGuide(DRUGS['erythromycin_eye'],'<details class="e1-recall" data-retrieval="P5E1-W5-Q-005"><summary>What must be avoided when applying the erythromycin ribbon?</summary><div class="e1-answer">Do not touch the tube to the eye.</div></details><aside class="e1-scope" role="note" data-synthesis="P5E1-W5-R-006"><strong>Technique sequence:</strong> Gloves and lid cleansing → open at lid corners → inner-to-outer application without tube contact → lid massage → wait 1 min before removing excess → observe for irritation → explain treatment.</aside>'+P5E1_W5_CMP_NEWBORN);
+p5e1W5AppendGuide(DRUGS['vitamin_k'],'<details class="e1-recall" data-retrieval="P5E1-W5-Q-006"><summary>Which clotting factors does Perry say phytonadione helps form?</summary><div class="e1-answer">II, VII, IX, and X.</div></details><details class="e1-recall" data-retrieval="P5E1-W5-Q-007"><summary>What makes rapid IV vitamin K dangerous in Perry’s rare preterm branch?</summary><div class="e1-answer">It can cause cardiac arrest.</div></details><aside class="e1-scope" role="note" data-synthesis="P5E1-W5-R-007"><strong>Rationale chain:</strong> Limited placental transfer and absent intestinal flora contribute to low newborn vitamin K; phytonadione supports clotting-factor formation. Keep routine IM, weight-specific IM, oral limitation, and rare preterm IV safety branches distinct.</aside>');
+p5e1W5AppendGuide(DRUGS['hep_b_vax'],'<details class="e1-recall" data-retrieval="P5E1-W5-Q-008"><summary>What injection-site separation does ATI require?</summary><div class="e1-answer">Do not give vitamin K and hepatitis B injections in the same thigh.</div></details>');
+
+QUICK_REVIEWS['methergine'].flags=(QUICK_REVIEWS['methergine'].flags||[]).filter(value=>!value.includes('data-fact="E1PI-F-010"'));
+QUICK_REVIEWS['carboprost'].flags=(QUICK_REVIEWS['carboprost'].flags||[]).filter(value=>!value.includes('data-fact="E1PI-F-010"'));
+QUICK_REVIEWS['oxytocin_pp'].flags.push(P5E1_W5_FACTS.f003);
+QUICK_REVIEWS['methergine'].flags.push(P5E1_W5_FACTS.f009);
+QUICK_REVIEWS['carboprost'].facts.push(P5E1_W5_FACTS.f011);
+QUICK_REVIEWS['carboprost'].flags.push(P5E1_W5_FACTS.f013);
+QUICK_REVIEWS['misoprostol_pp'].facts.push(P5E1_W5_FACTS.f005);
+QUICK_REVIEWS['erythromycin_eye'].facts.push(P5E1_W5_FACTS.f014,P5E1_W5_FACTS.f016);
+QUICK_REVIEWS['vitamin_k'].tldr+=p5e1W5List(P5E1_W5_FACTS.f017);
+QUICK_REVIEWS['vitamin_k'].facts.push(P5E1_W5_FACTS.f018,P5E1_W5_FACTS.f023,P5E1_W5_FACTS.f024);
+QUICK_REVIEWS['vitamin_k'].flags.push(P5E1_W5_FACTS.f020);
+
+DRUGS['carboprost'].reviewLimit='ATI does not establish a carboprost-specific dose or route in the admitted postpartum passages. Perry’s accepted PPH evidence supplies only the displayed non-IV route and dose contexts.';
+QUICK_REVIEWS['carboprost'].reviewLimit=DRUGS['carboprost'].reviewLimit;
+DRUGS['misoprostol_pp'].reviewLimit='ATI does not establish a postpartum misoprostol dose or route in the admitted passages. Perry’s accepted single-dose rectal, sublingual, or oral PPH context is displayed without transferring cervical-ripening content.';
+QUICK_REVIEWS['misoprostol_pp'].reviewLimit=DRUGS['misoprostol_pp'].reviewLimit;
+
+for(const id of ['oxytocin_pp','methergine','carboprost','misoprostol_pp','erythromycin_eye','vitamin_k','hep_b_vax']){
+  DRUGS[id].enrichmentVersion='PHARM-E1-W5-2026-09-06';
+  QUICK_REVIEWS[id].enrichmentVersion='PHARM-E1-W5-2026-09-06';
+}
+
+window.NUR2460_FACT_MIGRATIONS=Object.freeze(Object.assign({},window.NUR2460_FACT_MIGRATIONS,{
+  'E1PI-F-010::methergine::contraindications':Object.freeze(['E1PI-F-004','P5E1-W5-F-009']),
+  'E1PI-F-010::methergine::brief':Object.freeze(['E1PI-F-004','P5E1-W5-F-009']),
+  'E1PI-F-010::carboprost::complications':Object.freeze(['P5E1-W5-F-013']),
+  'E1PI-F-010::carboprost::contraindications':Object.freeze(['P5E1-W5-F-013']),
+  'E1PI-F-010::carboprost::brief':Object.freeze(['P5E1-W5-F-013'])
+}));
+// ── End Worker 5 accepted integration ────────────────────────────────────
 function openDrug(id){
   const d=DRUGS[id]; if(!d){alert('This drug has not been populated yet.');return}
   document.getElementById('modal').classList.toggle('e1-enriched',!!d.enrichmentVersion);
