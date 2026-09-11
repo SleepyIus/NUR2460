@@ -141,7 +141,7 @@ mark.topic-annotation{border-radius:2px;padding:0 1px;color:inherit;cursor:point
 /* ── Quick Review System ── */
 .tabs-row{display:flex;align-items:flex-end;position:relative;border-bottom:1px solid var(--border);margin:0 -28px;padding:0 28px}
 .tabs-row .tabs-wrap{flex:1;min-width:0}
-.tabs-row .tab-bar{margin-bottom:-1px}
+.tabs-row .tab-bar{margin-left:0;margin-right:0;margin-bottom:-1px;padding-left:0;padding-right:0}
 .qr-fab{background:var(--accent);color:#fff;border:1px solid var(--accent);border-bottom:2px solid var(--accent);border-radius:6px 6px 0 0;padding:10px 14px;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .15s;letter-spacing:.01em;flex-shrink:0;white-space:nowrap;margin:0 0 0 12px;position:relative;z-index:2;box-shadow:-12px 0 12px -8px var(--surface);align-self:flex-end}
 .qr-fab .qr-icon:empty{display:none}
 [data-theme="light"] .qr-fab{box-shadow:-12px 0 12px -8px var(--surface)}
@@ -149,7 +149,7 @@ mark.topic-annotation{border-radius:2px;padding:0 1px;color:inherit;cursor:point
 .qr-fab.in-deep{}
 .qr-fab.in-review{background:var(--surface2);color:var(--text);border:1px solid var(--border);border-bottom:2px solid var(--accent)}
 .qr-icon{font-size:13px;line-height:1}
-@media(max-width:600px){.qr-fab{padding:8px 12px;font-size:11px;margin-left:8px}}
+@media(max-width:600px){.modal-overlay{padding:12px 8px}.modal{max-height:calc(100vh - 24px)}.modal-header{padding:18px 16px 0}.tabs-row{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end}.tabs-row .tabs-wrap{grid-column:1/-1;grid-row:2}.qr-fab{grid-column:1;grid-row:1;justify-self:start;padding:8px 12px;font-size:11px;margin:0 0 8px;border-radius:6px;border-bottom-width:1px;box-shadow:none}.print-btn{grid-column:2;grid-row:1;justify-self:end;margin:0 0 8px;border-radius:6px;border-bottom-width:1px;box-shadow:none}}
 
 .qr-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:0;margin:8px 0 20px;overflow:hidden;animation:qrFadeIn .25s ease}
 @keyframes qrFadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
@@ -5480,6 +5480,31 @@ function renderHeaderTabs(t,activeTab){
     <button class="tab-btn" data-tab="adpiecomp" onclick="switchTab('adpiecomp')">⑥ ADPIE &amp; Complications</button>`;
 }
 
+function alignClinicalTab(button,behavior){
+  const bar=document.getElementById('clinicalTabs');
+  if(!bar||!button)return;
+  const maxLeft=Math.max(0,bar.scrollWidth-bar.clientWidth);
+  const centeredLeft=button.offsetLeft-(bar.clientWidth-button.offsetWidth)/2;
+  const targetLeft=Math.min(maxLeft,Math.max(0,centeredLeft));
+  if(behavior==='smooth'&&typeof bar.scrollTo==='function'){
+    bar.scrollTo({left:targetLeft,top:0,behavior:'smooth'});
+  }else{
+    bar.scrollLeft=targetLeft;
+  }
+}
+
+function resetTopicViewport(alignActiveTab){
+  const body=document.getElementById('modalBody');
+  const bar=document.getElementById('clinicalTabs');
+  if(body)body.scrollTop=0;
+  if(bar){
+    const active=alignActiveTab?bar.querySelector('.tab-btn.active'):null;
+    if(active)alignClinicalTab(active,'auto');
+    else bar.scrollLeft=0;
+  }
+  updateTabFade();
+}
+
 function scrollNeoSection(sectionId){
   const section=document.getElementById(`neo-${currentTopicId}-${sectionId}`);
   if(section)section.scrollIntoView({behavior:'smooth',block:'start'});
@@ -5528,12 +5553,12 @@ function renderDeepView(id,view,activeTab){
   }else if(currentStudyView==='topic'){
     lastTopicTab=topicSectionId(t,activeTab);
   }
-  body.scrollTop=0;
   updateStudyViewControls(t);
   prepareAnnotationScopes();
   reapplyTopicAnnotations();
   decorateBoxBookmarks();
-  setTimeout(updateTabFade,50);
+  resetTopicViewport(true);
+  requestAnimationFrame(function(){resetTopicViewport(true)});
 }
 
 function setStudyView(view){
@@ -5573,11 +5598,14 @@ function openModal(id,requestedView){
   renderDeepView(id,currentStudyView,initialTab);
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   document.getElementById('modalOverlay').classList.add('show');
-  setTimeout(updateTabFade,50);
   document.body.style.overflow='hidden';
   updateTopicTools();
   updateAnnotationFab();
   setTopicHeaderCollapsed(topicHeaderCollapsed,false);
+  requestAnimationFrame(function(){
+    resetTopicViewport(true);
+    requestAnimationFrame(function(){resetTopicViewport(true)});
+  });
   recordLastTopic(id,currentStudyView==='neo'?'neo':currentStudyView==='topic'?lastTopicTab:'overview','deep',currentStudyView);
 
   // Quick Review FAB visibility
@@ -8244,7 +8272,9 @@ function switchTab(tabId){
   const panel=document.querySelector(`#modalBody .tab-panel[data-tab="${tabId}"]`);
   const btn=document.querySelector(`#clinicalTabs .tab-btn[data-tab="${tabId}"]`);
   if(panel)panel.classList.add('active');
-  if(btn){btn.classList.add('active');btn.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'})}
+  const body=document.getElementById('modalBody');
+  if(body)body.scrollTop=0;
+  if(btn){btn.classList.add('active');alignClinicalTab(btn,'smooth')}
   if(currentTopicId&&!isInQuickReview)recordLastTopic(currentTopicId,tabId,'deep','adpie');
   setTimeout(updateTabFade,150);
 }
@@ -8259,8 +8289,8 @@ function switchTopicTab(sectionId){
   document.querySelectorAll('#modalBody .topic-tab-panel').forEach(panel=>panel.classList.toggle('active',panel.dataset.topicTab===sectionId));
   document.querySelectorAll('#clinicalTabs .tab-btn').forEach(button=>button.classList.toggle('active',button.dataset.topicTab===sectionId));
   const button=document.querySelector(`#clinicalTabs .tab-btn[data-topic-tab="${sectionId}"]`);
-  if(button)button.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
   document.getElementById('modalBody').scrollTop=0;
+  if(button)alignClinicalTab(button,'smooth');
   if(!isInQuickReview)recordLastTopic(currentTopicId,sectionId,'deep','topic');
   setTimeout(updateTabFade,150);
 }
